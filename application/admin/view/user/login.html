@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>后台管理系统</title>
+<link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+<link rel="stylesheet" href="__STATIC__/css/admin.css">
+<script src="__STATIC__/layui//layui.js"></script>
+<script src="__STATIC__/js/common.js"></script>
+</head>
+<body class="layui-layout-body" style="background-color: #5fb878;">
+	<div class="layui-col-md4 layui-col-md-offset4 admin-login-box">
+		<form class="layui-form" action="{:url('')}" method="post">
+			<div class="login-form-box">
+				<div class="login-box-item" style="color: #fff;">
+					后台管理系统
+				</div>
+				<div class="login-form-item">
+					<input type="text" name="username" placeholder="用户名" class="layui-input" required  lay-verify="required" title="是否加密">  
+				</div>
+				<div class="login-form-item">
+					<input type="password" name="password" placeholder="密码" class="layui-input">    
+				</div>
+				<div class="login-form-item layui-row layui-col-space10">
+					<div class="layui-col-md6">
+						<input type="text" name="verify" placeholder="验证码" class="layui-input">   
+					</div>
+					<div class="layui-col-md6">
+						<img src="{:url('verify')}" alt="captcha" onclick="this.src=this.src+'?'+Math.random();" />
+					</div>
+				</div>
+				<div class="login-form-item">
+					<button class="layui-btn layui-btn-warm login-btn" lay-submit lay-filter="submitForm">登录</button> 
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

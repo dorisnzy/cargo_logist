@@ -1,14 +1,13 @@
 <?php
 // +----------------------------------------------------------------------
-// | 货物运送系统
+// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2011 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: dorisnzy <dorisnzy@163.com>
+// | Author: luofei614 <weibo.com/luofei614>　
 // +----------------------------------------------------------------------
-// | Date: 2017-12-25
-// +----------------------------------------------------------------------
-
 namespace app\common\org;
 /**
  * 权限认证类
@@ -71,23 +70,18 @@ class Auth{
 
     //默认配置
     protected $_config = array(
-        'AUTH_ON'           => true,                      // 认证开关
-        'AUTH_TYPE'         => 1,                         // 认证方式，1为实时认证；2为登录认证。
-        'AUTH_GROUP'        => 'auth_group',        // 用户组数据表名
-        'AUTH_GROUP_ACCESS' => 'auth_group_access', // 用户-用户组关系表
-        'AUTH_RULE'         => 'auth_rule',         // 权限规则表
-        'AUTH_USER'         => 'member'             // 用户信息表
+        'auth_on'           => true,                      // 认证开关
+        'auth_type'         => 1,                         // 认证方式，1为实时认证；2为登录认证。
+        'auth_group'        => 'auth_group',        // 用户组数据表名
+        'auth_group_access' => 'auth_group_access', // 用户-用户组关系表
+        'auth_rule'         => 'auth_rule',         // 权限规则表
+        'auth_user'         => 'user'             // 用户信息表
     );
 
     public function __construct() {
-        $prefix = C('DB_PREFIX');
-        $this->_config['AUTH_GROUP'] = $prefix.$this->_config['AUTH_GROUP'];
-        $this->_config['AUTH_RULE'] = $prefix.$this->_config['AUTH_RULE'];
-        $this->_config['AUTH_USER'] = $prefix.$this->_config['AUTH_USER'];
-        $this->_config['AUTH_GROUP_ACCESS'] = $prefix.$this->_config['AUTH_GROUP_ACCESS'];
-        if (C('AUTH_CONFIG')) {
-            //可设置配置项 AUTH_CONFIG, 此配置项为数组。
-            $this->_config = array_merge($this->_config, C('AUTH_CONFIG'));
+        if (config('auth_config')) {
+            //可设置配置项 auth_config, 此配置项为数组。
+            $this->_config = array_merge($this->_config, config('auth_config'));
         }
     }
 
@@ -100,9 +94,10 @@ class Auth{
       * @return boolean           通过验证返回true;失败返回false
      */
     public function check($name, $uid, $type=1, $mode='url', $relation='or') {
-        if (!$this->_config['AUTH_ON'])
+        if (!$this->_config['auth_on'])
             return true;
         $authList = $this->getAuthList($uid,$type); //获取用户需要验证的所有有效规则列表
+        // halt($authList);
         if (is_string($name)) {
             $name = strtolower($name);
             if (strpos($name, ',') !== false) {
@@ -149,12 +144,12 @@ class Auth{
         static $groups = array();
         if (isset($groups[$uid]))
             return $groups[$uid];
-        $user_groups = M()
-            ->table($this->_config['AUTH_GROUP_ACCESS'] . ' a')
+        $user_groups = \think\Db::name($this->_config['auth_group_access'])
+            ->alias('a')
+            ->join($this->_config['auth_group']." g", "g.id=a.group_id")
             ->where("a.uid='$uid' and g.status='1'")
-            ->join($this->_config['AUTH_GROUP']." g on a.group_id=g.id")
             ->field('uid,group_id,title,rules')->select();
-        $groups[$uid]=$user_groups?:array();
+        $groups[$uid] = $user_groups ? $user_groups : array();
         return $groups[$uid];
     }
 
@@ -166,19 +161,22 @@ class Auth{
     protected function getAuthList($uid,$type) {
         static $_authList = array(); //保存用户验证通过的权限列表
         $t = implode(',',(array)$type);
-        if (isset($_authList[$uid.$t])) {
+        
+        if (!empty($_authList[$uid.$t])) {
             return $_authList[$uid.$t];
         }
-        if( $this->_config['AUTH_TYPE']==2 && isset($_SESSION['_AUTH_LIST_'.$uid.$t])){
-            return $_SESSION['_AUTH_LIST_'.$uid.$t];
-        }
 
+        if( $this->_config['auth_type']==2 && !empty($_SESSION['_auth_list_'.$uid.$t])){
+            return $_SESSION['_auth_list_'.$uid.$t];
+        }
+        
         //读取用户所属用户组
         $groups = $this->getGroups($uid);
         $ids = array();//保存用户所属用户组设置的所有权限规则id
         foreach ($groups as $g) {
             $ids = array_merge($ids, explode(',', trim($g['rules'], ',')));
         }
+
         $ids = array_unique($ids);
         if (empty($ids)) {
             $_authList[$uid.$t] = array();
@@ -187,12 +185,12 @@ class Auth{
 
         $map=array(
             'id'=>array('in',$ids),
-            'type'=>$type,
+            //'type'=>$type,
             'status'=>1,
         );
         //读取用户组所有权限规则
-        $rules = M()->table($this->_config['AUTH_RULE'])->where($map)->field('condition,name')->select();
-
+        $rules = \think\Db::name($this->_config['auth_rule'])->where($map)->field('condition,name')->select();
+        
         //循环规则，判断结果。
         $authList = array();   //
         foreach ($rules as $rule) {
@@ -211,9 +209,9 @@ class Auth{
             }
         }
         $_authList[$uid.$t] = $authList;
-        if($this->_config['AUTH_TYPE']==2){
+        if($this->_config['auth_type']==2){
             //规则列表结果保存到session
-            $_SESSION['_AUTH_LIST_'.$uid.$t]=$authList;
+            $_SESSION['_auth_list_'.$uid.$t]=$authList;
         }
         return array_unique($authList);
     }
@@ -224,7 +222,7 @@ class Auth{
     protected function getUserInfo($uid) {
         static $userinfo=array();
         if(!isset($userinfo[$uid])){
-             $userinfo[$uid]=M()->where(array('uid'=>$uid))->table($this->_config['AUTH_USER'])->find();
+             $userinfo[$uid]=\think\Db::name($this->_config['auth_user'])->where(array('uid'=>$uid))->find();
         }
         return $userinfo[$uid];
     }

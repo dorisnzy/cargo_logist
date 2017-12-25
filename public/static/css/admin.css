@@ -1,0 +1,27 @@
+.admin-nav-tag {
+	padding: 0.5rem;
+	background-color:#F0F0F0;
+}
+
+.admin-login-box{
+	background-color:rgba(0,0,0,0.1);
+	filter:Alpha(opacity=20);
+	height: 25rem;
+	border-radius: 0.5rem;
+	transform: translateY(20%);
+	box-shadow: 0px 0px 50px 1px #000;
+}
+.login-form-box{
+	padding: 2rem 2rem;
+}
+.login-box-item{
+	font-size: 2rem;
+	text-align: center;
+}
+.login-form-item{
+	padding: 1rem 0;
+}
+.login-btn{
+	display: block;
+	width: 100%;
+}
