@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-12-25 18:24:30
+Date: 2017-12-26 00:45:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,7 +25,17 @@ CREATE TABLE `ca_auth_group` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态：1-正常，0-禁用',
   `rules` varchar(255) NOT NULL DEFAULT '' COMMENT '用户组拥有的规则id,多个规则","隔开',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ca_auth_group
+-- ----------------------------
+INSERT INTO `ca_auth_group` VALUES ('1', '创始人组', '1', '');
+INSERT INTO `ca_auth_group` VALUES ('2', '测试用户组', '0', '');
+INSERT INTO `ca_auth_group` VALUES ('3', '供货商', '1', '');
+INSERT INTO `ca_auth_group` VALUES ('4', '调度者', '1', '');
+INSERT INTO `ca_auth_group` VALUES ('5', '取货员', '1', '');
+INSERT INTO `ca_auth_group` VALUES ('6', '司机', '1', '');
 
 -- ----------------------------
 -- Table structure for ca_auth_group_access
@@ -38,6 +48,10 @@ CREATE TABLE `ca_auth_group_access` (
   KEY `uid` (`uid`),
   KEY `group_id` (`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ca_auth_group_access
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for ca_auth_rule
@@ -53,7 +67,11 @@ CREATE TABLE `ca_auth_rule` (
   `condition` char(100) NOT NULL DEFAULT '' COMMENT '规则表达式，为空表示存在就验证，不为空表示按照条件验证',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=152 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ca_auth_rule
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for ca_config
@@ -74,7 +92,11 @@ CREATE TABLE `ca_config` (
   `sort` tinyint(4) NOT NULL DEFAULT '100' COMMENT '排序',
   PRIMARY KEY (`id`),
   KEY `group_id` (`group`,`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ca_config
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for ca_menu
@@ -91,24 +113,46 @@ CREATE TABLE `ca_menu` (
   `sort` tinyint(4) NOT NULL DEFAULT '0' COMMENT '权重',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态 0-禁用 1-启用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='菜单表';
+
+-- ----------------------------
+-- Records of ca_menu
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for ca_user
 -- ----------------------------
 DROP TABLE IF EXISTS `ca_user`;
 CREATE TABLE `ca_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
-  `name` varchar(50) DEFAULT NULL COMMENT '用户名（用于登录）',
-  `real_name` varchar(50) DEFAULT NULL COMMENT '真实姓名',
-  `email` varchar(50) DEFAULT NULL COMMENT '邮箱（用于登录）',
-  `password` varchar(50) DEFAULT NULL COMMENT '登录密码',
-  `reg_time` int(11) DEFAULT NULL COMMENT '注册时间',
-  `reg_ip` varchar(20) DEFAULT NULL COMMENT '注册IP',
-  `last_login_time` int(11) DEFAULT NULL COMMENT '最后登录时间',
-  `last_login_ip` varchar(20) DEFAULT NULL COMMENT '最后登录IP',
-  `xy_id` int(11) DEFAULT NULL COMMENT '翔宇用户ID',
-  `xy_name` varchar(100) DEFAULT NULL COMMENT '翔宇用户名',
-  `status` tinyint(4) DEFAULT '1' COMMENT '状态（-1：删除，0：禁用，1：正常）',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='用户表';
+  `uid` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户id',
+  `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户名',
+  `nickname` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '真实姓名',
+  `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '密码',
+  `isadministrator` tinyint(2) NOT NULL DEFAULT '0' COMMENT '管理员id标识: 0为非管理员，1为管理员',
+  `gender` tinyint(2) NOT NULL DEFAULT '0' COMMENT '性别：(0保密，1男,2女)',
+  `mobile` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '手机号',
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '邮箱',
+  `tel` varchar(20) NOT NULL DEFAULT '' COMMENT 'tel',
+  `weixin` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '微信号',
+  `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '头像',
+  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态（0待审核、1正常、2锁定、3离职）',
+  `sort` tinyint(4) NOT NULL DEFAULT '0' COMMENT '排序',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `salt` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '密码salt',
+  `guid` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '用户唯一id',
+  `remark` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '备注说明',
+  `regip` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '注册IP',
+  `last_login_ip` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '最后登录IP',
+  `last_login_time` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
+  `login` int(11) NOT NULL DEFAULT '0' COMMENT '登录次数',
+  `extattr` text NOT NULL,
+  PRIMARY KEY (`uid`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ca_user
+-- ----------------------------
+INSERT INTO `ca_user` VALUES ('1', 'admin', '创始人', 'ff523edfe51e5a090ebf44081f3a6210', '1', '0', '13667792110', 'admin@admin.com', '', '', '', '0', '0', '0', '0', '', '', '', '', '', '0', '0', '');
+INSERT INTO `ca_user` VALUES ('2', 'test', 'fsda', '097d09d4508bd192104114dc50f7a063', '0', '0', 'test', 'fsdaf', '', 'sdafsdf', '', '1', '0', '1514219807', '1514219807', 'zFEDkc', '', 0x74657374, '127.0.0.1', '', '0', '0', '');
