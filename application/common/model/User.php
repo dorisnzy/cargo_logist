@@ -238,6 +238,7 @@ class User extends Model
 	 */
 	public function getCurrentUserInfo()
 	{
-		return session('user_auth');
+		$base_info = session('user_auth');
+		return $this->where('uid', $base_info['uid'])->find();
 	}
 }

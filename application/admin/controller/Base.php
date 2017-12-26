@@ -26,59 +26,58 @@ class Base extends Controller
 	 */
 	protected function _initialize()
 	{
-		// $this->userInfo = model('User')->getCurrentUserInfo();
-		// halt($this->userInfo);
+		$this->userInfo = model('User')->getCurrentUserInfo();
 
-		// // 获取当前访问地址
-  //       $current_url = $this->request->path();
+		// 获取当前访问地址
+        $current_url = $this->request->path();
 
-  //       //不需要权限检测链接数组
-  //       $_noaccess_url_arr = array('admin/user/login', 'admin/user/logout', 'admin/user/verify',);
-  //       if (!is_login() && !in_array($current_url, $_noaccess_url_arr)) {
-		// 	$this->redirect('admin/user/login');
-		// }
+        //不需要权限检测链接数组
+        $_noaccess_url_arr = array('admin/user/login', 'admin/user/logout', 'admin/user/verify',);
+        if (!is_login() && !in_array($current_url, $_noaccess_url_arr)) {
+			$this->redirect('admin/user/login');
+		}
 
-		// //不是管理员禁止登陆后台
-  //       if(!$this->userInfo['isadministrator'] && !in_array($current_url, $_noaccess_url_arr)){
-  //       	model('User')->logout();
-  //           $this->error('您不是管理员，非法访问','admin/index/login');
-  //       }
+		//不是管理员禁止登陆后台
+        if(!$this->userInfo['isadministrator'] && !in_array($current_url, $_noaccess_url_arr)){
+        	model('User')->logout();
+            $this->error('您不是管理员，非法访问','admin/index/login');
+        }
 
-  //       // 是否是超级管理员
-		// defined('IS_ROOT') or define('IS_ROOT', is_administrator());
+        // 是否是超级管理员
+		defined('IS_ROOT') or define('IS_ROOT', is_administrator());
 
-		// if (!in_array($current_url, $_noaccess_url_arr)) {
+		if (!in_array($current_url, $_noaccess_url_arr)) {
             
-  //           // 检测系统权限
-		// 	if (!IS_ROOT) {
-  //               $access = $this->accessControl();
-  //               if (false === $access) {
-		// 			$this->error('403:禁止访问');
-		// 		} elseif (null === $access) {
-		// 			$dynamic = $this->checkDynamic(); //检测分类栏目有关的各项动态权限
-		// 			if ($dynamic === null && !in_array($current_url, $_noaccess_url_arr)) {
-		// 				//检测访问权限
-		// 				if (!$this->checkRule($current_url, array('in', '1,2'))) {
-		// 					model('User')->logout();
-		// 					$this->error('未授权访问!');
-		// 				} else {
-		// 					// 检测分类及内容有关的各项动态权限
-		// 					$dynamic = $this->checkDynamic();
-		// 					if (false === $dynamic) {
-		// 						model('User')->logout();
-		// 						$this->error('未授权访问!');
-		// 					}
-		// 				}
-		// 			} elseif ($dynamic === false) {
-		// 				model('User')->logout();
-		// 				$this->error('未授权访问!');
-		// 			}
-		// 		}
-		// 	}
-  //       }
+            // 检测系统权限
+			if (!IS_ROOT) {
+                $access = $this->accessControl();
+                if (false === $access) {
+					$this->error('403:禁止访问');
+				} elseif (null === $access) {
+					$dynamic = $this->checkDynamic(); //检测分类栏目有关的各项动态权限
+					if ($dynamic === null && !in_array($current_url, $_noaccess_url_arr)) {
+						//检测访问权限
+						if (!$this->checkRule($current_url, array('in', '1,2'))) {
+							model('User')->logout();
+							$this->error('未授权访问!');
+						} else {
+							// 检测分类及内容有关的各项动态权限
+							$dynamic = $this->checkDynamic();
+							if (false === $dynamic) {
+								model('User')->logout();
+								$this->error('未授权访问!');
+							}
+						}
+					} elseif ($dynamic === false) {
+						model('User')->logout();
+						$this->error('未授权访问!');
+					}
+				}
+			}
+        }
         
-  //       //菜单设置
-  //       $this->assign("__MENU__", $this->getMenus());
+        //菜单设置
+        $this->assign("__MENU__", $this->getMenus());
 
 
 
@@ -102,7 +101,78 @@ class Base extends Controller
 	 */
 	public function getMenus()
 	{
-		
+		// 获取当前访问地址
+        $current_url = $this->request->path();
+
+        // 获取顶级主菜单
+        $main_map['pid'] = 0;
+        $main_map['module'] = 'admin';
+        $main_map['status'] = 1;
+      	$main_map['type'] = 1;
+
+      	$main_list = db('menu')->where($main_map)->order('sort asc,id asc')->select();
+      	foreach ($main_list as $key => $item) {
+      		//此处用来做权限判断
+			if (!IS_ROOT && !$this->checkRule($item['name'])) {
+				unset($menus['main'][$item['id']]);
+				continue; //继续循环
+			}
+
+      		if ($current_url == $item['name']) {
+      			$item['class'] = 'layui-this';
+      		} else {
+      			$item['class'] = '';
+      		}
+
+      		$menus['main'][$item['id']] = $item;
+      	}
+
+      	//查询当前的父菜单id和菜单id
+        $pid = db('menu')->where("pid !=0 AND name = '{$current_url}' AND status = 1")->value('pid');
+        $id  = db('menu')->where("pid = 0 AND name = '{$current_url}' AND status = 1")->value('id');
+
+        $pid = $pid ? $pid : $id;
+
+        if (!$pid) {
+        	return $menus;
+        }
+
+        $sub_map['pid']  = $pid;
+        $sub_map['type'] = 2;
+        $sub_map['status'] = 1;
+
+        $sub_row = db('menu')->where($sub_map)->order('sort asc,id asc')->select();
+
+        $current_id  = db('menu')->where(array('status'=>1,'name'=>$current_url))->value('pid');
+
+        foreach ($sub_row as $key => $item) {
+        	if (IS_ROOT || $this->checkRule($value)) {
+        		$menus['main'][$item['pid']]['class'] = 'layui-this';
+
+        		if ($current_url == $item['name']) {
+        			$item['class'] = 'layui-this';
+        			$menus['_child'][$item['group']]['class'] = 'layui-nav-itemed';
+        		} else {
+        			$item['class'] = '';
+        		}
+
+        	} else if ($current_id == $item['id']) {
+        		$menus['main'][$item['pid']]['class'] = 'layui-this';
+        		
+        		if ($current_url == $item['name']) {
+        			$item['class'] = 'layui-this';
+        			$menus['_child'][$item['group']]['class'] = 'layui-nav-itemed';
+        		} else {
+        			$item['class'] = '';
+        		}
+        	} else {
+        		$item['class'] 						  = '';
+        	}
+
+        	$menus['_child'][$item['group']]['item'][$key] = $item;
+        }
+        // halt($menus);
+        return $menus;
 	}
 
 	/**
