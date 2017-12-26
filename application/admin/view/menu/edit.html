@@ -59,6 +59,14 @@
   </div>
 
   <div class="layui-form-item">
+    <label class="layui-form-label">排序</label>
+    <div class="layui-input-block">
+      <input type="text" name="sort" required  lay-verify="required" placeholder="请输入排序序号" value="{$info.sort|default="100"}" autocomplete="off" class="layui-input">
+      <div class="layui-form-mid layui-word-aux">菜单按照升序排序</div>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
     <label class="layui-form-label">状态</label>
     <div class="layui-input-block">
       <select name="status" lay-verify="required">

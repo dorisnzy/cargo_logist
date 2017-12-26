@@ -119,11 +119,48 @@ class Group extends Base
 	/**
 	 * 授权
 	 */
-	public function auth()
+	public function auth($module = 'admin', $group_id = 0)
 	{
-		if ($this->request->isPost()) {
-
+		$info = $this->modelGroup->where('id', $group_id)->find();
+		if (!$info) {
+			return $this->error('组别不存在');
 		}
+
+		if ($this->request->isPost()) {
+			$rules = input('post.rules/a', []);
+
+			$data['rules'] = implode(',', $rules);
+
+			$map['id'] = $group_id;
+
+			$res = $this->modelGroup->where($map)->update($data);
+
+			if ($res === false) {
+				return $this->error('授权失败');
+			}
+
+			return $this->success('授权成功', 'index');
+		}
+
+		// 获取权限列表信息
+		$map['module'] = $module;
+		$map['status'] = 1;
+		$list = model('AuthRule')->field('id,title,group')->where($map)->select();
+
+		// 按组别整理权限
+		$res = [];
+		foreach ($list as $key => $item) {
+			$res[$item['group']][$key]['id']   = $item['id'];
+			$res[$item['group']][$key]['title'] = $item['title'];
+		}
+
+		// 获取权限组
+		$auth_group = config('auth_group');
+
+		$this->assign('auth_group', $auth_group);
+		$this->assign('module', $module);
+		$this->assign('list', $res);
+		$this->assign('info', $info);
 
 		return $this->fetch();
 	}

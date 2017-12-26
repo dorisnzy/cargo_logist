@@ -1,0 +1,35 @@
+<extend name="public/base">
+
+<block name="body">
+<div class="layui-tab layui-tab-card">
+  <ul class="layui-tab-title">
+    <volist name="auth_group" id="item">
+    	<a href="{:url('', ['module' => $item['name'], 'group_id' => input('group_id')])}"><li <if condition="$module eq $item['name']">class="layui-this"</if> >{$item.title}</li></a>
+    </volist>
+  </ul>
+  <div class="layui-tab-content" >
+    <div class="layui-tab-item layui-show" style="padding-bottom: 3rem;">
+    	<form class="layui-form" action="">
+    		<input type="hidden" name="group_id" value="{:input('group_id')}">
+    		<volist name="list" id="group">
+				<div style="color: #FF5722; font-weight: bold; font-size: 1rem;padding-top: 1rem;">
+					{$key}
+				</div>
+
+				<div class="layui-row" style="padding-left: 2rem;">
+					<volist name="group" id="item">
+						<div class="layui-col-xs1 layui-col-sm2 layui-col-md2" style="padding-top: 0.5rem;">
+					       	<input type="checkbox" name="rules[]" value="{$item.id}" title="{$item.title}" lay-skin="primary" <in name="item.id" value="$info['rules']">checked</in>>
+					    </div>
+					</volist>
+				</div>
+			</volist>
+			<div style="padding-top: 3rem; text-align: center;">
+				<button class="layui-btn" lay-submit lay-filter="submitForm">提交</button>
+			</div>
+    	</form>
+    </div>
+  </div>
+</div>
+</form>
+</block>

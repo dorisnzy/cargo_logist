@@ -11,7 +11,7 @@
       <td>{$item.title}</td>
       <td>{$item.status|get_status_format}</td>
       <td>
-          <a href="{:url('auth')}" class="layui-btn layui-btn-xs layui-btn-primary">
+          <a href="{:url('auth',['group_id' => $item['id']])}" class="layui-btn layui-btn-xs layui-btn-primary">
             授权
           </a>
           <a href="{:url('edit',['group_id' => $item['id']])}" class="layui-btn layui-btn-xs">
