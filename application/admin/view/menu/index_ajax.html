@@ -1,0 +1,48 @@
+<div class="layui-btn-group">
+  <a class="layui-btn" href="{:url('add',['module' => $module])}">
+    <i class="layui-icon">&#xe654;</i>新增
+  </a>
+</div>
+<table class="layui-table">
+<thead>
+  <tr>
+    <th>标题</th>
+    <th>类型</th>
+    <th>所属分组</th>
+    <th>状态</th>
+    <th>操作</th>
+  </tr> 
+</thead>
+<tbody>
+  <notempty name="list">
+    <volist name="list" id="item">
+	    <tr>
+	      <td>{$item.title_show}</td>
+	      <td>
+			<switch name="item.type">
+				<case value="1">主菜单</case>
+				<case value="2">节点菜单</case>
+			</switch>
+	      </td>
+	      <td>{$item.group}</td>
+	      <td>{$item.status|get_status_format}</td>
+	      <td>
+	          <a href="{:url('add', ['module' => $module,'pid' => $item['id']])}" class="layui-btn layui-btn-xs layui-btn-primary">
+	            添加子菜单
+	          </a>
+	          <a href="{:url('edit', ['id' => $item['id']])}" class="layui-btn layui-btn-xs">
+	            编辑
+	          </a>
+	           <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['id' => $item['id'], 'model' => 'Menu'])}"data-tips="您确定要删除？">
+	            删除
+	          </a>
+	        <div class="layui-btn-group">
+	        </div>
+	      </td>
+	    </tr>
+  	</volist>
+  	<else/>
+  	<tr><td colspan="5" style="text-align: center;">~Oh!暂无数据</td></tr>
+  </notempty>
+</tbody>
+</table>

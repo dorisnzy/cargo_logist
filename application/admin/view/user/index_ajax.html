@@ -3,6 +3,7 @@
     <th>会员昵称</th>
     <th>邮件</th>
     <th>手机号</th>
+    <th>角色</th>
     <th>操作</th>
   </tr> 
 </thead>
@@ -12,16 +13,21 @@
       <td>{$item.nickname}</td>
       <td>{$item.email}</td>
       <td>{$item.mobile}</td>
+      <td>{$item.group_list}</td>
       <td>
-          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-primary">
+         <!--  <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-primary">
             查看
-          </a>
-          <a href="{:url('edit')}" class="layui-btn layui-btn-xs">
+          </a> -->
+          <a href="{:url('edit', ['uid' => $item['uid']])}" class="layui-btn layui-btn-xs">
             编辑
           </a>
-          <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['uid' => $item['uid']])}"data-tips="您确定要删除？">
+          <if condition="is_administrator($item['uid'])">
+            <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger">不能操作</a>
+          <else/>
+            <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['uid' => $item['uid'], 'model' => 'User', 'link_model' => 'AuthGroupAccess'])}"data-tips="您确定要删除？">
             删除
           </a>
+          </if>
         <div class="layui-btn-group">
         </div>
       </td>

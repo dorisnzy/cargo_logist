@@ -12,6 +12,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
+use app\common\model\User as UserModel;
 
 /**
  * 会员控制器
@@ -51,6 +52,16 @@ class User extends Base
             $map['nickname'] = ['like', '%'. $this->request->param('nickname') . '%'];
         }
 
+        // 用户名搜索
+        if ($this->request->param('username')) {
+        	$map['username'] = ['like', '%'. $this->request->param('username') . '%'];
+        }
+
+        // 邮箱搜索
+        if ($this->request->param('email')) {
+        	$map['email'] = ['like', '%'. $this->request->param('email') . '%'];
+        }
+
         // 按手机号搜索
         if ($this->request->param('mobile')) {
             $map['mobile'] = ['like', '%'. $this->request->param('mobile') . '%'];
@@ -62,6 +73,7 @@ class User extends Base
             $list  = $this->modelUser
                 ->where($map)
                 ->page($this->modelUser->getPageNow(), $this->modelUser->getPageLimit())
+                ->order('sort asc,uid asc')
                 ->select()
             ;
 
@@ -91,12 +103,18 @@ class User extends Base
 	{
 		if ($this->request->isPost()) {
 			$data = input('post.');
+
+			$vali_res = $this->validate($data, 'User.add');
+			if ($vali_res !== true) {
+				return $this->error($vali_res);
+			}
+
 			$res = $this->modelUser->register($data, false);
 			if (!$res) {
 				return $this->error('新增失败');
 			}
 
-			return $this->success('新增成功');
+			return $this->success('新增成功', 'index');
 		}
 
 		return $this->fetch('edit');
@@ -107,15 +125,40 @@ class User extends Base
 	 */
 	public function edit($uid = 0)
 	{
+		$info = $this->modelUser->where('uid', $uid)->find();
+		if (!$info) {
+			return $this->error('信息不存在');
+		}
 
+		if ($this->request->isPost()) {
+			$data = input('post.');
+			$data['uid'] = $uid;
+
+			$vali_res = $this->validate($data, 'User.edit');
+			if ($vali_res !== true) {
+				return $this->error($vali_res);
+			}
+
+			$res = $this->modelUser->editUser($data, true);
+
+			if (!$res) {
+				return $this->error('编辑失败');
+			}
+
+			return $this->success('编辑成功','index');
+		}
+
+		$this->assign('info', $info);
+
+		return $this->fetch('edit');
 	}
 
-	/** 
-	 * 删除用户
+	/**
+	 * 修改密码
 	 */
-	public function del()
+	public function editPwd()
 	{
-
+		// TODO::
 	}
 
 	/**
@@ -180,6 +223,7 @@ class User extends Base
 	public function verify($id = 1) {
 		$config = [
             'fontSize' => 15,
+            'length'   => 3, 
         ];
         $captcha = new \think\captcha\Captcha($config);
 
@@ -191,10 +235,10 @@ class User extends Base
 	 * @param  integer $id 验证码ID
 	 * @return boolean     检测结果
 	 */
-	public function checkVerify($code, $id = 1) {
+	public function checkVerify($code) {
 		if ($code) {
 			$captcha = new \think\captcha\Captcha();
-			$result = $captcha->check($code, $id);
+			$result = $captcha->check($code);
 			if (!$result) {
 				return $this->error("验证码错误！", "");
 			}

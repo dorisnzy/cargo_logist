@@ -9,32 +9,16 @@
 // | Date: 2017-12-25
 // +----------------------------------------------------------------------
 
-namespace app\admin\controller;
-
-use app\admin\controller\Base;
+namespace app\common\model;
+use app\common\model\Model;
 
 /**
- * 会员控制器
+ * 菜单模型
  */
-class index extends Base
+class Menu extends Model
 {
-	/**
-	 * 后台初始化
-	 *
-	 * @return void 
-	 */
-	protected function _init()
-	{
-
-	}
-
-	/**
-	 * 后台首页
-	 */
-	public function index()
-	{
-		
-		$this->setMeta('首页');
-		return $this->fetch();
-	}
+	//设置数据表（不含前缀)
+    protected $name = 'menu';
+    // 数据表主键 复合主键使用数组定义 不设置则自动获取
+    protected $pk = 'id';
 }

@@ -1,0 +1,72 @@
+<extend name="public/base">
+
+<block name="body">
+<div class="layui-tab" lay-filter="demo">
+  <ul class="layui-tab-title">
+    <li class="layui-this" data-url="{:url('', ['module' => 'admin'])}">后台菜单</li>
+    <li data-url="{:url('', ['module' => 'home'])}">前台菜单</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show" id="box">内容1</div>
+  </div>
+</div>
+
+<div id="page" style="text-align: center;"></div>
+</block>
+<block name="script">  
+<script type="text/javascript">
+layui.use(['element', 'jquery'], function(){
+  var element = layui.element;
+  var $ = layui.jquery;
+
+  element.on('tab(demo)', function(data){
+    get_element($(this).attr('data-url'));
+  });
+
+  get_element($('.layui-this').attr('data-url'));
+
+  function get_element (res_url) {
+    $.get(res_url, {} , function(res){
+      $('#box').html(res.data.list);
+      if ($('.dialogue').attr('data-url')) {  
+          $('.dialogue').bind('click', function(){
+              show_dialogue(this);
+          });
+      }
+    });
+  }
+
+  // 对话询问操作
+  var show_dialogue = function(me, url){
+      var tips = $(me).attr('data-tips');
+      tips = tips || '您确定要操作？';
+      layer.confirm(tips, {btn:['确定', '取消']},
+          function(){
+              var server_url = $(me).attr('data-url');
+              $.get(server_url, {}, function(result){
+                  if (!result.code) {
+                      error_msg(result.msg);
+                      return false;
+                  }
+                  success_msg(result.msg);
+                  setTimeout(function(){window.location.href = $('.layui-this').attr('data-url');}, 2000);
+              });
+          },
+          function(){
+              return;
+          },
+      );
+  }
+
+    // success msg
+    var success_msg = function(msg){
+        layer.msg(msg || '操作成功', {icon:6});
+    }
+
+    // error msg
+    var error_msg = function(msg){
+        layer.msg(msg || '操作失败', {icon:5});
+    }
+});
+</script>
+</block>

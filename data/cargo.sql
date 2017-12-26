@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-12-26 00:45:16
+Date: 2017-12-26 20:26:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,6 @@ CREATE TABLE `ca_auth_group` (
 -- Records of ca_auth_group
 -- ----------------------------
 INSERT INTO `ca_auth_group` VALUES ('1', '创始人组', '1', '');
-INSERT INTO `ca_auth_group` VALUES ('2', '测试用户组', '0', '');
 INSERT INTO `ca_auth_group` VALUES ('3', '供货商', '1', '');
 INSERT INTO `ca_auth_group` VALUES ('4', '调度者', '1', '');
 INSERT INTO `ca_auth_group` VALUES ('5', '取货员', '1', '');
@@ -52,6 +51,9 @@ CREATE TABLE `ca_auth_group_access` (
 -- ----------------------------
 -- Records of ca_auth_group_access
 -- ----------------------------
+INSERT INTO `ca_auth_group_access` VALUES ('1', '6');
+INSERT INTO `ca_auth_group_access` VALUES ('8', '3');
+INSERT INTO `ca_auth_group_access` VALUES ('8', '4');
 
 -- ----------------------------
 -- Table structure for ca_auth_rule
@@ -63,15 +65,34 @@ CREATE TABLE `ca_auth_rule` (
   `title` char(20) NOT NULL DEFAULT '' COMMENT '规则中文名称',
   `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '为1正常，为0禁用',
-  `group_id` smallint(6) NOT NULL DEFAULT '0' COMMENT '权限组，配置中定义',
+  `group` varchar(100) NOT NULL DEFAULT '' COMMENT '权限组，配置中定义',
   `condition` char(100) NOT NULL DEFAULT '' COMMENT '规则表达式，为空表示存在就验证，不为空表示按照条件验证',
+  `module` varchar(50) NOT NULL DEFAULT '' COMMENT '所属模块',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_auth_rule
 -- ----------------------------
+INSERT INTO `ca_auth_rule` VALUES ('1', 'admin/menu/index', '菜单列表', '1', '1', '菜单管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('2', 'admin/menu/add', '新增菜单', '1', '1', '菜单管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('3', 'admin/menu/edit', '编辑菜单', '1', '1', '菜单管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('4', 'admin/menu/delete', '删除菜单', '1', '1', '菜单管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('5', 'admin/user/index', '用户列表', '1', '1', '用户管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('6', 'admin/user/add', '注册用户', '1', '1', '用户管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('7', 'admin/user/edit', '编辑用户', '1', '1', '用户管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('8', 'admin/user/delete', '删除用户', '1', '1', '用户管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('9', 'admin/ user/editpwd', '修改密码', '1', '1', '用户管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('10', 'admin/group/index', '角色列表', '1', '1', '角色管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('11', 'admin/group/add', '新增角色', '1', '1', '角色管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('12', 'admin/group/edit', '编辑角色', '1', '1', '角色管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('13', 'admin/group/auth', '授权', '1', '1', '角色管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('14', 'admin/group/delete', '删除角色', '1', '1', '角色管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('15', 'admin/rule/index', '权限列表', '1', '1', '权限管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('16', 'admin/rule/add', '新增权限', '1', '1', '权限管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('17', 'admin/rule/edit', '编辑权限', '1', '1', '权限管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('18', 'admin/rule/delete', '删除权限', '1', '1', '权限管理', '', 'admin');
 
 -- ----------------------------
 -- Table structure for ca_config
@@ -106,18 +127,24 @@ CREATE TABLE `ca_menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
   `name` varchar(50) NOT NULL DEFAULT '' COMMENT '菜单节点',
+  `module` varchar(255) NOT NULL DEFAULT '' COMMENT '菜单所属模块',
+  `group` varchar(255) NOT NULL DEFAULT '' COMMENT '菜单所属分组',
   `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '菜单类型（1：主菜单，2：节点菜单）',
   `icon` varchar(50) DEFAULT NULL COMMENT '菜单图标',
-  `rule_id` int(11) NOT NULL COMMENT '权限节点id',
   `pid` int(11) NOT NULL DEFAULT '0' COMMENT '上级id',
   `sort` tinyint(4) NOT NULL DEFAULT '0' COMMENT '权重',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态 0-禁用 1-启用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='菜单表';
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 -- ----------------------------
 -- Records of ca_menu
 -- ----------------------------
+INSERT INTO `ca_menu` VALUES ('1', '系统', 'admin/index/index', 'admin', '系统管理', '1', null, '0', '0', '1');
+INSERT INTO `ca_menu` VALUES ('2', '用户', 'admin/user/index', 'admin', '系统管理', '2', null, '1', '0', '1');
+INSERT INTO `ca_menu` VALUES ('3', '角色', 'admin/group/index', 'admin', '系统管理', '2', null, '1', '0', '1');
+INSERT INTO `ca_menu` VALUES ('4', '菜单', 'admin/menu/index', 'admin', '系统管理', '2', null, '1', '0', '1');
+INSERT INTO `ca_menu` VALUES ('6', '权限', 'admin/rule/index', 'admin', '系统管理', '2', null, '1', '0', '1');
 
 -- ----------------------------
 -- Table structure for ca_user
@@ -148,11 +175,14 @@ CREATE TABLE `ca_user` (
   `login` int(11) NOT NULL DEFAULT '0' COMMENT '登录次数',
   `extattr` text NOT NULL,
   PRIMARY KEY (`uid`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `user_name` (`username`) USING BTREE,
+  UNIQUE KEY `mobile` (`mobile`) USING BTREE,
+  UNIQUE KEY `email` (`email`) USING BTREE,
+  UNIQUE KEY `weixin` (`weixin`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_user
 -- ----------------------------
-INSERT INTO `ca_user` VALUES ('1', 'admin', '创始人', 'ff523edfe51e5a090ebf44081f3a6210', '1', '0', '13667792110', 'admin@admin.com', '', '', '', '0', '0', '0', '0', '', '', '', '', '', '0', '0', '');
-INSERT INTO `ca_user` VALUES ('2', 'test', 'fsda', '097d09d4508bd192104114dc50f7a063', '0', '0', 'test', 'fsdaf', '', 'sdafsdf', '', '1', '0', '1514219807', '1514219807', 'zFEDkc', '', 0x74657374, '127.0.0.1', '', '0', '0', '');
+INSERT INTO `ca_user` VALUES ('1', 'admin', '创始人', 'c3bbda06c082cb7b602c95ddf4a98442', '1', '1', '13667792110', 'admin@admin.com', '', 'admin', '', '1', '0', '0', '1514267887', 'CfRNP', '', 0x61646D696E, '', '127.0.0.1', '1514264708', '1', '');
+INSERT INTO `ca_user` VALUES ('8', 'nongzhengyi', 'test', 'bbc2e3ff75c3609c1e318ab01f42ecd8', '1', '1', '18388069008', 'adf@adf.com', '', 'sdfsdf', '', '1', '0', '1514265017', '1514267752', 'rcKREq', '', 0x7364667364, '127.0.0.1', '', '0', '0', '');

@@ -1,0 +1,58 @@
+<extend name="public/base">
+
+<block name="body">
+<form class="layui-form" action="">
+  <input type="hidden" name="module" value="{$info.module}">
+  <div class="layui-form-item">
+    <label class="layui-form-label">权限组</label>
+    <div class="layui-input-block">
+      <select name="group" lay-verify="required">
+          <option value="">{$group.title}</option>
+          <volist name="group.group" id="item">
+            <option value="{$item}" <notempty name="info.group"><eq name="item" value="$info['group']">selected</eq></notempty>>{$item}</option>
+          </volist>
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">标题</label>
+    <div class="layui-input-block">
+      <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" value="{$info.title|default=""}" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">控制器</label>
+    <div class="layui-input-block">
+      <input type="text" name="controller" required  lay-verify="required" placeholder="请输入控制器" value="{$info.controller|default=""}" autocomplete="off" class="layui-input">
+      <div class="layui-form-mid layui-word-aux">小写英文标识（例：控制器为userApply输入为user_apply）</div>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">方法</label>
+    <div class="layui-input-block">
+      <input type="text" name="node" required  lay-verify="required" placeholder="请输入方法" value="{$info.node|default=""}" autocomplete="off" class="layui-input">
+      <div class="layui-form-mid layui-word-aux">小写英文标识</div>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-block">
+      <select name="status" lay-verify="required">
+        <option value="0" <notempty name="info.status"><eq name="info.status" value="0">selected</eq></notempty>>禁用</option>
+        <option value="1" <notempty name="info.status"><eq name="info.status" value="1">selected</eq></notempty>>正常</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+</block>

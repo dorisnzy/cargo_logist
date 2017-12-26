@@ -1,17 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | 公共用户模型
+// | 货物运送系统
 // +----------------------------------------------------------------------
-// | @copyright (c) lishaoen.com All rights reserved.
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | @author: lishaoen <lishaoen@gmail.com>
+// | Author: dorisnzy <dorisnzy@163.com>
 // +----------------------------------------------------------------------
-// | @version: v1.0
+// | Date: 2017-12-25
 // +----------------------------------------------------------------------
 
 namespace app\common\model;
 use app\common\model\Model;
 
+/**
+ * 用户模型
+ */
 class User extends Model
 {
 	//设置数据表（不含前缀)
@@ -47,6 +50,21 @@ class User extends Model
     		'group_id', 
     		'uid'
     	);
+    }
+
+    public function getGroupListAttr($value, $data)
+    {
+    	$group_ids = $group_arr = array();
+    	$group_ids = db('AuthGroupAccess')->where('uid', $data['uid'])->column('group_id');
+    	$map['id'] = array('in',$group_ids);
+    	return implode(',', db('AuthGroup')->where($map)->column('title'));
+    }
+
+    public function getGroupIdAttr($value, $data)
+    {
+    	$group_ids = $group_arr = array();
+    	$group_ids = db('AuthGroupAccess')->where('uid', $data['uid'])->column('group_id');
+    	return $group_ids ? implode(',', $group_ids) : '';
     }
 
 	/**
@@ -148,14 +166,16 @@ class User extends Model
         if($data){       
             $data['status'] = 1;
 
-            $group_ids = $data['group_id'];
+            $group_ids = isset($data['group_id']) ? $data['group_id'] : [];
             unset($data['group_id']);
 
             $result = $this->data($data,true)->isUpdate(false)->validate(true)->save();
-
     		if ($result) {
     		    $data['uid'] = $this->data['uid'];
-    		    $this->group()->saveAll($group_ids);
+
+    		    // 新增用户-角色关联信息
+				model('AuthGroupAccess')->addLink($data['uid'], $group_ids);
+				unset($data['group_id']);
 
     			if ($isautologin) {
     				$this->autoLogin($this->data);
@@ -172,6 +192,45 @@ class User extends Model
            $this->error = "非法请示，数据不能为空！"; 
         }
 	}
+
+	/**
+	 * 修改用户
+	 *
+	 * @param  array  $data          修改的数据集
+	 * @param  boolean $is_change_pwd 是否要修改密码(true:是，false:否)
+	 *
+	 * @return mixed                 修改结果集
+	 */
+	public function editUser($data, $is_change_pwd = false)
+	{
+		if (!empty($data['uid'])) {
+			// 修改密码
+			if (!$is_change_pwd || ($is_change_pwd && empty($data['password']))) {
+				unset($data['salt']);
+				unset($data['password']);
+			} else {
+				$data['salt'] = rand_string(5);
+			}
+
+			// 重置角色
+			$group_ids = isset($data['group_id']) ? $data['group_id'] : [];
+			model('AuthGroupAccess')->addLink($data['uid'], $group_ids);
+			unset($data['group_id']);
+
+			$result = $this->data($data,true)->isUpdate(true)->validate('User.edit')->save();
+
+			if ($result) {
+				return $result;
+			}
+
+			return false;
+		} else {
+			$this->error = '非法操作';
+			return false;
+		}
+	}
+
+
 
 	/**
 	 * 获取当前用户信息

@@ -1,19 +1,24 @@
 <?php
 // +----------------------------------------------------------------------
-// | 权限表模型
+// | 货物运送系统
 // +----------------------------------------------------------------------
-// | @copyright (c) dorisnzy.com All rights reserved.
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | @author: dorisnzy <dorisnzy@163.com>
+// | Author: dorisnzy <dorisnzy@163.com>
 // +----------------------------------------------------------------------
-// | @version: v1.0
+// | Date: 2017-12-25
 // +----------------------------------------------------------------------
 
 namespace app\common\model;
 use app\common\model\Model;
 
-class AuthGroupAccess extends Model
+/**
+ * 权限模型
+ */
+class AuthRule extends Model
 {
 	//设置数据表（不含前缀)
     protected $name = 'auth_rule';
+    // 数据表主键 复合主键使用数组定义 不设置则自动获取
+    protected $pk = 'id';
 }

@@ -1,12 +1,12 @@
 <?php
 // +----------------------------------------------------------------------
-// | 公共模型
+// | 货物运送系统
 // +----------------------------------------------------------------------
-// | @copyright (c) lishaoen.com All rights reserved.
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | @author: lishaoen <lishaoen@gmail.com>
+// | Author: dorisnzy <dorisnzy@163.com>
 // +----------------------------------------------------------------------
-// | @version: v1.0
+// | Date: 2017-12-25
 // +----------------------------------------------------------------------
 
 namespace app\common\model;
@@ -14,6 +14,9 @@ namespace app\common\model;
 use think\Config;
 use think\Request;
 
+/**
+ * 公共模型
+ */
 class Model extends \think\Model
 {
 	// 当前页

@@ -18,6 +18,7 @@ use think\Controller;
  */
 class Base extends Controller
 {
+	protected $userInfo;
 	/**
 	 * 系统初始化
 	 *
@@ -25,7 +26,8 @@ class Base extends Controller
 	 */
 	protected function _initialize()
 	{
-		// $this->user_info = model('User')->getCurrentUserInfo();
+		// $this->userInfo = model('User')->getCurrentUserInfo();
+		// halt($this->userInfo);
 
 		// // 获取当前访问地址
   //       $current_url = $this->request->path();
@@ -37,7 +39,7 @@ class Base extends Controller
 		// }
 
 		// //不是管理员禁止登陆后台
-  //       if(!$this->user_info['isadministrator'] && !in_array($current_url, $_noaccess_url_arr)){
+  //       if(!$this->userInfo['isadministrator'] && !in_array($current_url, $_noaccess_url_arr)){
   //       	model('User')->logout();
   //           $this->error('您不是管理员，非法访问','admin/index/login');
   //       }
@@ -172,5 +174,45 @@ class Base extends Controller
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * 删除数据
+	 *
+	 * @return void 
+	 */
+	public function delete()
+	{	
+		$data = input('param.');
+
+		if (empty($data['model'])) {
+			return $this->error('请指定模型');
+		}
+
+		$model = $data['model'];
+
+		$pk = model($model)->getPk();
+
+		if (empty($data[$pk])) {
+			return $this->error('参数错误');
+		}
+
+		$map[$pk] = $data[$pk];
+
+		$res = model($model)->where($map)->delete();
+
+		if (!$res) {
+			return $this->error('删除失败');
+		}
+
+		// 关联数据删除
+		if (empty($data['link_model'])) {
+			return $this->success('删除成功');
+		}
+
+		model($data['link_model'])->where($map)->delete();
+		
+		return $this->success('删除成功');
+
 	}
 }
