@@ -187,7 +187,36 @@ class Base extends Controller
 	 */
 	protected function setMeta($meta_title = '')
 	{
-		$this->assign('meta_title', $meta_title);
+		// $this->assign('meta_title', $meta_title);
+		// 
+		if ($this->request->isAjax()) {
+			return false;
+		}
+
+		$current_url  = $this->request->module() . '/';
+		$current_url .= $this->request->controller() . '/';
+		$current_url .= $this->request->action();
+
+		$node = explode('/', $current_url);
+      	$hover_url = $node[0].'/'.$node[1];
+
+		$sub_title = db('menu')
+			->field('pid,title,name')
+			->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")
+			->find();
+		;
+
+        $main_title  = db('menu')
+        	->field('pid,title,name')
+        	->where('id', $sub_title['pid'])
+        	->find();
+        ;
+
+        $nav['main'] = $main_title;
+        $nav['sub'] = $sub_title;
+        $nav['current'] = $meta_title;
+
+        $this->assign('__NAV__', $nav);
 	}
 
 	/**

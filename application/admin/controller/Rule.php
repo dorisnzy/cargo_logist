@@ -29,7 +29,6 @@ class Rule extends Base
 	protected function _init()
 	{
 		$this->modelRule = model('AuthRule');
-		$this->setMeta('权限管理');
 
 		// 获取权限组
 		$curr_action = ['add', 'edit'];
@@ -91,6 +90,7 @@ class Rule extends Base
         $group = config('auth_group');
 		$this->assign('group', $group);
 
+		$this->setMeta('列表信息');
 		return $this->fetch();
 	}
 
@@ -123,6 +123,7 @@ class Rule extends Base
 		$info['module'] = $module;
 		$this->assign('info', $info);
 
+		$this->setMeta('新增权限');
 		return $this->fetch('edit');
 	}
 
@@ -164,6 +165,8 @@ class Rule extends Base
 		$info->node       = $node;
 
 		$this->assign('info', $info);
+
+		$this->setMeta('编辑权限');
 		return $this->fetch('edit');
 	}
 }

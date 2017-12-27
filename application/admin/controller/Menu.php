@@ -29,7 +29,6 @@ class Menu extends Base
 	protected function _init()
 	{
 		$this->modelMenu = model('Menu');
-		$this->setMeta('菜单管理');
 
 		// 获取菜单列表
 		$curr_action = ['add', 'edit'];
@@ -77,6 +76,7 @@ class Menu extends Base
 			$html = $this->fetch('index_ajax');
 			return $this->success('获取成功', '', ['list' => $html]);
 		}
+		$this->setMeta('列表信息');
 		return $this->fetch();
 	}
 
@@ -109,6 +109,8 @@ class Menu extends Base
 		$info['pid'] = $pid;
 		$info['module'] = $module;
 		$this->assign('info', $info);
+
+		$this->setMeta('新增菜单');
 
 		return $this->fetch('edit');
 	}
@@ -150,6 +152,8 @@ class Menu extends Base
 		$info->node       = $node;
 
 		$this->assign('info', $info);
+
+		$this->setMeta('编辑菜单');
 		return $this->fetch();
 	}
 }

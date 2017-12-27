@@ -29,7 +29,6 @@ class Group extends Base
 	protected function _init()
 	{
 		$this->modelGroup = model('AuthGroup');
-		$this->setMeta('角色管理');
 	}
 
 	/**
@@ -69,6 +68,7 @@ class Group extends Base
             return $this->success('获取成功', '', $data);
         }
 
+        $this->setMeta('列表信息');
 		return $this->fetch();
 	}
 	
@@ -87,6 +87,7 @@ class Group extends Base
 			return $this->success('新增成功', 'index');
 		}
 
+		$this->setMeta('新增');
 		return $this->fetch('edit');
 	}
 
@@ -111,6 +112,8 @@ class Group extends Base
 			}
 			return $this->success('编辑成功', 'index');
 		}
+
+		$this->setMeta('编辑');
 
 		$this->assign('info', $info);
 		return $this->fetch('edit');
@@ -161,6 +164,8 @@ class Group extends Base
 		$this->assign('module', $module);
 		$this->assign('list', $res);
 		$this->assign('info', $info);
+
+		$this->setMeta('授权');
 
 		return $this->fetch();
 	}

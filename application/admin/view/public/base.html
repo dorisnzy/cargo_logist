@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>{:config('app_name')}|{$meta_title}</title>
+  <title>{:config('app_name')}|{$__NAV__.main.title}|{$__NAV__.sub.title}</title>
   <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
 </head>
 <body class="layui-layout-body">
@@ -57,13 +57,17 @@
     </style>
   </empty>
   <div class="layui-body">
+    <notempty name="__MENU__._child">
+      <div style=" background-color: #f2f2f2; padding: 0.5rem 1rem;">
+        <span class="layui-breadcrumb">
+          <a href="{:url($__NAV__.main.name)}">{$__NAV__.main.title}</a>
+          <a href="{:url($__NAV__.sub.name)}">{$__NAV__.sub.title}</a>
+          <a href="javascript:;">{$__NAV__.current}</a>
+        </span>
+      </div>
+    </notempty>
     <!-- 内容主体区域 -->
-    <div style="padding: 15px;">
-      <notempty name="__MENU__._child">
-        <fieldset class="layui-elem-field layui-field-title">
-          <legend>{$meta_title}</legend>
-        </fieldset>
-      </notempty>
+    <div style="padding: 1rem;">
       <block name="body"></block>
     </div>
   </div>

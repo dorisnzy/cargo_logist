@@ -30,7 +30,6 @@ class User extends Base
 	protected function _init()
 	{
 		$this->modelUser = model('User');
-		$this->setMeta('用户管理');
 
 		// 用户组操作
 		$action_arr = ['add', 'edit'];
@@ -93,6 +92,7 @@ class User extends Base
             return $this->success('获取成功', '', $data);
         }
 
+        $this->setMeta('用户列表');
 		return $this->fetch();
 	}
 
@@ -117,6 +117,7 @@ class User extends Base
 			return $this->success('新增成功', 'index');
 		}
 
+		$this->setMeta('新增用户');
 		return $this->fetch('edit');
 	}
 
@@ -150,6 +151,7 @@ class User extends Base
 
 		$this->assign('info', $info);
 
+		$this->setMeta('编辑用户');
 		return $this->fetch('edit');
 	}
 
@@ -208,8 +210,7 @@ class User extends Base
             if (is_login()) {
                 $this->success("您已经是登陆状态！", url('admin/index/index'));
             }
-        
-            $this->setMeta('登录');
+            
             return $this->fetch();
         }
     }
