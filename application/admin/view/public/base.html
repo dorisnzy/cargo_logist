@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>后台系统|{$meta_title}</title>
+  <title>{:config('app_name')}|{$meta_title}</title>
   <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
-    <div class="layui-logo">后台系统</div>
+    <div class="layui-logo">{:config('app_name')}</div>
     <!-- 头部区域（可配合layui已有的水平导航） -->
     <ul class="layui-nav layui-layout-left">
       <notempty name="__MENU__.main">
@@ -29,11 +29,11 @@
     </ul>
   </div>
   
+  <notempty name="__MENU__._child">
   <div class="layui-side layui-bg-black">
     <div class="layui-side-scroll">
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-        <notempty name="__MENU__._child">
           <volist name="__MENU__._child" id="menu_group">
             <li class="layui-nav-item {$menu_group.class|default=''}">
               <a class="" href="javascript:;">{$key}</a>
@@ -46,24 +46,31 @@
               </dl>
             </li>
           </volist>
-        </notempty>
       </ul>
     </div>
   </div>
-  
+  </notempty>
+  <empty name="__MENU__._child">
+    <style type="text/css">
+      .layui-body{left: 0px;}
+      .layui-layout-admin .layui-footer{left: 0px;text-align: center;}
+    </style>
+  </empty>
   <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">
-      <fieldset class="layui-elem-field layui-field-title">
-        <legend>{$meta_title}</legend>
-      </fieldset>
+      <notempty name="__MENU__._child">
+        <fieldset class="layui-elem-field layui-field-title">
+          <legend>{$meta_title}</legend>
+        </fieldset>
+      </notempty>
       <block name="body"></block>
     </div>
   </div>
-  
+
   <div class="layui-footer">
     <!-- 底部固定区域 -->
-    © layui.com - 底部固定区域
+    Copyright © 2017 {:config('app_copyright')} 版权所有 All Rights Reserved.
   </div>
 </div>
 <script src="__STATIC__/layui//layui.js"></script>

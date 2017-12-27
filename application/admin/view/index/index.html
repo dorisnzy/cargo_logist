@@ -1,5 +1,47 @@
 <extend name="public/base">
 
 <block name="body">
-sdfsdf
+<blockquote class="layui-elem-quote">系统信息</blockquote>
+<table class="layui-table" lay-skin="line">
+  <tbody>
+    <tr>
+		<th style="width:20%;">系统名称</th>
+		<td>{:config('app_name')}</td>
+	</tr>
+	<tr>
+		<th style="width:20%;">系统版本</th>
+		<td>{:config('app_name')} v{$Think.THINK_VERSION}</td>
+	</tr>
+	<tr>
+		<th style="width:20%;">系统版权所有</th>
+		<td>
+			Copyright © {:date('Y')} {:config('app_copyright')} 版权所有 All Rights Reserved.
+		</td>
+	</tr>
+  </tbody>
+</table>
+
+<blockquote class="layui-elem-quote">服务器信息</blockquote>
+<table class="layui-table" lay-skin="line">
+  <tbody>
+    <tr>
+		<th style="width:20%;">服务器操作系统</th>
+		<td>{$Think.const.PHP_OS}</td>
+	</tr>
+	<tr>
+		<th style="width:20%;">运行环境</th>
+		<td>{$_SERVER['SERVER_SOFTWARE']}</td>
+	</tr>
+	<tr>
+		<th style="width:20%;">MYSQL版本</th>
+		<php>$system_info_mysql = \think\Db::query("select version() as v;");</php>
+		<td>{$system_info_mysql.0.v}</td>
+	</tr>
+	<tr>
+		<th style="width:20%;">上传限制</th>
+		<td>{:ini_get('upload_max_filesize')}</td>
+	</tr>
+  </tbody>
+</table>
+
 </block>
