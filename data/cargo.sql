@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-12-27 17:55:38
+Date: 2017-12-28 01:12:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -56,8 +56,6 @@ INSERT INTO `ca_auth_group_access` VALUES ('8', '4');
 INSERT INTO `ca_auth_group_access` VALUES ('13', '1');
 INSERT INTO `ca_auth_group_access` VALUES ('14', '1');
 INSERT INTO `ca_auth_group_access` VALUES ('15', '1');
-INSERT INTO `ca_auth_group_access` VALUES ('16', '1');
-INSERT INTO `ca_auth_group_access` VALUES ('17', '1');
 
 -- ----------------------------
 -- Table structure for ca_auth_rule
@@ -180,6 +178,7 @@ CREATE TABLE `ca_user` (
   `last_login_time` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
   `login` int(11) NOT NULL DEFAULT '0' COMMENT '登录次数',
   `extattr` text NOT NULL,
+  `work_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '工作状态（0：空闲，1：忙碌）',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `user_name` (`username`) USING BTREE,
   UNIQUE KEY `mobile` (`mobile`) USING BTREE,
@@ -190,9 +189,7 @@ CREATE TABLE `ca_user` (
 -- ----------------------------
 -- Records of ca_user
 -- ----------------------------
-INSERT INTO `ca_user` VALUES ('1', 'admin', '创始人', 'cf57eb8a739adbcae3a7669e4a41ad5a', '1', '1', '13667792110', 'admin@admin.com', '', 'admin', '', '1', '0', '0', '1514367782', 'UFTGw', '', 0x61646D696E, '', '127.0.0.1', '1514367782', '10', '');
-INSERT INTO `ca_user` VALUES ('13', 'nongzhengyi', 'nongzhengyi', '4d1b77e5a85cadf095fc9ce447324ab6', '1', '1', '18345152222', 'sdf@sdfds.com', '', 'sdjojojoo', '', '1', '0', '1514353683', '1514366927', 'iRopO', '', '', '127.0.0.1', '127.0.0.1', '1514366927', '6', '');
-INSERT INTO `ca_user` VALUES ('14', 'test', 'test', '6e6f925a9d56ec6874cbfc9058bb882e', '1', '0', '234', 'sdf@fdsf.com', '', 'dsjfksajdf', '', '1', '0', '1514355803', '1514356028', 'FXCBw', '', 0x73616466647366, '127.0.0.1', '', '0', '0', '');
-INSERT INTO `ca_user` VALUES ('15', 'test1', 'test2', '0e3f3017fcc3332f1e7a6d4559532f87', '1', '0', 'test1', 'sadf@sdf.com', '', 'sadf', '', '1', '0', '1514356082', '1514356082', 'DgyHnk', '', '', '127.0.0.1', '', '0', '0', '');
-INSERT INTO `ca_user` VALUES ('16', 'test3', 'test3', 'd6183d468cbc10b8dd8055cda781c880', '1', '0', 'test3', 'sdf@sdf.com', '', 'sjfojoiioo', '', '1', '0', '1514356440', '1514356910', 'MtGLy', '', '', '127.0.0.1', '127.0.0.1', '1514356910', '1', '');
-INSERT INTO `ca_user` VALUES ('17', 'test4', 'test4', 'b69a300a340f86b9b3b1a9fd8c8aad78', '1', '0', 'test4', 'test4@sdf.com', '', 'sdfhhh', '', '1', '0', '1514356963', '1514357010', 'MRBfqN', '', 0x6173646673616466, '127.0.0.1', '127.0.0.1', '1514357010', '1', '');
+INSERT INTO `ca_user` VALUES ('1', 'admin', '创始人', 'cf57eb8a739adbcae3a7669e4a41ad5a', '1', '1', '13667792110', 'admin@admin.com', '', 'admin', '', '1', '0', '0', '1514381279', 'UFTGw', '', 0x61646D696E, '', '127.0.0.1', '1514381279', '13', '', '0');
+INSERT INTO `ca_user` VALUES ('13', 'nongzhengyi', 'nongzhengyi', '4d1b77e5a85cadf095fc9ce447324ab6', '1', '1', '18345152222', 'sdf@sdfds.com', '', 'sdjojojoo', '', '1', '0', '1514353683', '1514376972', 'iRopO', '', '', '127.0.0.1', '127.0.0.1', '1514376972', '7', '', '0');
+INSERT INTO `ca_user` VALUES ('14', 'test', 'test', '6e6f925a9d56ec6874cbfc9058bb882e', '1', '0', '234', 'sdf@fdsf.com', '', 'dsjfksajdf', '', '1', '0', '1514355803', '1514356028', 'FXCBw', '', 0x73616466647366, '127.0.0.1', '', '0', '0', '', '0');
+INSERT INTO `ca_user` VALUES ('15', 'test1', 'test2', '0e3f3017fcc3332f1e7a6d4559532f87', '1', '0', 'test1', 'sadf@sdf.com', '', 'sadf', '', '1', '0', '1514356082', '1514356082', 'DgyHnk', '', '', '127.0.0.1', '', '0', '0', '', '0');
