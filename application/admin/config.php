@@ -6,6 +6,6 @@ return [
 	// 系统后台分页
     'page' => [
         'type' => 'layui',
-        'list_rows' => 15,
+        'list_rows' => 13,
     ],
 ];

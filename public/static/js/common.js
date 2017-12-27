@@ -69,7 +69,7 @@ layui.use(module, function(){
     var show_dialogue = function(me, current, where){
         var tips = $(me).attr('data-tips');
         tips = tips || '您确定要操作？';
-        layer.confirm(tips, {btn:['确定', '取消']},
+        layer.confirm(tips, {btn:['确定', '取消'],skin:'layui-layer-molv',icon:3},
             function(){
                 var server_url = $(me).attr('data-url');
                 $.get(server_url, {}, function(result){
@@ -88,7 +88,7 @@ layui.use(module, function(){
     }
 
     // 表单提交
-    var submit_form = function(lay_filter){
+    var submit_form = function(lay_filter, callback){
         lay_filter = lay_filter || 'submitForm';
         form.on('submit(' + lay_filter + ')', function(data){
             var default_class = data.elem.classList.value;
@@ -106,10 +106,16 @@ layui.use(module, function(){
 
                 if (!result.code) {
                     error_msg(result.msg);
+                    if (callback && typeof callback.error != 'undefined' && callback.error != undefined) {
+                        callback.error();
+                    } 
                     return false;
                 }
 
                 success_msg(result.msg);
+                if (callback && typeof callback.success != 'undefined' && callback.success != undefined) {
+                    callback.success();
+                } 
 
                 if (result.url) {
                     setTimeout(function(){window.location.href = result.url;}, 2000);
@@ -146,18 +152,66 @@ layui.use(module, function(){
         layer.msg(msg || '操作失败', {icon:5});
     }
 
+    // 弹窗获取html
+    var get_open_html = function(element){
+        var element    = element || '.open-html';
+        var open_url   = $(element).attr('data-url');
+        var box_width  = $(element).attr('box-width') || '500px';
+        var box_height = $(element).attr('box-height') || '300px';
+        if (!open_url) {
+            return false;
+        }
+        $.get(open_url, {}, function(result){
+            if (!result.code) {
+                error_msg(result.msg);
+                return false;
+            }
 
+            layer.open({
+                type : 1,
+                area : [box_width, box_height],
+                anim : 5,
+                skin : 'layui-layer-molv',
+                shade : 0.1,
+                content : '<div style="padding:1rem;">' + result.data.html + '</div>'
+            });
+        });
+    }
 
 
 // ----------------- 普通调用 ---------------------
 
-    if ($('.layui-table').attr('data-url')) {
-        get_list('', 1, {});
-    }
-    if ($('#keyword')) {        
-        $('#keyword').on('click', function(){
-            get_list('', 1, $('.keyword').serializeObject());  
+    var common_invok = function(){
+        // 分页获取列表信息初始化
+        if ($('.layui-table').attr('data-url')) {
+            get_list('', 1, {});
+        }
+
+        // 关键词搜索
+        if ($('#keyword')) {
+            $('#keyword').on('click', function(){
+                get_list('', 1, $('.keyword').serializeObject());
+            });
+        }
+
+        // 通用表单提交
+        submit_form();
+
+        // 登录表单提交
+        submit_form('login-submit', {
+            error:function(){
+                $('#verify').attr('src', function(){
+                    this.src=this.src+'?'+Math.random();
+                });
+            },
+            success:function(){},
+        });
+
+        // 弹窗获取页面
+        $('.open-html').on('click', function(){
+            get_open_html();
         });
     }
-    submit_form();
+    
+    common_invok();
 });

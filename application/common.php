@@ -193,3 +193,33 @@ function get_status_format($status)
 
 	return $dot;
 }
+
+/**
+ * 权限校验
+ * $url URL地址
+ * @return boolean
+ */
+function check_rule($url){
+	$count = count(explode('/', $url));
+
+	if ($count == 1) {
+		$rule = request()->module() . '/' . request()->dispatch()['module'][1] . '/' . $url;
+	} else if ($count == 2) {
+		$rule = request()->module() . '/' . $url;
+	} else if ($count == 3) {
+		$rule = $url;
+	} else {
+		return false;
+	}
+
+	static $Auth = null;
+
+	if (!$Auth) {
+		$Auth = new \app\common\org\Auth();
+	}
+	if (!IS_ROOT && !$Auth->check($rule, session('user_auth.uid'), 1, 'url')) {
+		return false;
+	}
+
+	return true;
+}

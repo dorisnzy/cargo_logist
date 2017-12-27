@@ -18,7 +18,17 @@ use think\Controller;
  */
 class Base extends Controller
 {
+	// 当前用户信息
 	protected $userInfo;
+
+	// 不需要验证权限的节点
+	protected $noaccessUrlArr = [
+		'admin/user/login', 
+		'admin/user/logout', 
+		'admin/user/verify',
+		'admin/index/index',
+	];
+
 	/**
 	 * 系统初始化
 	 *
@@ -29,16 +39,15 @@ class Base extends Controller
 		$this->userInfo = model('User')->getCurrentUserInfo();
 
 		// 获取当前访问地址
-        $current_url = $this->request->path();
-
+        $current_url = strtolower($this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action());
+        
         //不需要权限检测链接数组
-        $_noaccess_url_arr = array('admin/user/login', 'admin/user/logout', 'admin/user/verify',);
-        if (!is_login() && !in_array($current_url, $_noaccess_url_arr)) {
+        if (!is_login() && !in_array($current_url, $this->noaccessUrlArr)) {
 			$this->redirect('admin/user/login');
 		}
 
-		//不是管理员禁止登陆后台
-        if(!$this->userInfo['isadministrator'] && !in_array($current_url, $_noaccess_url_arr)){
+		//不是后台管理员禁止登陆后台
+        if(!$this->userInfo['isadministrator'] && !in_array($current_url, $this->noaccessUrlArr)){
         	model('User')->logout();
             $this->error('您不是管理员，非法访问','admin/index/login');
         }
@@ -46,40 +55,27 @@ class Base extends Controller
         // 是否是超级管理员
 		defined('IS_ROOT') or define('IS_ROOT', is_administrator());
 
-		if (!in_array($current_url, $_noaccess_url_arr)) {
-            
+		if (!in_array($current_url, $this->noaccessUrlArr)) {            
             // 检测系统权限
 			if (!IS_ROOT) {
+				// 检测控制访问权限（这一级权限为系统最高权限验证）
                 $access = $this->accessControl();
-                if (false === $access) {
-					$this->error('403:禁止访问');
-				} elseif (null === $access) {
-					$dynamic = $this->checkDynamic(); //检测分类栏目有关的各项动态权限
-					if ($dynamic === null && !in_array($current_url, $_noaccess_url_arr)) {
-						//检测访问权限
-						if (!$this->checkRule($current_url, array('in', '1,2'))) {
-							model('User')->logout();
-							$this->error('未授权访问!');
-						} else {
-							// 检测分类及内容有关的各项动态权限
-							$dynamic = $this->checkDynamic();
-							if (false === $dynamic) {
-								model('User')->logout();
-								$this->error('未授权访问!');
-							}
-						}
-					} elseif ($dynamic === false) {
-						model('User')->logout();
-						$this->error('未授权访问!');
-					}
-				}
+                if (-1 === $access) {
+                	$this->error('403:禁止访问');
+                }
+
+                //检测访问权限
+                if (!$this->checkRule($current_url, array('in', '1,2'))) {
+                	$this->error('未授权访问!');
+                }
 			}
         }
         
         //菜单设置
-        $this->assign("__MENU__", $this->getMenus());
-
-
+        if (!$this->request->isAjax()) {
+        	$this->assign('USER_INFO', $this->userInfo);
+        	$this->assign("__MENU__", $this->getMenus());
+        }
 
 		$this->_init();
 	}
@@ -102,7 +98,7 @@ class Base extends Controller
 	public function getMenus()
 	{
 		// 获取当前访问地址
-        $current_url = $this->request->path();
+        $current_url = strtolower($this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action());
 
         // 获取顶级主菜单
         $main_map['pid'] = 0;
@@ -110,12 +106,19 @@ class Base extends Controller
         $main_map['status'] = 1;
       	$main_map['type'] = 1;
 
+      	$menus = [];
+
       	$main_list = db('menu')->where($main_map)->order('sort asc,id asc')->select();
       	foreach ($main_list as $key => $item) {
-      		//此处用来做权限判断
-			if (!IS_ROOT && !$this->checkRule($item['name'])) {
-				unset($menus['main'][$item['id']]);
-				continue; //继续循环
+      		// 获取子菜单标识
+      		$sub_tag = db('menu')->where(['pid' => $item['id']])->value('id');
+      		
+			// 没有子菜单 并且 不在公开节点内
+			if (!in_array($item['name'], $this->noaccessUrlArr)) {
+				// 不是超级管理员进行权限验证
+				if (!IS_ROOT && !$this->checkRule($item['name'], 2)) {
+					continue; //继续循环
+				}
 			}
 
       		if ($current_url == $item['name']) {
@@ -128,8 +131,11 @@ class Base extends Controller
       	}
 
       	//查询当前的父菜单id和菜单id
-        $pid = db('menu')->where("pid !=0 AND name = '{$current_url}' AND status = 1")->value('pid');
-        $id  = db('menu')->where("pid = 0 AND name = '{$current_url}' AND status = 1")->value('id');
+      	$node = explode('/', $current_url);
+      	$hover_url = $node[0].'/'.$node[1];
+
+        $pid = db('menu')->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")->value('pid');
+        $id  = db('menu')->where("pid = 0 AND name like '{$hover_url}%' AND status = 1")->value('id');
 
         $pid = $pid ? $pid : $id;
 
@@ -141,37 +147,34 @@ class Base extends Controller
         $sub_map['type'] = 2;
         $sub_map['status'] = 1;
 
-        $sub_row = db('menu')->where($sub_map)->order('sort asc,id asc')->select();
-
+        $sub_row = db('menu')->where($sub_map)->order('sort asc,id asc')->column('*', 'id');
+        if (!$sub_row) {
+        	return $menus; //如果没有子菜单直接返回
+        }
         $current_id  = db('menu')->where(array('status'=>1,'name'=>$current_url))->value('pid');
 
+        $sub_pid = db('menu')->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")->value('id');
+    	// 给当前左侧子菜单激活属性
+        $sub_row[$sub_pid]['class'] = 'layui-this';
+    	// 给当前左侧菜单组激活属性
+    	$menus['_child'][$sub_row[$sub_pid]['group']]['class'] = 'layui-nav-itemed';
+    	if (!empty($menus['main'][$sub_row[$sub_pid]['pid']])) {
+    		$menus['main'][$sub_row[$sub_pid]['pid']]['class'] = 'layui-this';
+    	}
+
+        // 给主菜单激活属性
         foreach ($sub_row as $key => $item) {
-        	if (IS_ROOT || $this->checkRule($value)) {
-        		$menus['main'][$item['pid']]['class'] = 'layui-this';
-
-        		if ($current_url == $item['name']) {
-        			$item['class'] = 'layui-this';
-        			$menus['_child'][$item['group']]['class'] = 'layui-nav-itemed';
-        		} else {
-        			$item['class'] = '';
-        		}
-
-        	} else if ($current_id == $item['id']) {
-        		$menus['main'][$item['pid']]['class'] = 'layui-this';
-        		
-        		if ($current_url == $item['name']) {
-        			$item['class'] = 'layui-this';
-        			$menus['_child'][$item['group']]['class'] = 'layui-nav-itemed';
-        		} else {
-        			$item['class'] = '';
-        		}
-        	} else {
-        		$item['class'] 						  = '';
-        	}
+        	// 不在公开节点内
+			if (!in_array($item['name'], $this->noaccessUrlArr)) {
+				// 不是超级管理员进行权限验证
+				if (!IS_ROOT && !$this->checkRule($item['name'], 1)) {
+					continue; //继续循环
+				}
+			}
 
         	$menus['_child'][$item['group']]['item'][$key] = $item;
         }
-        // halt($menus);
+
         return $menus;
 	}
 
@@ -188,29 +191,13 @@ class Base extends Controller
 	}
 
 	/**
-	 * 检测是否是需要动态判断的权限
-	 * @return boolean|null
-	 *      返回true则表示当前访问有权限
-	 *      返回false则表示当前访问无权限
-	 *      返回null，则表示权限不明
-	 *
-	 */
-	protected function checkDynamic()
-	{
-		if (IS_ROOT) {
-			return true; //管理员允许访问任何页面
-		}
-		return null; //不明,需checkRule
-	}
-
-	/**
 	 * action访问控制,在 **登陆成功** 后执行的第一项权限检测任务
 	 *
 	 * @return boolean|null  返回值必须使用 `===` 进行判断
 	 *
-	 *   返回 **false**, 不允许任何人访问(超管除外)
-	 *   返回 **true**, 允许任何管理员访问,无需执行节点权限检测
-	 *   返回 **null**, 需要继续执行节点权限检测决定是否允许访问
+	 *   返回 **-1**, 不允许任何人访问(超管除外)
+	 *   返回 **1**, 允许任何管理员访问,无需执行节点权限检测
+	 *   返回 **0**, 需要继续执行节点权限检测决定是否允许访问
 	 */
 	final protected function accessControl()
 	{
@@ -224,7 +211,7 @@ class Base extends Controller
 		// if (!empty($allow) && in_array_case($check, $allow)) {
 		// 	return true;
 		// }
-		return null; //需要检测节点权限
+		return 0; //需要检测节点权限
 	}
 
 	/**

@@ -32,11 +32,7 @@ class User extends Model
     protected $dateFormat;
 
     // 新增自动完成列表
-	protected $insert = array('password','create_time','regip');
-
-	protected function setPasswordAttr($value, $data){
-		return md5($value.$data['salt']);
-	}
+	protected $insert = array('create_time','regip');
 
 	protected function setRegipAttr(){
         return request()->ip();
@@ -65,6 +61,14 @@ class User extends Model
     	$group_ids = $group_arr = array();
     	$group_ids = db('AuthGroupAccess')->where('uid', $data['uid'])->column('group_id');
     	return $group_ids ? implode(',', $group_ids) : '';
+    }
+
+    /**
+     * 密码加密
+     */
+    public function encrptyPwd($password, $salt)
+    {
+    	return md5(sha1($password.$salt));
     }
 
 	/**
@@ -99,17 +103,22 @@ class User extends Model
 		}
 
 		$user = $this->where($map)->find();
-        
-		if(isset($user['status']) && $user['status']){
-			/* 验证用户密码 */
-			if(md5($password.$user['salt']) === $user['password']){
-				$this->autoLogin($user); //更新用户登录信息
-				return $user['uid']; //登录成功，返回用户ID
-			} else {
-				return -2; //密码错误
-			}
+        if (!$user) {
+        	return -1; //用户不存在
+        }
+        if ($user['status'] != 1) {
+        	return -1; //用户被禁用
+        }
+        if ($user['isadministrator'] != 1) {
+        	return -1; // 不是管理员
+        }
+		/* 验证用户密码 */
+		$password = $this->encrptyPwd($password, $user['salt']);
+		if($password === $user['password']){
+			$this->autoLogin($user); //更新用户登录信息
+			return $user['uid']; //登录成功，返回用户ID
 		} else {
-			return -1; //用户不存在或被禁用
+			return -2; //密码错误
 		}
 	}
 
@@ -163,9 +172,9 @@ class User extends Model
 		if(empty($data['salt'])){
             $data['salt'] = rand_string(6);
 		}
+        $data['password'] = $this->encrptyPwd($data['password'], $data['salt']);
+		// halt($data);
         if($data){       
-            $data['status'] = 1;
-
             $group_ids = isset($data['group_id']) ? $data['group_id'] : [];
             unset($data['group_id']);
 
@@ -201,7 +210,7 @@ class User extends Model
 	 *
 	 * @return mixed                 修改结果集
 	 */
-	public function editUser($data, $is_change_pwd = false)
+	public function editUser($data, $is_change_pwd = false, $is_change_group = true)
 	{
 		if (!empty($data['uid'])) {
 			// 修改密码
@@ -210,11 +219,14 @@ class User extends Model
 				unset($data['password']);
 			} else {
 				$data['salt'] = rand_string(5);
+				$data['password'] = $this->encrptyPwd($data['password'], $data['salt']);
 			}
 
 			// 重置角色
-			$group_ids = isset($data['group_id']) ? $data['group_id'] : [];
-			model('AuthGroupAccess')->addLink($data['uid'], $group_ids);
+			if ($is_change_group) {
+				$group_ids = isset($data['group_id']) ? $data['group_id'] : [];
+				model('AuthGroupAccess')->addLink($data['uid'], $group_ids);
+			}
 			unset($data['group_id']);
 
 			$result = $this->data($data,true)->isUpdate(true)->validate('User.edit')->save();

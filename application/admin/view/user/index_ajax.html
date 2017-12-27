@@ -18,15 +18,17 @@
          <!--  <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-primary">
             查看
           </a> -->
-          <a href="{:url('edit', ['uid' => $item['uid']])}" class="layui-btn layui-btn-xs">
-            编辑
-          </a>
-          <if condition="is_administrator($item['uid'])">
+          <if condition="is_administrator($item['uid']) and !IS_ROOT">
             <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger">不能操作</a>
           <else/>
-            <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['uid' => $item['uid'], 'model' => 'User', 'link_model' => 'AuthGroupAccess'])}"data-tips="您确定要删除？">
-            删除
-          </a>
+            <a href="{:url('edit', ['uid' => $item['uid']])}" class="layui-btn layui-btn-xs">
+              编辑
+            </a>
+            <if condition="!is_administrator($item['uid'])">
+              <a href="javascript:" class="layui-btn layui-btn-xs layui-btn-danger dialogue" data-url="{:url('delete',['uid' => $item['uid'], 'model' => 'User', 'link_model' => 'AuthGroupAccess'])}"data-tips="您确定要删除？">
+              删除
+              </a>
+            </if>
           </if>
         <div class="layui-btn-group">
         </div>

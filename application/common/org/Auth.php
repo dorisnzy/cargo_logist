@@ -97,6 +97,7 @@ class Auth{
         if (!$this->_config['auth_on'])
             return true;
         $authList = $this->getAuthList($uid,$type); //获取用户需要验证的所有有效规则列表
+        // halt($type);
         // halt($authList);
         if (is_string($name)) {
             $name = strtolower($name);
@@ -185,7 +186,7 @@ class Auth{
 
         $map=array(
             'id'=>array('in',$ids),
-            //'type'=>$type,
+            'type'=>$type,
             'status'=>1,
         );
         //读取用户组所有权限规则

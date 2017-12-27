@@ -21,4 +21,12 @@ class AuthRule extends Model
     protected $name = 'auth_rule';
     // 数据表主键 复合主键使用数组定义 不设置则自动获取
     protected $pk = 'id';
+
+    // 保存自动完成列表
+    protected $auto = ['type'];
+
+    protected function setTypeAttr($value, $data)
+    {
+    	return $data['group'] == '顶级菜单' ? 2 : 1;
+    } 
 }

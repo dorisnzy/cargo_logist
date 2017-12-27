@@ -24,7 +24,7 @@ class Rule extends Validate
 		'controller'     => 'require',
 		'node'     => 'require',
 		'group'     => 'require',
-		'name'     => 'require|unique:auth_rule',
+		'name'     => 'require|checkRuleName',
 	);
 	protected $message = array(
 		'title.require'    => '请选择上级菜单',
@@ -34,10 +34,27 @@ class Rule extends Validate
 		'node.require'    => '请填写方法',
 		'group.require'    => '请选择菜单分组',
 		'name.require'    => '权限出错',
-		'name.unique'    => '权限节点冲突',
+		'name.checkRuleName'    => '权限节点冲突',
 	);
 	protected $scene = array(
 		'add' => 'title,module,controller,node,group,name',
 		'edit' => 'title,module,controller,node,group,name',
 	);
+
+	/**
+	 * 节点验证
+	 */
+	protected function checkRuleName($value, $rule, $data)
+	{
+		$map['type'] = $data['group'] == '顶级菜单' ? 2 : 1;
+		$map['name'] = $data['name'];
+
+		$id = db('auth_rule')->where($map)->value('id');
+
+		if ($id) {
+			return false;
+		}
+
+		return true;
+	}
 }

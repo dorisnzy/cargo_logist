@@ -158,7 +158,18 @@ class User extends Base
 	 */
 	public function editPwd()
 	{
-		// TODO::
+		if ($this->request->isPost()) {
+			$data = input('post.');
+			$data['uid'] = session('user_auth.uid');
+			$res = $this->modelUser->editUser($data, true, false);
+			if (!$res) {
+				return $this->error('编辑失败');
+			}
+			return $this->success('编辑成功','index/index');
+		}
+		$this->assign('info', $this->userInfo);
+		$html = $this->fetch('editpwd_ajax');
+		return $this->success('获取成功', '', ['html' => $html]);
 	}
 
 	/**
@@ -186,7 +197,7 @@ class User extends Base
 				switch ($uid) {
 				case -1:$error = '用户不存在或被禁用！';
 					break; //系统级别禁用
-				case -2:$error = '密码错误！';
+				case -2:$error = '用户或密码错误！';
 					break;
 				default:$error = '未知错误！';
 					break; // 0-接口参数错误（调试阶段使用）
