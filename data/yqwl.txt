@@ -1,0 +1,75 @@
+CREATE TABLE `ca_order` (
+  `order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) DEFAULT NULL COMMENT '供应商id',
+  `supplier_uid` int(11) DEFAULT NULL COMMENT '供应商用户uid',
+  `publish_time` int(11) DEFAULT NULL COMMENT '发布时间',
+  `maybe_time` int(11) DEFAULT NULL COMMENT '预计到达时间 （自动在发布时间后加三十分钟）',
+  `order_remark` varchar(255) DEFAULT NULL COMMENT '订单备注',
+  `order_status` int(11) DEFAULT NULL COMMENT '订单状态 0 发布 20平台收到待分配取货者  40-取货确认  60 - 已到达   80-已取货  100 发布司机送货单 120 完成回到平台所在，取货整体完成',
+  `order_product` varchar(255) DEFAULT NULL COMMENT '产品名称 - 有可能用到',
+  `order_product_price` varchar(10) DEFAULT NULL COMMENT '产品价格 - 有可能用到',
+  `site_sn` varchar(255) DEFAULT NULL COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
+  `take_uid` int(11) DEFAULT NULL COMMENT '取货人uid',
+  `take_time` int(11) DEFAULT NULL COMMENT '取货时间',
+  `target_uid` int(11) DEFAULT NULL COMMENT '目标目的地商家用户表',
+  `target_name` varchar(255) DEFAULT NULL COMMENT '目的地商家名称',
+  `target_username` varchar(255) DEFAULT NULL COMMENT '目的地商家联系人',
+  `target_tel` varchar(255) DEFAULT NULL COMMENT '电话',
+  `target_address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  `target_lng` varchar(255) DEFAULT NULL COMMENT '目的地商家 经度',
+  `target_lat` varchar(255) DEFAULT NULL COMMENT '目的地商家 维度',
+  PRIMARY KEY (`order_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='供应商发布需求，补充完善信息表';
+
+
+
+CREATE TABLE `ca_order_log` (
+  `log_id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL COMMENT '对应订单id',
+  `order_status` int(255) DEFAULT NULL COMMENT '订单状态',
+  `op_uid` int(11) DEFAULT NULL COMMENT '操作用户uid  根据status来判断是哪种uid 发布需求的uid 取货的uid',
+  `log_time` datetime DEFAULT NULL COMMENT '时间',
+  `log_msg` varchar(255) DEFAULT NULL COMMENT '日志备注，专门针对这个环节的备注',
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='供应商发布需求，状态变化日志表';
+
+
+
+CREATE TABLE `ca_send` (
+  `send_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '送货单id',
+  `supplier_id` varchar(255) DEFAULT NULL COMMENT '供应商id',
+  `supplier_uid` int(11) DEFAULT NULL COMMENT '供应商用户uid',
+  `order_id` int(11) DEFAULT NULL COMMENT '来源于 供应商列表',
+  `publish_time` int(11) DEFAULT NULL COMMENT '发布时间',
+  `maybe_time` int(11) DEFAULT NULL COMMENT '预计送达时间 （自动在发布时间后加60分钟）',
+  `sand_remark` varchar(255) DEFAULT NULL COMMENT '送货订单备注',
+  `send_status` int(11) DEFAULT NULL COMMENT '订单状态 0 发布 20平台收到待分配送货者司机  40-送货者司机确认  60 - 司机已到达   80-司机已取货  100 司机送达目的地 120目的地商家确认收货 140 完成送货回到平台所在，送货整体完成',
+  `pay_status` int(11) DEFAULT NULL COMMENT '支付状态 0 未支付 大于0具体为支付订单号 便于关联查询',
+  `driver_uid` int(11) DEFAULT NULL COMMENT '司机uid',
+  `driver_take_time` int(11) DEFAULT NULL COMMENT '司机取货时间',
+  `driver_over_time` int(11) DEFAULT NULL COMMENT '司机送达货时间',
+  `site_sn` varchar(255) DEFAULT NULL COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
+  `target_uid` int(11) DEFAULT NULL COMMENT '目标目的地商家用户表',
+  `target_name` varchar(255) DEFAULT NULL COMMENT '目的地商家名称',
+  `target_username` varchar(255) DEFAULT NULL COMMENT '目的地商家联系人',
+  `target_tel` varchar(255) DEFAULT NULL COMMENT '目的地电话',
+  `target_address` varchar(255) DEFAULT NULL COMMENT '目的地详细地址',
+  `target_lng` varchar(255) DEFAULT NULL COMMENT '目的地商家 经度',
+  `target_lat` varchar(255) DEFAULT NULL COMMENT '目的地商家 维度',
+  PRIMARY KEY (`send_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='供应商发布需求，补充完善信息表';
+
+
+
+
+CREATE TABLE `ca_send_log` (
+  `log_id` int(11) NOT NULL,
+  `send_id` int(11) DEFAULT NULL COMMENT '对应订单id',
+  `send_status` int(255) DEFAULT NULL COMMENT '订单状态',
+  `op_uid` int(11) DEFAULT NULL COMMENT '操作用户uid  根据status来判断是哪种uid 司机的uid 确认的uid',
+  `log_time` datetime DEFAULT NULL COMMENT '时间',
+  `log_msg` varchar(255) DEFAULT NULL COMMENT '日志备注，专门针对这个环节的备注',
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='供应商发布需求，状态变化日志表';
+
+

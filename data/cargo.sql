@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-12-28 01:12:10
+Date: 2017-12-28 19:05:27
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -56,6 +56,8 @@ INSERT INTO `ca_auth_group_access` VALUES ('8', '4');
 INSERT INTO `ca_auth_group_access` VALUES ('13', '1');
 INSERT INTO `ca_auth_group_access` VALUES ('14', '1');
 INSERT INTO `ca_auth_group_access` VALUES ('15', '1');
+INSERT INTO `ca_auth_group_access` VALUES ('16', '1');
+INSERT INTO `ca_auth_group_access` VALUES ('17', '1');
 
 -- ----------------------------
 -- Table structure for ca_auth_rule
@@ -151,6 +153,119 @@ INSERT INTO `ca_menu` VALUES ('6', '权限', 'admin/rule/index', 'admin', '系�
 INSERT INTO `ca_menu` VALUES ('7', '首页', 'admin/index/index', 'admin', '其它', '1', null, '0', '1', '1');
 
 -- ----------------------------
+-- Table structure for ca_order
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_order`;
+CREATE TABLE `ca_order` (
+  `order_id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) DEFAULT NULL COMMENT '供应商id',
+  `supplier_uid` int(11) DEFAULT NULL COMMENT '供应商用户uid',
+  `publish_time` int(11) DEFAULT NULL COMMENT '发布时间',
+  `maybe_time` int(11) DEFAULT NULL COMMENT '预计到达时间 （自动在发布时间后加三十分钟）',
+  `order_remark` varchar(255) DEFAULT NULL COMMENT '订单备注',
+  `order_status` int(11) DEFAULT NULL COMMENT '订单状态 0 发布 20平台收到待分配取货者  40-取货确认  60 - 已到达   80-已取货  100 发布司机送货单 120 完成回到平台所在，取货整体完成',
+  `order_product` varchar(255) DEFAULT NULL COMMENT '产品名称 - 有可能用到',
+  `order_product_price` varchar(10) DEFAULT NULL COMMENT '产品价格 - 有可能用到',
+  `site_sn` varchar(255) DEFAULT NULL COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
+  `take_uid` int(11) DEFAULT NULL COMMENT '取货人uid',
+  `take_time` int(11) DEFAULT NULL COMMENT '取货时间',
+  `target_uid` int(11) DEFAULT NULL COMMENT '目的地商家用户表',
+  `target_name` varchar(255) DEFAULT NULL COMMENT '目的地商家名称',
+  `target_username` varchar(255) DEFAULT NULL COMMENT '目的地商家联系人',
+  `target_tel` varchar(255) DEFAULT NULL COMMENT '电话',
+  `target_address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  `target_lng` varchar(255) DEFAULT NULL COMMENT '目的地商家 经度',
+  `target_lat` varchar(255) DEFAULT NULL COMMENT '目的地商家 维度',
+  PRIMARY KEY (`order_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='供应商发布需求，补充完善信息表';
+
+-- ----------------------------
+-- Records of ca_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_order_log
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_order_log`;
+CREATE TABLE `ca_order_log` (
+  `log_id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL COMMENT '对应订单id',
+  `order_status` int(255) DEFAULT NULL COMMENT '订单状态',
+  `op_uid` int(11) DEFAULT NULL COMMENT '操作用户uid  根据status来判断是哪种uid 发布需求的uid 取货的uid',
+  `log_time` datetime DEFAULT NULL COMMENT '时间',
+  `log_msg` varchar(255) DEFAULT NULL COMMENT '日志备注，专门针对这个环节的备注',
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='供应商发布需求，状态变化日志表';
+
+-- ----------------------------
+-- Records of ca_order_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_send
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_send`;
+CREATE TABLE `ca_send` (
+  `send_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '送货单id',
+  `supplier_id` varchar(255) DEFAULT NULL COMMENT '供应商id',
+  `supplier_uid` int(11) DEFAULT NULL COMMENT '供应商用户uid',
+  `order_id` int(11) DEFAULT NULL COMMENT '来源于 供应商发布需求表',
+  `publish_time` int(11) DEFAULT NULL COMMENT '发布时间',
+  `maybe_time` int(11) DEFAULT NULL COMMENT '预计送达时间 （自动在发布时间后加60分钟）',
+  `sand_remark` varchar(255) DEFAULT NULL COMMENT '送货订单备注',
+  `send_status` int(11) DEFAULT NULL COMMENT '订单状态 0 发布 20平台收到待分配送货者司机  40-送货者司机确认  60 - 司机已到达   80-司机已取货  100 司机送达目的地 120目的地商家确认收货 140 完成送货回到平台所在，送货整体完成',
+  `pay_status` int(11) DEFAULT NULL COMMENT '支付状态 0 未支付 大于0具体为支付订单号 便于关联查询',
+  `driver_uid` int(11) DEFAULT NULL COMMENT '司机uid',
+  `driver_take_time` int(11) DEFAULT NULL COMMENT '司机取货时间',
+  `driver_over_time` int(11) DEFAULT NULL COMMENT '司机送达货时间',
+  `site_sn` varchar(255) DEFAULT NULL COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
+  PRIMARY KEY (`send_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='司机送货需求表，补充完善信息表';
+
+-- ----------------------------
+-- Records of ca_send
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_send_log
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_send_log`;
+CREATE TABLE `ca_send_log` (
+  `log_id` int(11) NOT NULL,
+  `send_id` int(11) DEFAULT NULL COMMENT '对应订单id',
+  `send_status` int(255) DEFAULT NULL COMMENT '订单状态',
+  `op_uid` int(11) DEFAULT NULL COMMENT '操作用户uid  根据status来判断是哪种uid 司机的uid 确认的uid',
+  `log_time` datetime DEFAULT NULL COMMENT '时间',
+  `log_msg` varchar(255) DEFAULT NULL COMMENT '日志备注，专门针对这个环节的备注',
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='司机送货需求表，状态变化日志表';
+
+-- ----------------------------
+-- Records of ca_send_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_supplier_user
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_supplier_user`;
+CREATE TABLE `ca_supplier_user` (
+  `supplier_uid` tinyint(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `nickname` varchar(255) NOT NULL DEFAULT '' COMMENT '用户昵称（前台展示）',
+  `wxname` varchar(255) NOT NULL DEFAULT '' COMMENT '微信昵称',
+  `openid` varchar(100) NOT NULL DEFAULT '' COMMENT '微信用户openid',
+  `unionid` varchar(100) NOT NULL DEFAULT '',
+  `wxavatar` varchar(255) NOT NULL,
+  `gender` tinyint(1) NOT NULL DEFAULT '0' COMMENT '性别：(0保密，1男,2女)',
+  `mobile` varchar(11) NOT NULL DEFAULT '' COMMENT '手机号',
+  `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
+  PRIMARY KEY (`supplier_uid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='供货商用户表（待完善）';
+
+-- ----------------------------
+-- Records of ca_supplier_user
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for ca_user
 -- ----------------------------
 DROP TABLE IF EXISTS `ca_user`;
@@ -178,7 +293,6 @@ CREATE TABLE `ca_user` (
   `last_login_time` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
   `login` int(11) NOT NULL DEFAULT '0' COMMENT '登录次数',
   `extattr` text NOT NULL,
-  `work_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '工作状态（0：空闲，1：忙碌）',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `user_name` (`username`) USING BTREE,
   UNIQUE KEY `mobile` (`mobile`) USING BTREE,
@@ -189,7 +303,9 @@ CREATE TABLE `ca_user` (
 -- ----------------------------
 -- Records of ca_user
 -- ----------------------------
-INSERT INTO `ca_user` VALUES ('1', 'admin', '创始人', 'cf57eb8a739adbcae3a7669e4a41ad5a', '1', '1', '13667792110', 'admin@admin.com', '', 'admin', '', '1', '0', '0', '1514381279', 'UFTGw', '', 0x61646D696E, '', '127.0.0.1', '1514381279', '13', '', '0');
-INSERT INTO `ca_user` VALUES ('13', 'nongzhengyi', 'nongzhengyi', '4d1b77e5a85cadf095fc9ce447324ab6', '1', '1', '18345152222', 'sdf@sdfds.com', '', 'sdjojojoo', '', '1', '0', '1514353683', '1514376972', 'iRopO', '', '', '127.0.0.1', '127.0.0.1', '1514376972', '7', '', '0');
-INSERT INTO `ca_user` VALUES ('14', 'test', 'test', '6e6f925a9d56ec6874cbfc9058bb882e', '1', '0', '234', 'sdf@fdsf.com', '', 'dsjfksajdf', '', '1', '0', '1514355803', '1514356028', 'FXCBw', '', 0x73616466647366, '127.0.0.1', '', '0', '0', '', '0');
-INSERT INTO `ca_user` VALUES ('15', 'test1', 'test2', '0e3f3017fcc3332f1e7a6d4559532f87', '1', '0', 'test1', 'sadf@sdf.com', '', 'sadf', '', '1', '0', '1514356082', '1514356082', 'DgyHnk', '', '', '127.0.0.1', '', '0', '0', '', '0');
+INSERT INTO `ca_user` VALUES ('1', 'admin', '创始人', 'cf57eb8a739adbcae3a7669e4a41ad5a', '1', '1', '13667792110', 'admin@admin.com', '', 'admin', '', '1', '0', '0', '1514432674', 'UFTGw', '', 0x61646D696E, '', '127.0.0.1', '1514432674', '11', '');
+INSERT INTO `ca_user` VALUES ('13', 'nongzhengyi', 'nongzhengyi', '4d1b77e5a85cadf095fc9ce447324ab6', '1', '1', '18345152222', 'sdf@sdfds.com', '', 'sdjojojoo', '', '1', '0', '1514353683', '1514366927', 'iRopO', '', '', '127.0.0.1', '127.0.0.1', '1514366927', '6', '');
+INSERT INTO `ca_user` VALUES ('14', 'test', 'test', '6e6f925a9d56ec6874cbfc9058bb882e', '1', '0', '234', 'sdf@fdsf.com', '', 'dsjfksajdf', '', '1', '0', '1514355803', '1514356028', 'FXCBw', '', 0x73616466647366, '127.0.0.1', '', '0', '0', '');
+INSERT INTO `ca_user` VALUES ('15', 'test1', 'test2', '0e3f3017fcc3332f1e7a6d4559532f87', '1', '0', 'test1', 'sadf@sdf.com', '', 'sadf', '', '1', '0', '1514356082', '1514356082', 'DgyHnk', '', '', '127.0.0.1', '', '0', '0', '');
+INSERT INTO `ca_user` VALUES ('16', 'test3', 'test3', 'd6183d468cbc10b8dd8055cda781c880', '1', '0', 'test3', 'sdf@sdf.com', '', 'sjfojoiioo', '', '1', '0', '1514356440', '1514356910', 'MtGLy', '', '', '127.0.0.1', '127.0.0.1', '1514356910', '1', '');
+INSERT INTO `ca_user` VALUES ('17', 'test4', 'test4', 'b69a300a340f86b9b3b1a9fd8c8aad78', '1', '0', 'test4', 'test4@sdf.com', '', 'sdfhhh', '', '1', '0', '1514356963', '1514357010', 'MRBfqN', '', 0x6173646673616466, '127.0.0.1', '127.0.0.1', '1514357010', '1', '');
