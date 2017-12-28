@@ -46,7 +46,7 @@ function get_username($uid = 0)
  * 检测当前用户是否为超级管理员
  * @return boolean true-管理员，false-非管理员
  */
-function is_administrator($uid = null) 
+function is_administrator($uid = null)
 {
 	$uid = is_null($uid) ? is_login() : $uid;
     if(in_array($uid,config('user_administrator'))){
