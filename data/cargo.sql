@@ -10,10 +10,75 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-12-28 19:05:27
+Date: 2017-12-29 17:35:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for ca_address_map
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_address_map`;
+CREATE TABLE `ca_address_map` (
+  `map_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `longitude` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置经度',
+  `latitude` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置纬度',
+  `precision` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置精度',
+  `op_uid` int(11) NOT NULL DEFAULT '0' COMMENT '操作用户uid  根据type来判断是哪种uid，(例如：取货人uid， 司机的uid)',
+  `type` smallint(4) NOT NULL DEFAULT '3' COMMENT '用户类型（3取货者，4司机）',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '上传时间',
+  PRIMARY KEY (`map_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='地理位置表';
+
+-- ----------------------------
+-- Records of ca_address_map
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_attachment
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_attachment`;
+CREATE TABLE `ca_attachment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '附件id',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件名称',
+  `savename` varchar(255) NOT NULL DEFAULT '' COMMENT '保存文件名',
+  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件路径',
+  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件链接',
+  `ext` varchar(40) NOT NULL DEFAULT '' COMMENT '文件后缀',
+  `mime` varchar(40) NOT NULL DEFAULT '' COMMENT '文件mime类型',
+  `type` varchar(20) NOT NULL DEFAULT '' COMMENT '附件类型',
+  `size` int(11) NOT NULL DEFAULT '0' COMMENT '附件大小',
+  `md5` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件MD5',
+  `sha1` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '文件sha1编码',
+  `remark` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '附件备注',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
+  `location` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件存储位置',
+  `ip` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件上传IP',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ca_attachment
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_attachment_user
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_attachment_user`;
+CREATE TABLE `ca_attachment_user` (
+  `attachment_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `scene_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '附件使用场景类型（1用户头像，2取货者验货上传的图片，3司机送货成功验货上传的图片）',
+  PRIMARY KEY (`attachment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='附件_用户关联表';
+
+-- ----------------------------
+-- Records of ca_attachment_user
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for ca_auth_group
@@ -25,7 +90,7 @@ CREATE TABLE `ca_auth_group` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态：1-正常，0-禁用',
   `rules` varchar(255) NOT NULL DEFAULT '' COMMENT '用户组拥有的规则id,多个规则","隔开',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_auth_group
@@ -46,7 +111,7 @@ CREATE TABLE `ca_auth_group_access` (
   UNIQUE KEY `uid_group_id` (`uid`,`group_id`),
   KEY `uid` (`uid`),
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_auth_group_access
@@ -73,7 +138,7 @@ CREATE TABLE `ca_auth_rule` (
   `condition` char(100) NOT NULL DEFAULT '' COMMENT '规则表达式，为空表示存在就验证，不为空表示按照条件验证',
   `module` varchar(50) NOT NULL DEFAULT '' COMMENT '所属模块',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_auth_rule
@@ -118,7 +183,7 @@ CREATE TABLE `ca_config` (
   `sort` tinyint(4) NOT NULL DEFAULT '100' COMMENT '排序',
   PRIMARY KEY (`id`),
   KEY `group_id` (`group`,`status`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统配置表';
 
 -- ----------------------------
 -- Records of ca_config
@@ -153,31 +218,69 @@ INSERT INTO `ca_menu` VALUES ('6', '权限', 'admin/rule/index', 'admin', '系�
 INSERT INTO `ca_menu` VALUES ('7', '首页', 'admin/index/index', 'admin', '其它', '1', null, '0', '1', '1');
 
 -- ----------------------------
+-- Table structure for ca_merchant
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_merchant`;
+CREATE TABLE `ca_merchant` (
+  `merchant_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '商家类型（注：1供应商家，2目的地商家）',
+  `province` varchar(100) NOT NULL DEFAULT '' COMMENT '商家所在省份',
+  `city` varchar(100) NOT NULL DEFAULT '' COMMENT '商家所在城市',
+  `county` varchar(100) NOT NULL DEFAULT '' COMMENT '商家所在县区',
+  `supplier_address` varchar(255) NOT NULL DEFAULT '' COMMENT '商家详细地址',
+  `longitude` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置经度',
+  `latitude` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置纬度',
+  `precision` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置精度',
+  PRIMARY KEY (`merchant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商家表，包括供应商和收货商';
+
+-- ----------------------------
+-- Records of ca_merchant
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_notice`;
+CREATE TABLE `ca_notice` (
+  `notice_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `scene_url` varchar(100) NOT NULL DEFAULT '' COMMENT '点击跳转到具体业务业务逻辑的url',
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '收到通知的用户uid',
+  PRIMARY KEY (`notice_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='通知表';
+
+-- ----------------------------
+-- Records of ca_notice
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for ca_order
 -- ----------------------------
 DROP TABLE IF EXISTS `ca_order`;
 CREATE TABLE `ca_order` (
   `order_id` int(11) NOT NULL AUTO_INCREMENT,
-  `supplier_id` int(11) DEFAULT NULL COMMENT '供应商id',
-  `supplier_uid` int(11) DEFAULT NULL COMMENT '供应商用户uid',
-  `publish_time` int(11) DEFAULT NULL COMMENT '发布时间',
-  `maybe_time` int(11) DEFAULT NULL COMMENT '预计到达时间 （自动在发布时间后加三十分钟）',
-  `order_remark` varchar(255) DEFAULT NULL COMMENT '订单备注',
-  `order_status` int(11) DEFAULT NULL COMMENT '订单状态 0 发布 20平台收到待分配取货者  40-取货确认  60 - 已到达   80-已取货  100 发布司机送货单 120 完成回到平台所在，取货整体完成',
-  `order_product` varchar(255) DEFAULT NULL COMMENT '产品名称 - 有可能用到',
-  `order_product_price` varchar(10) DEFAULT NULL COMMENT '产品价格 - 有可能用到',
-  `site_sn` varchar(255) DEFAULT NULL COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
-  `take_uid` int(11) DEFAULT NULL COMMENT '取货人uid',
-  `take_time` int(11) DEFAULT NULL COMMENT '取货时间',
-  `target_uid` int(11) DEFAULT NULL COMMENT '目的地商家用户表',
-  `target_name` varchar(255) DEFAULT NULL COMMENT '目的地商家名称',
-  `target_username` varchar(255) DEFAULT NULL COMMENT '目的地商家联系人',
-  `target_tel` varchar(255) DEFAULT NULL COMMENT '电话',
-  `target_address` varchar(255) DEFAULT NULL COMMENT '详细地址',
-  `target_lng` varchar(255) DEFAULT NULL COMMENT '目的地商家 经度',
-  `target_lat` varchar(255) DEFAULT NULL COMMENT '目的地商家 维度',
+  `merchant_id` int(11) NOT NULL DEFAULT '0' COMMENT '供应商id',
+  `supplier_uid` int(11) NOT NULL DEFAULT '0' COMMENT '供应商用户uid',
+  `publish_time` int(11) NOT NULL DEFAULT '0' COMMENT '发布时间',
+  `maybe_time` int(11) NOT NULL DEFAULT '0' COMMENT '预计到达时间 （自动在发布时间后加三十分钟）',
+  `order_remark` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '订单备注',
+  `order_status` int(11) NOT NULL DEFAULT '0' COMMENT '订单状态 0 发布 20平台收到待分配取货者  40-取货确认  60 - 已到达   80-已取货  100 发布司机送货单 120 完成回到平台所在，取货整体完成',
+  `order_product` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '产品名称 - 有可能用到',
+  `order_product_price` varchar(10) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '产品价格 - 有可能用到',
+  `site_sn` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
+  `take_uid` int(11) NOT NULL DEFAULT '0' COMMENT '取货人uid',
+  `take_time` int(11) NOT NULL DEFAULT '0' COMMENT '取货时间',
+  `target_uid` int(11) NOT NULL DEFAULT '0' COMMENT '目的地商家用户表',
+  `target_name` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '目的地商家名称',
+  `target_username` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '目的地商家联系人',
+  `target_tel` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '电话',
+  `target_address` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '详细地址',
+  `target_lng` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '目的地商家 经度',
+  `target_lat` varchar(255) NOT NULL DEFAULT '' COMMENT '目的地商家 维度',
   PRIMARY KEY (`order_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='供应商发布需求，补充完善信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，补充完善信息表';
 
 -- ----------------------------
 -- Records of ca_order
@@ -193,12 +296,108 @@ CREATE TABLE `ca_order_log` (
   `order_status` int(255) DEFAULT NULL COMMENT '订单状态',
   `op_uid` int(11) DEFAULT NULL COMMENT '操作用户uid  根据status来判断是哪种uid 发布需求的uid 取货的uid',
   `log_time` datetime DEFAULT NULL COMMENT '时间',
-  `log_msg` varchar(255) DEFAULT NULL COMMENT '日志备注，专门针对这个环节的备注',
+  `log_msg` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '日志备注，专门针对这个环节的备注',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='供应商发布需求，状态变化日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，状态变化日志表';
 
 -- ----------------------------
 -- Records of ca_order_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_pay
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_pay`;
+CREATE TABLE `ca_pay` (
+  `order_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `order_num` varchar(50) NOT NULL DEFAULT '' COMMENT '订单号',
+  `pay_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '付款方式（注：1卡，2现金，3代收货款、4微信支付，5支付宝支付）',
+  `pay_scene` tinyint(1) NOT NULL DEFAULT '1' COMMENT '支付场景（注：1线上支付，2线下支付）',
+  `pay_status` tinyint(1) NOT NULL COMMENT '付款状态（注：1未付款，2已付款）',
+  `pay_price` decimal(6,2) NOT NULL DEFAULT '0.00' COMMENT '订单金额',
+  `create_time` int(1) NOT NULL DEFAULT '0' COMMENT '生成订单时间',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '修改订单时间',
+  `pay_time` int(11) NOT NULL DEFAULT '0' COMMENT '支付时间',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '支付人用户uid',
+  PRIMARY KEY (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付订单表';
+
+-- ----------------------------
+-- Records of ca_pay
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_pay_alinotice
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_pay_alinotice`;
+CREATE TABLE `ca_pay_alinotice` (
+  `order_id` int(10) NOT NULL,
+  `out_trade_no` varchar(100) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '商户订单号',
+  `gmt_create` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '交易创建时间',
+  `charset` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '编码格式',
+  `seller_email` varchar(100) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '卖家支付宝账号',
+  `subject` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '订单标题',
+  `sign` varchar(400) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '签名',
+  `body` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '商品描述',
+  `buyer_id` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '买家支付宝用户号',
+  `invoice_amount` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '开票金额',
+  `notify_id` varchar(100) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '通知校验ID',
+  `fund_bill_list` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '支付金额信息',
+  `notify_type` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '通知类型',
+  `trade_status` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '交易状态',
+  `receipt_amount` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '实收金额',
+  `app_id` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '开发者的app_id',
+  `buyer_pay_amount` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '付款金额',
+  `sign_type` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '签名类型',
+  `seller_id` varchar(100) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '卖家支付宝用户号',
+  `gmt_payment` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '交易付款时间',
+  `notify_time` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '通知时间',
+  `version` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '接口版本',
+  `total_amount` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '订单金额',
+  `trade_no` varchar(100) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '支付宝交易号  ',
+  `auth_app_id` varchar(100) CHARACTER SET utf8mb4 DEFAULT '',
+  `buyer_logon_id` varchar(100) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '买家支付宝账号',
+  `point_amount` varchar(100) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '集分宝金额',
+  `channel` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '支付渠道',
+  PRIMARY KEY (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ca_pay_alinotice
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_pay_wxnotice
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_pay_wxnotice`;
+CREATE TABLE `ca_pay_wxnotice` (
+  `order_id` int(10) NOT NULL,
+  `appid` varchar(30) CHARACTER SET utf8mb4 DEFAULT '',
+  `attach` varchar(128) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '商家数据包 128位 原样返回',
+  `customer_id` int(10) DEFAULT NULL COMMENT '该订单下单的客户ID',
+  `bank_type` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '付款银行',
+  `cash_fee` varchar(10) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '现金支付金额',
+  `device_info` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '设备信息',
+  `fee_type` varchar(10) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '货币种类',
+  `is_subscribe` varchar(3) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '是否关注',
+  `mch_id` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '商户ID',
+  `nonce_str` varchar(50) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '随机字符串',
+  `openid` varchar(100) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '支付用户ID',
+  `out_trade_no` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '订单号',
+  `result_code` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '结果状态',
+  `return_code` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '返回状态',
+  `sign` varchar(100) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '签名',
+  `time_end` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '结束时间',
+  `total_fee` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '订单总价、按分计算',
+  `trade_type` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '交易类型',
+  `transaction_id` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '微信支付订单号',
+  `channel` varchar(30) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '支付渠道',
+  `add_time` int(10) DEFAULT '0' COMMENT '当前订单生成时间',
+  PRIMARY KEY (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付订单，保存各种渠道的交易流水、交易订单信息等';
+
+-- ----------------------------
+-- Records of ca_pay_wxnotice
 -- ----------------------------
 
 -- ----------------------------
@@ -207,20 +406,20 @@ CREATE TABLE `ca_order_log` (
 DROP TABLE IF EXISTS `ca_send`;
 CREATE TABLE `ca_send` (
   `send_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '送货单id',
-  `supplier_id` varchar(255) DEFAULT NULL COMMENT '供应商id',
+  `merchant_id` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '供应商id',
   `supplier_uid` int(11) DEFAULT NULL COMMENT '供应商用户uid',
   `order_id` int(11) DEFAULT NULL COMMENT '来源于 供应商发布需求表',
   `publish_time` int(11) DEFAULT NULL COMMENT '发布时间',
   `maybe_time` int(11) DEFAULT NULL COMMENT '预计送达时间 （自动在发布时间后加60分钟）',
-  `sand_remark` varchar(255) DEFAULT NULL COMMENT '送货订单备注',
+  `sand_remark` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '送货订单备注',
   `send_status` int(11) DEFAULT NULL COMMENT '订单状态 0 发布 20平台收到待分配送货者司机  40-送货者司机确认  60 - 司机已到达   80-司机已取货  100 司机送达目的地 120目的地商家确认收货 140 完成送货回到平台所在，送货整体完成',
   `pay_status` int(11) DEFAULT NULL COMMENT '支付状态 0 未支付 大于0具体为支付订单号 便于关联查询',
   `driver_uid` int(11) DEFAULT NULL COMMENT '司机uid',
   `driver_take_time` int(11) DEFAULT NULL COMMENT '司机取货时间',
   `driver_over_time` int(11) DEFAULT NULL COMMENT '司机送达货时间',
-  `site_sn` varchar(255) DEFAULT NULL COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
+  `site_sn` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
   PRIMARY KEY (`send_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='司机送货需求表，补充完善信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='司机送货需求表，补充完善信息表';
 
 -- ----------------------------
 -- Records of ca_send
@@ -236,33 +435,12 @@ CREATE TABLE `ca_send_log` (
   `send_status` int(255) DEFAULT NULL COMMENT '订单状态',
   `op_uid` int(11) DEFAULT NULL COMMENT '操作用户uid  根据status来判断是哪种uid 司机的uid 确认的uid',
   `log_time` datetime DEFAULT NULL COMMENT '时间',
-  `log_msg` varchar(255) DEFAULT NULL COMMENT '日志备注，专门针对这个环节的备注',
+  `log_msg` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '日志备注，专门针对这个环节的备注',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='司机送货需求表，状态变化日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='司机送货需求表，状态变化日志表';
 
 -- ----------------------------
 -- Records of ca_send_log
--- ----------------------------
-
--- ----------------------------
--- Table structure for ca_supplier_user
--- ----------------------------
-DROP TABLE IF EXISTS `ca_supplier_user`;
-CREATE TABLE `ca_supplier_user` (
-  `supplier_uid` tinyint(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-  `nickname` varchar(255) NOT NULL DEFAULT '' COMMENT '用户昵称（前台展示）',
-  `wxname` varchar(255) NOT NULL DEFAULT '' COMMENT '微信昵称',
-  `openid` varchar(100) NOT NULL DEFAULT '' COMMENT '微信用户openid',
-  `unionid` varchar(100) NOT NULL DEFAULT '',
-  `wxavatar` varchar(255) NOT NULL,
-  `gender` tinyint(1) NOT NULL DEFAULT '0' COMMENT '性别：(0保密，1男,2女)',
-  `mobile` varchar(11) NOT NULL DEFAULT '' COMMENT '手机号',
-  `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
-  PRIMARY KEY (`supplier_uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='供货商用户表（待完善）';
-
--- ----------------------------
--- Records of ca_supplier_user
 -- ----------------------------
 
 -- ----------------------------
@@ -270,42 +448,111 @@ CREATE TABLE `ca_supplier_user` (
 -- ----------------------------
 DROP TABLE IF EXISTS `ca_user`;
 CREATE TABLE `ca_user` (
-  `uid` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户id',
-  `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户名',
-  `nickname` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '真实姓名',
-  `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '密码',
-  `isadministrator` tinyint(2) NOT NULL DEFAULT '0' COMMENT '管理员id标识: 0为非管理员，1为管理员',
-  `gender` tinyint(2) NOT NULL DEFAULT '0' COMMENT '性别：(0保密，1男,2女)',
-  `mobile` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '手机号',
-  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '邮箱',
-  `tel` varchar(20) NOT NULL DEFAULT '' COMMENT 'tel',
-  `weixin` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '微信号',
-  `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '头像',
-  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态（0待审核、1正常、2锁定、3离职）',
-  `sort` tinyint(4) NOT NULL DEFAULT '0' COMMENT '排序',
-  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `salt` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '密码salt',
-  `guid` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '用户唯一id',
-  `remark` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '备注说明',
-  `regip` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '注册IP',
-  `last_login_ip` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '最后登录IP',
-  `last_login_time` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
-  `login` int(11) NOT NULL DEFAULT '0' COMMENT '登录次数',
-  `extattr` text NOT NULL,
+  `uid` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `realname` varchar(50) NOT NULL DEFAULT '' COMMENT '真实姓名',
+  `username` varchar(50) NOT NULL DEFAULT '' COMMENT '用户名前后端登录唯一标识（系统内部动态生成）',
+  `openid` varchar(100) NOT NULL DEFAULT '' COMMENT '用户的标识，对当前公众号唯一',
+  `wxname` varchar(100) NOT NULL COMMENT '微信用户的昵称',
+  `sex` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户的性别，值为1时是男性，值为2时是女性，值为0时是未知',
+  `city` varchar(100) NOT NULL DEFAULT '' COMMENT '用户所在城市',
+  `country` varchar(100) NOT NULL DEFAULT '' COMMENT '用户所在国家',
+  `province` varchar(100) NOT NULL DEFAULT '' COMMENT '用户所在省份',
+  `language` varchar(50) NOT NULL COMMENT '用户的语言，简体中文为zh_CN',
+  `subscribe_time` int(11) NOT NULL DEFAULT '0' COMMENT '用户关注时间，为时间戳。如果用户曾多次关注，则取最后关注时间',
+  `unionid` varchar(100) NOT NULL DEFAULT '' COMMENT '用户唯一标识（注：只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段）',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '公众号运营者对粉丝的备注，公众号运营者可在微信公众平台用户管理界面对粉丝添加备注',
+  `groupid` varchar(100) NOT NULL DEFAULT '' COMMENT '用户所在的分组ID（兼容旧的用户分组接口）',
+  `tagid_list` varchar(100) NOT NULL DEFAULT '' COMMENT '用户被打上的标签ID列表',
+  `password` varchar(50) NOT NULL DEFAULT '' COMMENT '密码',
+  `salt` varchar(10) NOT NULL DEFAULT '' COMMENT '密码salt',
+  `regip` varchar(20) NOT NULL DEFAULT '' COMMENT '注册IP',
+  `last_login_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后登录IP',
+  `login_num` int(11) NOT NULL DEFAULT '0' COMMENT '登录次数',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '用户类型（0：游客，1：后台管理员、2供应商用户，3取货者，4司机，5目的地商家用户）',
   PRIMARY KEY (`uid`),
-  UNIQUE KEY `user_name` (`username`) USING BTREE,
-  UNIQUE KEY `mobile` (`mobile`) USING BTREE,
-  UNIQUE KEY `email` (`email`) USING BTREE,
-  UNIQUE KEY `weixin` (`weixin`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `username` (`username`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 -- ----------------------------
 -- Records of ca_user
 -- ----------------------------
-INSERT INTO `ca_user` VALUES ('1', 'admin', '创始人', 'cf57eb8a739adbcae3a7669e4a41ad5a', '1', '1', '13667792110', 'admin@admin.com', '', 'admin', '', '1', '0', '0', '1514432674', 'UFTGw', '', 0x61646D696E, '', '127.0.0.1', '1514432674', '11', '');
-INSERT INTO `ca_user` VALUES ('13', 'nongzhengyi', 'nongzhengyi', '4d1b77e5a85cadf095fc9ce447324ab6', '1', '1', '18345152222', 'sdf@sdfds.com', '', 'sdjojojoo', '', '1', '0', '1514353683', '1514366927', 'iRopO', '', '', '127.0.0.1', '127.0.0.1', '1514366927', '6', '');
-INSERT INTO `ca_user` VALUES ('14', 'test', 'test', '6e6f925a9d56ec6874cbfc9058bb882e', '1', '0', '234', 'sdf@fdsf.com', '', 'dsjfksajdf', '', '1', '0', '1514355803', '1514356028', 'FXCBw', '', 0x73616466647366, '127.0.0.1', '', '0', '0', '');
-INSERT INTO `ca_user` VALUES ('15', 'test1', 'test2', '0e3f3017fcc3332f1e7a6d4559532f87', '1', '0', 'test1', 'sadf@sdf.com', '', 'sadf', '', '1', '0', '1514356082', '1514356082', 'DgyHnk', '', '', '127.0.0.1', '', '0', '0', '');
-INSERT INTO `ca_user` VALUES ('16', 'test3', 'test3', 'd6183d468cbc10b8dd8055cda781c880', '1', '0', 'test3', 'sdf@sdf.com', '', 'sjfojoiioo', '', '1', '0', '1514356440', '1514356910', 'MtGLy', '', '', '127.0.0.1', '127.0.0.1', '1514356910', '1', '');
-INSERT INTO `ca_user` VALUES ('17', 'test4', 'test4', 'b69a300a340f86b9b3b1a9fd8c8aad78', '1', '0', 'test4', 'test4@sdf.com', '', 'sdfhhh', '', '1', '0', '1514356963', '1514357010', 'MRBfqN', '', 0x6173646673616466, '127.0.0.1', '127.0.0.1', '1514357010', '1', '');
+
+-- ----------------------------
+-- Table structure for ca_user_admin
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_user_admin`;
+CREATE TABLE `ca_user_admin` (
+  `admin_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态（0待审核、1正常、2锁定、3离职）',
+  PRIMARY KEY (`admin_id`),
+  UNIQUE KEY `uid` (`uid`) USING BTREE COMMENT '会员uid不能重复'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台管理员表';
+
+-- ----------------------------
+-- Records of ca_user_admin
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_user_driver
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_user_driver`;
+CREATE TABLE `ca_user_driver` (
+  `driver_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `work_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '工作状态（0：休息，1：忙碌，3：停职）',
+  PRIMARY KEY (`driver_id`),
+  UNIQUE KEY `uid` (`uid`) USING BTREE COMMENT '会员ID唯一'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='司机用户表';
+
+-- ----------------------------
+-- Records of ca_user_driver
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_user_supplier
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_user_supplier`;
+CREATE TABLE `ca_user_supplier` (
+  `supplier_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `merchant_id` int(11) NOT NULL DEFAULT '0' COMMENT '供应商家ID（注：与商家表ca_merchant关联）',
+  PRIMARY KEY (`supplier_id`),
+  UNIQUE KEY `uid` (`uid`) USING BTREE COMMENT '会员ID唯一'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供应商用户表';
+
+-- ----------------------------
+-- Records of ca_user_supplier
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_user_take
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_user_take`;
+CREATE TABLE `ca_user_take` (
+  `take_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `work_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '工作状态（0：休息，1：忙碌，3：停职）',
+  PRIMARY KEY (`take_id`),
+  UNIQUE KEY `uid` (`uid`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='取货者表';
+
+-- ----------------------------
+-- Records of ca_user_take
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for ca_user_target
+-- ----------------------------
+DROP TABLE IF EXISTS `ca_user_target`;
+CREATE TABLE `ca_user_target` (
+  `target_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `merchant_id` int(11) NOT NULL DEFAULT '0' COMMENT '目的地商家ID（注：与商家表ca_merchant关联）',
+  PRIMARY KEY (`target_id`),
+  UNIQUE KEY `uid` (`uid`) USING BTREE COMMENT '会员唯一'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='目的地商家用户表';
+
+-- ----------------------------
+-- Records of ca_user_target
+-- ----------------------------
