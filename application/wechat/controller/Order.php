@@ -11,7 +11,7 @@
 
 namespace app\wechat\controller;
 
-use app\wechat\Controller\Base;
+use app\wechat\controller\Base;
 
 /**
  * 供应商发布需求，第一环节
