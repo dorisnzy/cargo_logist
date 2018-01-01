@@ -11,7 +11,7 @@
 
 namespace app\wechat\controller;
 
-use think\controller;
+use think\Controller;
 
 /**
  * 调试控制器
