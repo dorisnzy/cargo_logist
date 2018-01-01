@@ -72,7 +72,7 @@ class User extends Base
             $list  = $this->modelUser
                 ->where($map)
                 ->page($this->modelUser->getPageNow(), $this->modelUser->getPageLimit())
-                ->order('sort asc,uid asc')
+                ->order('uid desc')
                 ->select()
             ;
 

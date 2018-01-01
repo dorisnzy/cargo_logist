@@ -1,0 +1,148 @@
+<extend name="public/base">
+
+<block name="body">
+<form action="">
+	<div class="weui-cells__title">供货信息</div>
+	<div class="weui-cells">
+	  <div class="weui-cell">
+	    <div class="weui-cell__hd"><label for="" class="weui-label">供应商</label></div>
+	    <div class="weui-cell__bd">
+	      fdsfds
+	    </div>
+	  </div>
+
+	  <div class="weui-cell">
+	    <div class="weui-cell__hd"><label for="" class="weui-label">联系人</label></div>
+	    <div class="weui-cell__bd">
+	      sdfsd
+	    </div>
+	  </div>
+
+	  <div class="weui-cell">
+	    <div class="weui-cell__hd"><label for="" class="weui-label">联系电话</label></div>
+	    <div class="weui-cell__bd">
+	      asdfsda
+	    </div>
+	  </div>
+
+	  <div class="weui-cell">
+	    <div class="weui-cell__hd"><label for="" class="weui-label">联系地址</label></div>
+	    <div class="weui-cell__bd">
+	      sadfsda
+	    </div>
+	  </div>
+	</div>
+
+	<div class="weui-cells__title">收货信息</div>
+	<div class="weui-cells weui-cells_form">
+	  <div class="weui-cell">
+	    <div class="weui-cell__hd"><label for="" class="weui-label">收获商家</label></div>
+	    <div class="weui-cell__bd">
+	      <input class="weui-input"  placeholder="请输入收获商家">
+	    </div>
+	  </div>
+
+	  <div class="weui-cell">
+	    <div class="weui-cell__hd"><label for="" class="weui-label">联系人</label></div>
+	    <div class="weui-cell__bd">
+	      <input class="weui-input"  placeholder="请输入联系人">
+	    </div>
+	  </div>
+
+	  <div class="weui-cell">
+	    <div class="weui-cell__hd"><label for="" class="weui-label">联系电话</label></div>
+	    <div class="weui-cell__bd">
+	      <input class="weui-input"  placeholder="请输入联系电话">
+	    </div>
+	  </div>
+
+	  <div class="weui-cell">
+	    <div class="weui-cell__hd"><label for="" class="weui-label">送货地址</label></div>
+	    <div class="weui-cell__bd">
+	      <input class="weui-input"  placeholder="请输入送货地址">
+	    </div>
+	    <div class="weui-cell__ft">
+          <a href="javascript:;" class="weui-vcode-btn open-popup" data-target="#map">选择位置</a>
+        </div>
+	  </div>
+
+	  <div class="weui-cell">
+	    <div class="weui-cell__bd">
+	      <textarea class="weui-textarea" placeholder="这里可以填写备注信息哟" rows="3"></textarea>
+	      <div class="weui-textarea-counter"><span>0</span>/200</div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="weui-btn-area">
+	    <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确定</a>
+	</div>
+
+</form>
+
+<div id="map" class="weui-popup__container">
+  <div class="weui-popup__overlay"></div>
+  <div class="weui-popup__modal">
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <a href="javascript:;" class="picker-button close-popup">关闭</a>
+        <h1 class="title">选择位置</h1>
+      </div>
+    </div>
+    <div id="container" style="height: 20rem;"></div>
+    <div class="weui-cells">
+	    <div class="weui-cell">
+		    <div class="weui-cell__hd"><label for="" class="weui-label">按关键词搜索</label></div>
+		    <div class="weui-cell__bd">
+		      <input class="weui-input" id="tipinput">
+		    </div>
+		</div>
+		<div class="weui-cell">
+		    <div class="weui-cell__hd"><label for="" class="weui-label">经纬度</label></div>
+		    <div class="weui-cell__bd">
+		      <input class="weui-input" id="lnglat">
+		    </div>
+		</div>
+	</div>
+  </div>
+</div>
+
+</block>
+<block name="script">
+
+	<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.3&key=7c45b141523c00c13256887f315ce7ec&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>
+	<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+	<script type="text/javascript">
+	 var map = new AMap.Map("container", {
+        resizeEnable: true,
+    });
+    //为地图注册click事件获取鼠标点击出的经纬度坐标
+    var clickEventListener = map.on('click', function(e) {
+    	console.log(e);
+        document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
+        // alert('您在[ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ]的位置点击了地图！');
+    }); 
+
+    //输入提示
+    var auto = new AMap.Autocomplete({
+        input: "tipinput"
+    });
+
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });  //构造地点查询类
+    AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name);  //关键字查询查询
+        console.log(e);
+    }
+    AMap.event.addListener(placeSearch, 'markerClick', mark_click);
+
+    function mark_click(s){
+    	console.log(s);
+    }
+    	
+	</script>
+
+</block>

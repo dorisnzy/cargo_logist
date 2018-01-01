@@ -6,16 +6,16 @@
   <tbody>
     <tr>
 		<th style="width:20%;">系统名称</th>
-		<td>{:config('app_name')}</td>
+		<td>{:config('app.name')}</td>
 	</tr>
 	<tr>
 		<th style="width:20%;">系统版本</th>
-		<td>{:config('app_name')} v{$Think.THINK_VERSION}</td>
+		<td>{:config('app.name')} v{$Think.THINK_VERSION}</td>
 	</tr>
 	<tr>
 		<th style="width:20%;">系统版权所有</th>
 		<td>
-			Copyright © {:date('Y')} {:config('app_copyright')} 版权所有 All Rights Reserved.
+			Copyright © {:date('Y')} {:config('app.copyright')} 版权所有 All Rights Reserved.
 		</td>
 	</tr>
   </tbody>

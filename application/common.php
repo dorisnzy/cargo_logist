@@ -49,7 +49,7 @@ function get_username($uid = 0)
 function is_administrator($uid = null)
 {
 	$uid = is_null($uid) ? is_login() : $uid;
-    if(in_array($uid,config('user_administrator'))){
+    if(in_array($uid,config('app.user_administrator'))){
 		return $uid;
 	}else{
 		return false;

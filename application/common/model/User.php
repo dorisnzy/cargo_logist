@@ -106,12 +106,7 @@ class User extends Model
         if (!$user) {
         	return -1; //用户不存在
         }
-        if ($user['status'] != 1) {
-        	return -1; //用户被禁用
-        }
-        if ($user['isadministrator'] != 1) {
-        	return -1; // 不是管理员
-        }
+      
 		/* 验证用户密码 */
 		$password = $this->encrptyPwd($password, $user['salt']);
 		if($password === $user['password']){
@@ -131,13 +126,14 @@ class User extends Model
 		/* 更新登录信息 */
 		$data = array(
 			'uid'             => $user['uid'],
-			'login'           => array('exp', '`login`+1'),
+			'login_num'           => array('exp', '`login_num`+1'),
 			'last_login_time' => time(),
 			'last_login_ip'   => get_client_ip(),
 		);
         
 		$this->save($data,array('uid'=>$user['uid']));
 		$user = $this->where(array('uid'=>$user['uid']))->find();
+
 		/* 记录登录SESSION和COOKIES */
 		$auth = array(
 			'uid'             => $user['uid'],
