@@ -25,3 +25,9 @@
 	display: block;
 	width: 100%;
 }
+.layui-layout-body{
+/*	background:url('') no-repeat;*/
+    background: url('../images/login.jpg') no-repeat center center fixed; 
+    background-size: 100%;//此处要注意，可以填cover也可以填100%。建议填100%
+	background-color: #5fb878;
+}

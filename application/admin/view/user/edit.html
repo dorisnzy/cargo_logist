@@ -40,18 +40,18 @@
   </div>
 
   <div class="layui-form-item">
-    <label class="layui-form-label">微信号</label>
+    <label class="layui-form-label">微信昵称</label>
     <div class="layui-input-block">
-      <input type="text" name="weixin" required  lay-verify="required" placeholder="请输入微信号" value="{$info.weixin|default=""}" autocomplete="off" class="layui-input">
+      <input type="text" name="wxname" placeholder="请输入微信号" value="{$info.wxname|default=""}" autocomplete="off" class="layui-input">
     </div>
   </div>
 
   <div class="layui-form-item">
     <label class="layui-form-label">性别</label>
     <div class="layui-input-block">
-      <input type="radio" name="gender" value="0" title="保密" <notempty name="info"><eq name="info.gender" value="0">checked</eq></notempty>>
-      <input type="radio" name="gender" value="1" title="男" <notempty name="info"><eq name="info.gender" value="1">checked</eq></notempty>>
-      <input type="radio" name="gender" value="2" title="女" <notempty name="info"><eq name="info.gender" value="2">checked</eq></notempty>>
+      <input type="radio" name="sex" value="0" title="保密" <notempty name="info"><eq name="info.sex" value="0">checked</eq></notempty>>
+      <input type="radio" name="sex" value="1" title="男" <notempty name="info"><eq name="info.sex" value="1">checked</eq></notempty>>
+      <input type="radio" name="sex" value="2" title="女" <notempty name="info"><eq name="info.sex" value="2">checked</eq></notempty>>
     </div>
   </div>
 
@@ -65,10 +65,14 @@
   </div>
 
   <div class="layui-form-item">
-    <label class="layui-form-label">是否为管理员</label>
+    <label class="layui-form-label">用户类型</label>
     <div class="layui-input-block">
-      <input type="radio" name="isadministrator" value="0" <notempty name="info"><eq name="info.isadministrator" value="0">checked</eq></notempty> title="否">
-      <input type="radio" name="isadministrator" value="1" <notempty name="info"><eq name="info.isadministrator" value="1">checked</eq></notempty> title="是">
+      <input type="radio" name="type" value="0" <notempty name="info"><eq name="info.type" value="0">checked</eq></notempty> title="游客">
+      <input type="radio" name="type" value="1" <notempty name="info"><eq name="info.type" value="1">checked</eq></notempty> title="后台管理员">
+      <input type="radio" name="type" value="2" <notempty name="info"><eq name="info.type" value="2">checked</eq></notempty> title="供应商用户">
+      <input type="radio" name="type" value="3" <notempty name="info"><eq name="info.type" value="3">checked</eq></notempty> title="取货人用户">
+      <input type="radio" name="type" value="4" <notempty name="info"><eq name="info.type" value="4">checked</eq></notempty> title="司机用户">
+      <input type="radio" name="type" value="5" <notempty name="info"><eq name="info.type" value="5">checked</eq></notempty> title="目的地商家用户">
     </div>
   </div>
 
@@ -76,18 +80,6 @@
     <label class="layui-form-label">备注</label>
     <div class="layui-input-block">
       <textarea name="remark" placeholder="请输入内容" class="layui-textarea">{$info.remark|default=""}</textarea>
-    </div>
-  </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">状态</label>
-    <div class="layui-input-block">
-      <select name="status" lay-verify="required">
-        <option value="0" <notempty name="info"><eq name="info.status" value="0">selected</eq></notempty>>禁用</option>
-        <option value="1" <notempty name="info"><eq name="info.status" value="1">selected</eq></notempty>>正常</option>
-        <option value="2" <notempty name="info"><eq name="info.status" value="2">selected</eq></notempty>>锁定</option>
-        <option value="3" <notempty name="info"><eq name="info.status" value="3">selected</eq></notempty>>离职</option>
-      </select>
     </div>
   </div>
 

@@ -20,6 +20,8 @@ class Base extends Controller
 {
 	// 当前用户信息
 	protected $userInfo;
+	// 当前url
+	protected $currentUrl;
 
 	// 不需要验证权限的节点
 	protected $noaccessUrlArr = [
@@ -39,23 +41,28 @@ class Base extends Controller
 		$this->userInfo = model('User')->getCurrentUserInfo();
 
 		// 获取当前访问地址
-        $current_url = strtolower($this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action());
+        $this->currentUrl  = $this->request->module() . '/';
+		$this->currentUrl .= $this->request->controller() . '/';
+		$this->currentUrl .= $this->request->action();
+		
+		$this->currentUrl  = strtolower($this->currentUrl);
         
         //不需要权限检测链接数组
-        if (!is_login() && !in_array($current_url, $this->noaccessUrlArr)) {
+        if (!is_login() && !in_array($this->currentUrl, $this->noaccessUrlArr)) {
 			$this->redirect('admin/user/login');
 		}
 
 		//不是后台管理员禁止登陆后台
-        if(!$this->userInfo['isadministrator'] && !in_array($current_url, $this->noaccessUrlArr)){
+        if($this->userInfo['type'] != 1 && !in_array($this->currentUrl, $this->noaccessUrlArr)){
         	model('User')->logout();
             $this->error('您不是管理员，非法访问','admin/index/login');
         }
 
+
         // 是否是超级管理员
 		defined('IS_ROOT') or define('IS_ROOT', is_administrator());
 
-		if (!in_array($current_url, $this->noaccessUrlArr)) {            
+		if (!in_array($this->currentUrl, $this->noaccessUrlArr)) {            
             // 检测系统权限
 			if (!IS_ROOT) {
 				// 检测控制访问权限（这一级权限为系统最高权限验证）
@@ -65,7 +72,7 @@ class Base extends Controller
                 }
 
                 //检测访问权限
-                if (!$this->checkRule($current_url, array('in', '1,2'))) {
+                if (!$this->checkRule($this->currentUrl, array('in', '1,2'))) {
                 	$this->error('未授权访问!');
                 }
 			}
@@ -97,9 +104,6 @@ class Base extends Controller
 	 */
 	public function getMenus()
 	{
-		// 获取当前访问地址
-        $current_url = strtolower($this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action());
-
         // 获取顶级主菜单
         $main_map['pid'] = 0;
         $main_map['module'] = 'admin';
@@ -108,10 +112,17 @@ class Base extends Controller
 
       	$menus = [];
 
-      	$main_list = db('menu')->where($main_map)->order('sort asc,id asc')->select();
+      	$main_list = db('menu')
+      		->where($main_map)
+      		->order('sort asc,id asc')
+      		->select()
+      	;
       	foreach ($main_list as $key => $item) {
       		// 获取子菜单标识
-      		$sub_tag = db('menu')->where(['pid' => $item['id']])->value('id');
+      		$sub_tag = db('menu')
+      			->where(['pid' => $item['id']])
+      			->value('id')
+      		;
       		
 			// 没有子菜单 并且 不在公开节点内
 			if (!in_array($item['name'], $this->noaccessUrlArr)) {
@@ -121,7 +132,7 @@ class Base extends Controller
 				}
 			}
 
-      		if ($current_url == $item['name']) {
+      		if ($this->currentUrl == $item['name']) {
       			$item['class'] = 'layui-this';
       		} else {
       			$item['class'] = '';
@@ -131,11 +142,17 @@ class Base extends Controller
       	}
 
       	//查询当前的父菜单id和菜单id
-      	$node = explode('/', $current_url);
+      	$node = explode('/', $this->currentUrl);
       	$hover_url = $node[0].'/'.$node[1];
 
-        $pid = db('menu')->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")->value('pid');
-        $id  = db('menu')->where("pid = 0 AND name like '{$hover_url}%' AND status = 1")->value('id');
+        $pid = db('menu')
+        	->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")
+        	->value('pid')
+        ;
+        $id  = db('menu')
+        	->where("pid = 0 AND name like '{$hover_url}%' AND status = 1")
+        	->value('id')
+        ;
 
         $pid = $pid ? $pid : $id;
 
@@ -147,13 +164,26 @@ class Base extends Controller
         $sub_map['type'] = 2;
         $sub_map['status'] = 1;
 
-        $sub_row = db('menu')->where($sub_map)->order('sort asc,id asc')->column('*', 'id');
+        $sub_row = db('menu')
+        	->where($sub_map)
+        	->order('sort asc,id asc')
+        	->column('*', 'id')
+        ;
+
         if (!$sub_row) {
         	return $menus; //如果没有子菜单直接返回
         }
-        $current_id  = db('menu')->where(array('status'=>1,'name'=>$current_url))->value('pid');
 
-        $sub_pid = db('menu')->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")->value('id');
+        $current_id  = db('menu')
+        	->where(array('status'=>1,'name'=>$this->currentUrl))
+        	->value('pid')
+        ;
+
+        $sub_pid = db('menu')
+        	->where("pid !=0 AND name like '{$hover_url}%' AND status = 1")
+        	->value('id')
+        ;
+
     	// 给当前左侧子菜单激活属性
         $sub_row[$sub_pid]['class'] = 'layui-this';
     	// 给当前左侧菜单组激活属性
@@ -193,11 +223,7 @@ class Base extends Controller
 			return false;
 		}
 
-		$current_url  = $this->request->module() . '/';
-		$current_url .= $this->request->controller() . '/';
-		$current_url .= $this->request->action();
-
-		$node = explode('/', $current_url);
+		$node = explode('/', $this->currentUrl);
       	$hover_url = $node[0].'/'.$node[1];
 
 		$sub_title = db('menu')

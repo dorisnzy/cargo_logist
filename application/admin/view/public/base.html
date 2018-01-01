@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>{:config('app_name')}|{$__NAV__.main.title}|{$__NAV__.sub.title}</title>
+  <title>{:config('app.name')}|{$__NAV__.main.title}|{$__NAV__.sub.title}</title>
   <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
-    <div class="layui-logo">{:config('app_name')}</div>
+    <div class="layui-logo">{:config('app.name')}</div>
     <!-- 头部区域（可配合layui已有的水平导航） -->
     <ul class="layui-nav layui-layout-left">
       <notempty name="__MENU__.main">
@@ -20,7 +20,7 @@
     </ul>
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
-        <a href="javascript:;">{$USER_INFO.nickname}</a>
+        <a href="javascript:;">{$USER_INFO.username}</a>
         <dl class="layui-nav-child">
           <dd><a href="javascript:;" class="open-html" box-width="500px" box-height="400px" data-url="{:url('user/editPwd')}">修改基本资料</a></dd>
         </dl>
@@ -74,7 +74,7 @@
 
   <div class="layui-footer">
     <!-- 底部固定区域 -->
-    Copyright © 2017 {:config('app_copyright')} 版权所有 All Rights Reserved.
+    Copyright © 2017 {:config('app.copyright')} 版权所有 All Rights Reserved.
   </div>
 </div>
 <script src="__STATIC__/layui//layui.js"></script>

@@ -1,0 +1,20 @@
+body {
+	background-color: #f2f2f2;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.wechat-header {
+	height: 2.5rem;
+	line-height: 2.5rem;
+	background-color: #01AAED;
+	padding-left: 1rem;
+}
+
+.wechat-header a {
+	color: #fff;
+	font-size: 1rem;
+}
+
+.wechat-contain {
+	padding: 0 0.2rem;
+}

@@ -60,9 +60,9 @@ return [
     // 禁止访问模块
     'deny_module_list'       => ['common'],
     // 默认控制器名
-    'default_controller'     => 'Index',
+    'default_controller'     => 'user',
     // 默认操作名
-    'default_action'         => 'index',
+    'default_action'         => 'login',
     // 默认验证器
     'default_validate'       => '',
     // 默认的空控制器名
@@ -269,14 +269,4 @@ return [
             ],
         ],
     ],
-
-    // +----------------------------------------------------------------------
-    // | 系统信息
-    // +----------------------------------------------------------------------
-    // 系统名称
-    'app_name' => '巴拉拉后台管理系统',
-    // 系统版本
-    'app_version'  => '1.0.1',
-    // 系统版权
-    'app_copyright' => '昆明信息港',
 ];

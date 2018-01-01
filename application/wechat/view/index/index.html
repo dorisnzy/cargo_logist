@@ -1,0 +1,23 @@
+<extend name="public/base">
+<block name="css">
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no"> 
+<style type="text/css">
+  #container{
+    height: 40%;
+  }
+</style>
+</block>
+
+<block name="body">
+<div id="container" tabindex="0">
+</div>
+</block>
+
+<block name="script">
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.3&key=7c45b141523c00c13256887f315ce7ec"></script>
+
+<script type="text/javascript">
+var map = new AMap.Map('container');
+</script>
+
+</block>
