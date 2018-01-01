@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-12-29 17:35:21
+Date: 2018-01-02 01:24:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -116,6 +116,8 @@ CREATE TABLE `ca_auth_group_access` (
 -- ----------------------------
 -- Records of ca_auth_group_access
 -- ----------------------------
+INSERT INTO `ca_auth_group_access` VALUES ('1', '1');
+INSERT INTO `ca_auth_group_access` VALUES ('2', '1');
 INSERT INTO `ca_auth_group_access` VALUES ('8', '3');
 INSERT INTO `ca_auth_group_access` VALUES ('8', '4');
 INSERT INTO `ca_auth_group_access` VALUES ('13', '1');
@@ -211,7 +213,7 @@ CREATE TABLE `ca_menu` (
 -- Records of ca_menu
 -- ----------------------------
 INSERT INTO `ca_menu` VALUES ('1', '系统', 'admin/user/index', 'admin', '系统管理', '1', null, '0', '100', '1');
-INSERT INTO `ca_menu` VALUES ('2', '用户', 'admin/user/index', 'admin', '系统管理', '2', null, '1', '100', '1');
+INSERT INTO `ca_menu` VALUES ('2', '会员', 'admin/user/index', 'admin', '系统管理', '2', null, '1', '100', '1');
 INSERT INTO `ca_menu` VALUES ('3', '角色', 'admin/group/index', 'admin', '系统管理', '2', null, '1', '100', '1');
 INSERT INTO `ca_menu` VALUES ('4', '菜单', 'admin/menu/index', 'admin', '系统管理', '2', null, '1', '100', '1');
 INSERT INTO `ca_menu` VALUES ('6', '权限', 'admin/rule/index', 'admin', '系统管理', '2', null, '1', '100', '1');
@@ -223,6 +225,7 @@ INSERT INTO `ca_menu` VALUES ('7', '首页', 'admin/index/index', 'admin', '其�
 DROP TABLE IF EXISTS `ca_merchant`;
 CREATE TABLE `ca_merchant` (
   `merchant_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '商家名称',
   `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '商家类型（注：1供应商家，2目的地商家）',
   `province` varchar(100) NOT NULL DEFAULT '' COMMENT '商家所在省份',
   `city` varchar(100) NOT NULL DEFAULT '' COMMENT '商家所在城市',
@@ -232,11 +235,12 @@ CREATE TABLE `ca_merchant` (
   `latitude` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置纬度',
   `precision` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置精度',
   PRIMARY KEY (`merchant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商家表，包括供应商和收货商';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商家表，包括供应商和收货商';
 
 -- ----------------------------
 -- Records of ca_merchant
 -- ----------------------------
+INSERT INTO `ca_merchant` VALUES ('1', '昆明信息港', '1', '云南省', '昆明市', '五华区', '高新区西城时代', '', '', '');
 
 -- ----------------------------
 -- Table structure for ca_notice
@@ -266,7 +270,7 @@ CREATE TABLE `ca_order` (
   `publish_time` int(11) NOT NULL DEFAULT '0' COMMENT '发布时间',
   `maybe_time` int(11) NOT NULL DEFAULT '0' COMMENT '预计到达时间 （自动在发布时间后加三十分钟）',
   `order_remark` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '订单备注',
-  `order_status` int(11) NOT NULL DEFAULT '0' COMMENT '订单状态 0 发布 20平台收到待分配取货者  40-取货确认  60 - 已到达   80-已取货  100 发布司机送货单 120 完成回到平台所在，取货整体完成',
+  `order_status` int(11) NOT NULL DEFAULT '0' COMMENT '订单状态 0 发布成功平台收到待分配取货者 20待取货者确认  40-取货确认  60 - 已到达   80-已取货  100 发布司机送货单 120 完成回到平台所在，取货整体完成',
   `order_product` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '产品名称 - 有可能用到',
   `order_product_price` varchar(10) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '产品价格 - 有可能用到',
   `site_sn` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
@@ -280,29 +284,34 @@ CREATE TABLE `ca_order` (
   `target_lng` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '目的地商家 经度',
   `target_lat` varchar(255) NOT NULL DEFAULT '' COMMENT '目的地商家 维度',
   PRIMARY KEY (`order_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，补充完善信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，补充完善信息表';
 
 -- ----------------------------
 -- Records of ca_order
 -- ----------------------------
+INSERT INTO `ca_order` VALUES ('1', '1', '2', '0', '30', 'adf，', '60', '', '', '', '1', '0', '0', 'a ', 'nog', '', '北京市北京市房山区九渡大街15号翠竹桥苑内房山十渡风景名胜区-关圣阁', '', '');
 
 -- ----------------------------
 -- Table structure for ca_order_log
 -- ----------------------------
 DROP TABLE IF EXISTS `ca_order_log`;
 CREATE TABLE `ca_order_log` (
-  `log_id` int(11) NOT NULL,
-  `order_id` int(11) DEFAULT NULL COMMENT '对应订单id',
-  `order_status` int(255) DEFAULT NULL COMMENT '订单状态',
-  `op_uid` int(11) DEFAULT NULL COMMENT '操作用户uid  根据status来判断是哪种uid 发布需求的uid 取货的uid',
-  `log_time` datetime DEFAULT NULL COMMENT '时间',
-  `log_msg` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '日志备注，专门针对这个环节的备注',
+  `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '对应订单id',
+  `order_status` int(255) NOT NULL DEFAULT '0' COMMENT '订单状态',
+  `op_uid` int(11) NOT NULL DEFAULT '0' COMMENT '操作用户uid  根据status来判断是哪种uid 发布需求的uid 取货的uid',
+  `log_time` int(11) NOT NULL DEFAULT '0' COMMENT '时间',
+  `log_msg` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '日志备注，专门针对这个环节的备注',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，状态变化日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，状态变化日志表';
 
 -- ----------------------------
 -- Records of ca_order_log
 -- ----------------------------
+INSERT INTO `ca_order_log` VALUES ('1', '1', '0', '1', '1514821289', '发布成功,平台收到待分配取货者');
+INSERT INTO `ca_order_log` VALUES ('2', '1', '20', '1', '1514821289', '已指派取货人');
+INSERT INTO `ca_order_log` VALUES ('3', '1', '40', '1', '1514821289', '已经指派取货人');
+INSERT INTO `ca_order_log` VALUES ('5', '1', '60', '1', '1514824399', '取货人已到达取货地点');
 
 -- ----------------------------
 -- Table structure for ca_pay
@@ -452,6 +461,7 @@ CREATE TABLE `ca_user` (
   `realname` varchar(50) NOT NULL DEFAULT '' COMMENT '真实姓名',
   `username` varchar(50) NOT NULL DEFAULT '' COMMENT '用户名前后端登录唯一标识（系统内部动态生成）',
   `openid` varchar(100) NOT NULL DEFAULT '' COMMENT '用户的标识，对当前公众号唯一',
+  `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '前台显示的昵称',
   `wxname` varchar(100) NOT NULL COMMENT '微信用户的昵称',
   `sex` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户的性别，值为1时是男性，值为2时是女性，值为0时是未知',
   `city` varchar(100) NOT NULL DEFAULT '' COMMENT '用户所在城市',
@@ -466,16 +476,23 @@ CREATE TABLE `ca_user` (
   `password` varchar(50) NOT NULL DEFAULT '' COMMENT '密码',
   `salt` varchar(10) NOT NULL DEFAULT '' COMMENT '密码salt',
   `regip` varchar(20) NOT NULL DEFAULT '' COMMENT '注册IP',
+  `last_login_time` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
   `last_login_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后登录IP',
   `login_num` int(11) NOT NULL DEFAULT '0' COMMENT '登录次数',
   `type` int(11) NOT NULL DEFAULT '0' COMMENT '用户类型（0：游客，1：后台管理员、2供应商用户，3取货者，4司机，5目的地商家用户）',
+  `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '修改时间',
+  `mobile` varchar(11) NOT NULL DEFAULT '' COMMENT '手机号',
+  `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 -- ----------------------------
 -- Records of ca_user
 -- ----------------------------
+INSERT INTO `ca_user` VALUES ('1', '创始人', 'admin', 'admin', '创始人', 'dorisnzy', '0', '', '', '', '', '0', '', '', '', '', 'cf57eb8a739adbcae3a7669e4a41ad5a', 'UFTGw', '', '1514795224', '127.0.0.1', '34', '1', '0', '1514795224', '18388069008', '915599781@qq.com');
+INSERT INTO `ca_user` VALUES ('2', '', 'nongzhengyi', '', '农正忆', 'dorislsy', '1', '', '', '', '', '0', '', '', '', '', 'c60782f20eef3d9abd3fd8493b26ab6d', 'BROFzf', '127.0.0.1', '1514708513', '127.0.0.1', '7', '1', '1514566861', '1514708513', '18388092222', '915599781@qq.at');
 
 -- ----------------------------
 -- Table structure for ca_user_admin
@@ -519,11 +536,12 @@ CREATE TABLE `ca_user_supplier` (
   `merchant_id` int(11) NOT NULL DEFAULT '0' COMMENT '供应商家ID（注：与商家表ca_merchant关联）',
   PRIMARY KEY (`supplier_id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE COMMENT '会员ID唯一'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供应商用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='供应商用户表';
 
 -- ----------------------------
 -- Records of ca_user_supplier
 -- ----------------------------
+INSERT INTO `ca_user_supplier` VALUES ('1', '2', '1');
 
 -- ----------------------------
 -- Table structure for ca_user_take

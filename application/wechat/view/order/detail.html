@@ -1,0 +1,157 @@
+<extend name="public/base">
+<block name="css">
+<style type="text/css">
+	.status-list-item {
+		border-bottom: 1px solid #F0F0F0; padding: 0.5rem;
+	}
+	.status-list-item .left-item{
+		font-size: 0.5rem;
+		padding-right: 0.5rem;
+		color:#888;
+	}
+	.status-list-item .rigth-item{
+	}
+	.status-list-item .rigth-item .take-info{
+		color:#888;
+		font-size: 0.5rem;
+	}
+</style>
+</block>
+<block name="body">
+
+<div class="weui-cells__title">供货信息</div>
+<div class="weui-cells">
+  <div class="weui-cell">
+    <div class="weui-cell__hd"><label for="" class="weui-label">供应商</label></div>
+    <div class="weui-cell__bd">
+      {$info.merchant.name}
+    </div>
+  </div>
+
+  <div class="weui-cell">
+    <div class="weui-cell__hd"><label for="" class="weui-label">联系人</label></div>
+    <div class="weui-cell__bd">
+      {$info.supplier.wxname}
+    </div>
+  </div>
+
+  <div class="weui-cell">
+    <div class="weui-cell__hd"><label for="" class="weui-label">联系电话</label></div>
+    <div class="weui-cell__bd">
+      {$info.supplier.mobile}
+    </div>
+  </div>
+
+  <div class="weui-cell">
+    <div class="weui-cell__hd"><label for="" class="weui-label">联系地址</label></div>
+    <div class="weui-cell__bd">
+      {$info.merchant.province}{$info.merchant.city}{$info.merchant.county}{$info.merchant.supplier_address}
+    </div>
+  </div>
+</div>
+
+<div class="weui-cells__title">状态</div>
+<div class="weui-cells">
+  <volist name="info.log" id="item">
+  	<switch name="item.order_status">
+  	  <case value="0">
+  	  	<div class="status-list-item">
+	  	  	<div class="weui-flex">
+			  <div class=" left-item">
+			  	<div class="top-time">{$item.log_time|date="m-d",###}</div>
+			  	<div class="top-time">{$item.log_time|date="H:i",###}</div>
+			  </div>
+			  <div class="weui-flex__item rigth-item">{$item.log_msg}</div>
+		    </div>
+	    </div>
+  	  </case>
+  	  <case value="20">
+  	  	<!-- 待取货者确认 -->
+  	  	<div class="status-list-item">
+	  	  	<div class="weui-flex">
+			  <div class="left-item">
+			  	<div class="top-time">{$item.log_time|date="m-d",###}</div>
+			  	<div class="top-time">{$item.log_time|date="H:i",###}</div>
+			  </div>
+			  <div class="weui-flex__item rigth-item">
+			  	<div>{$item.log_msg}<span style="color:red;">（待确认）</span></div>
+			  	<div class="take-info">取货人：{$info.take.wxname}</div>
+			  	<div class="take-info">联系方式：{$info.take.mobile|default=""}</div>
+			  	<div class="take-info">取货地址：{$info.merchant.province}{$info.merchant.city}{$info.merchant.county}{$info.merchant.supplier_address}</div>
+			  </div>
+		    </div>
+	    </div>
+  	  </case>
+  	  <case value="40">
+  	  	<!-- 取货者确认 -->
+  	  	<div class="status-list-item">
+	  	  	<div class="weui-flex">
+			  <div class="left-item">
+			  	<div class="top-time">{$item.log_time|date="m-d",###}</div>
+			  	<div class="top-time">{$item.log_time|date="H:i",###}</div>
+			  </div>
+			  <div class="weui-flex__item rigth-item">
+			  	<div>{$item.log_msg}<span style="color:#3cc51f;">（已确认）</span></div>
+			  	<div class="take-info">取货人：{$info.take.wxname}</div>
+			  	<div class="take-info">联系方式：{$info.take.mobile|default=""}</div>
+			  	
+			  </div>
+		    </div>
+	    </div>
+  	  </case>
+  	  <case value="60">
+  	  	<!-- 取货人已到达取货点 -->
+  	  	<div class="status-list-item">
+	  	  	<div class="weui-flex">
+			  <div class="left-item">
+			  	<div class="top-time">{$item.log_time|date="m-d",###}</div>
+			  	<div class="top-time">{$item.log_time|date="H:i",###}</div>
+			  </div>
+			  <div class="weui-flex__item rigth-item">
+			  	<div>{$item.log_msg}</div>
+			  	<div class="take-info">取货人：{$info.take.wxname}</div>
+			  	<div class="take-info">联系方式：{$info.take.mobile|default=""}</div>
+			  	
+			  </div>
+		    </div>
+	    </div>
+  	  </case>
+  	  <case value="80">
+  	  	<!-- 已取货 -->
+
+  	  </case>
+  	  <case value="100">
+  	  	<!-- 发布司机送货 -->
+
+  	  </case>
+  	  <case value="120">
+  	  	<!-- 取货完成 -->
+
+  	  </case>
+	</switch>
+  </volist>
+
+</div>
+  <if condition="!empty($action) && $action == 'accessorder' && $info['order_status'] < 40">
+  	<!-- 取货人确认订单 -->
+  	<form action="">
+  		<input type="hidden" name="action" value="$action">
+	  	<div class="weui-btn-area">
+		    <input type="button" class="weui-btn weui-btn_primary" id="ajaxPost" value="确认接收订单">
+		</div>
+  	</form>
+  <elseif condition="!empty($action) && $action == 'reachtarget' && $info['order_status'] < 60">
+  	<!-- 取货人已到达取货地点 -->
+  	<form action="">
+  		<input type="hidden" name="action" value="$action">
+	  	<div class="weui-btn-area">
+		    <input type="button" class="weui-btn weui-btn_primary" id="ajaxPost" value="确认到达取货点">
+		</div>
+  	</form>
+  <elseif condition="!empty($action) && $action == 'reachtarget' && $info['order_status'] == 60">
+  	<div class="weui-btn-area">
+  		<a href="{:url('takegoods',['order_id' => input('order_id')])}" class="weui-btn weui-btn_primary">填写收货信息</a>
+    </div>
+  </if>
+
+</block>
