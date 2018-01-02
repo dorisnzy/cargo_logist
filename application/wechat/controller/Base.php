@@ -63,12 +63,12 @@ class Base extends Controller
 
 		if (!in_array($this->currentUrl, $this->noaccessUrlArr)) {            
             // 检测系统权限
-			if (!IS_ROOT) {
-                //检测访问权限
-                if (!$this->checkRule($this->currentUrl, array('in', '1,2'))) {
-                	$this->error('未授权访问!');
-                }
-			}
+			// if (!IS_ROOT) {
+   //              //检测访问权限
+   //              if (!$this->checkRule($this->currentUrl, array('in', '1,2'))) {
+   //              	$this->error('未授权访问!');
+   //              }
+			// }
         }
 
         $this->_init();
