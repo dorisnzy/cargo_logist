@@ -34,7 +34,7 @@ class index extends Base
 	public function index()
 	{
 		
-		// $this->setMeta('首页');
-		// return $this->fetch();
+		$this->setMeta('首页');
+		return $this->fetch();
 	}
 }
