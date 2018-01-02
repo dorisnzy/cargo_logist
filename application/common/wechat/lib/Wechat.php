@@ -871,24 +871,54 @@ class Wechat {
 	}
 
 	/**
-	 * 不转义中文字符和\/的 json 编码方法
-	 * @param  array $array
+	 * 微信api不支持中文转义的json结构
+	 * @param  array $arr
 	 * @return json
 	 * @author 、小陈叔叔 <cjango@163.com>
 	 */
-	private function json_encode($array = array()) {
-		$array = str_replace("\\/", "/", json_encode($array));
-		
-		// return $array;
-
-		$search = '#\\\u([0-9a-f]+)#ie';
-		if (strpos(strtoupper(PHP_OS), 'WIN') === false) {
-			$replace = "iconv('UCS-2BE', 'UTF-8', pack('H4', '\\1'))";//LINUX
-		} else {
-			$replace = "iconv('UCS-2', 'UTF-8', pack('H4', '\\1'))";//WINDOWS
+	private function json_encode($arr = array()) {
+		if (count($arr) == 0) return "[]";
+		$parts = array ();
+		$is_list = false;
+		//Find out if the given array is a numerical array
+		$keys = array_keys ( $arr );
+		$max_length = count ( $arr ) - 1;
+		if (($keys [0] === 0) && ($keys [$max_length] === $max_length )) { //See if the first key is 0 and last key is length - 1
+			$is_list = true;
+			for($i = 0; $i < count ( $keys ); $i ++) { //See if each key correspondes to its position
+				if ($i != $keys [$i]) { //A key fails at position check.
+					$is_list = false; //It is an associative array.
+					break;
+				}
+			}
 		}
-
-		return preg_replace($search, $replace, $array);
+		foreach ( $arr as $key => $value ) {
+			if (is_array ( $value )) { //Custom handling for arrays
+				if ($is_list)
+					$parts [] = self::json_encode ( $value ); /* :RECURSION: */
+				else
+					$parts [] = '"' . $key . '":' . self::json_encode ( $value ); /* :RECURSION: */
+			} else {
+				$str = '';
+				if (! $is_list)
+					$str = '"' . $key . '":';
+				//Custom handling for multiple data types
+				if (!is_string ( $value ) && is_numeric ( $value ) && $value<2000000000)
+					$str .= $value; //Numbers
+				elseif ($value === false)
+				$str .= 'false'; //The booleans
+				elseif ($value === true)
+				$str .= 'true';
+				else
+					$str .= '"' . addslashes ( $value ) . '"'; //All other things
+				// :TODO: Is there any more datatype we should be in the lookout for? (Object?)
+				$parts [] = $str;
+			}
+		}
+		$json = implode ( ',', $parts );
+		if ($is_list)
+			return '[' . $json . ']'; //Return numerical JSON
+		return '{' . $json . '}'; //Return associative JSON
 	}
 
 	/**
