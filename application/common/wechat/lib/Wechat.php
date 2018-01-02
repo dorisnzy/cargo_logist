@@ -124,8 +124,8 @@ class Wechat {
 	 * @author 、小陈叔叔 <cjango@163.com>
 	 */
 	public function valid() {
-		$echoStr = $_GET["echostr"];
-		if (isset($echoStr)) {
+		if (isset($_GET["echostr"])) {
+			$echoStr = $_GET["echostr"];
 			$this->checkSignature() && exit($echoStr);
 		} else {
 			!$this->checkSignature() && exit('Access Denied!');
@@ -140,9 +140,9 @@ class Wechat {
 	public function checkSignature() {
 		//如果调试状态，直接返回真
 		if ($this->debug) return true;
-		$signature = $_GET['signature'];
-		$timestamp = $_GET['timestamp'];
-		$nonce     = $_GET['nonce'];
+		$signature = isset($_GET['signature']) ? $_GET['signature'] : '';
+		$timestamp = isset($_GET['timestamp']) ? $_GET['timestamp'] : '';
+		$nonce     = isset($_GET['nonce']) ? $_GET['nonce'] : '';
 		if (empty($signature) || empty($timestamp) || empty($nonce)) {
 			return false;
 		}
