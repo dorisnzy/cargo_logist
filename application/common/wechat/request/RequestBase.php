@@ -21,6 +21,8 @@ abstract class RequestBase {
     protected $wechat;
     // 接收到的信息
     protected $content;
+    // 当前用户信息
+    protected $userInfo;
 
     /**
      * 初始化
@@ -28,6 +30,21 @@ abstract class RequestBase {
     public function __construct() {
         $this->wechat = WechatFactory::getInstance();
         $this->content = $this->wechat->request();
+
+        // 根据微信公众号获取用户ID
+        if (empty($this->content['fromusername'])) {
+            throw new \Exception('参数错误');  
+        }
+
+        $map['openid'] = $this->content['fromusername'];
+        $user_info = model('User')->where($map)->find();
+
+        if (!$user_info) {
+            throw new \Exception('用户信息不存在');
+        }
+
+        $this->userInfo = $user_info;
+
         $this->init();
     }
 

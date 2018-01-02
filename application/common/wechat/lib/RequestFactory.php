@@ -30,7 +30,7 @@ class RequestFactory {
      * @return object 具体响应事件对象
      */ 
     public static function getInstance($request) {
-        
+
         $request = array_change_key_case($request, CASE_LOWER);
 
         switch ($request['msgtype']){
@@ -60,15 +60,14 @@ class RequestFactory {
      * @param string $key 对象实例键
      * @param obj 返回对象实例
      */ 
-    private function getObj($key) {
-        if (!self::$instance[$key]) {
+    private static function getObj($key) {
+        if (empty(self::$instance[$key])) {
 
             self::$request_path;
 
             $class_name = ucwords($key);
 
             $class = self::$request_path . $class_name;
-
             if (!class_exists($class)) {
 
                 throw new \Exception($key.'类不存在');
@@ -76,7 +75,6 @@ class RequestFactory {
 
             self::$instance[$key] = new $class();
         }
-
         return self::$instance[$key];
     }
 }

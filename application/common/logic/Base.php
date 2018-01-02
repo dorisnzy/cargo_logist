@@ -27,6 +27,15 @@ class Base extends Model
 		return $this->errmsg;
 	}
 
+	public function __construct()
+	{
+		parent::__construct();
+		$this->logicInit();
+	}
+
+	// 初始化
+	protected function logicInit(){}
+
 	/**
 	 * 设置错误信息
 	 */
