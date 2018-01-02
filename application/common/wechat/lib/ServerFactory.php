@@ -30,7 +30,7 @@ class ServerFactory {
      * 获取对象信息
      */
     public static function getInstance($key) {
-        if (self::$instance[$key]) {
+        if (!empty(self::$instance[$key])) {
             return self::$instance[$key];
         }
 

@@ -12,13 +12,22 @@
 namespace app\wechat\controller;
 
 use think\Controller;
+use app\common\wechat\lib\ServerFactory;
 
 /**
  * 调试控制器
  */
 class Debug extends Controller
 {
-
+	protected function _initialize()
+	{
+		try {
+            $this->menu = ServerFactory::getInstance('menu');
+        } catch (\Exception $e) {
+            dump($e->getMessage());die;
+        }
+	}
+	
 	/**
 	 * 模拟系统登录
 	 *
@@ -63,6 +72,19 @@ class Debug extends Controller
     {
     	model('User')->logout();
     	halt('退出登录成功');
+    }
+
+    /**
+     * 创建微信菜单
+     */
+    public function createMenu()
+    {
+        try {
+            $res = $this->menu->create();
+            dump($res);
+        } catch (\Exception $e) {
+            dump($e->getMessage());
+        }
     }
 
     /**

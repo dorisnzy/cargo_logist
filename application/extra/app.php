@@ -12,5 +12,8 @@ return [
     'copyright' => '昆明信息港',
     // 超级管理员组
 	'user_administrator' => [1],
+
+    // 网站域名
+    'system_domain' => 'http://www.wuliu.jlhou.cn',
 ];
 

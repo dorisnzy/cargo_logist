@@ -9,7 +9,9 @@
 // | Date: 2017-12-25
 // +----------------------------------------------------------------------
 
-namespace app\common\server;
+namespace app\common\wechat\server;
+
+use app\common\wechat\lib\Wechat;
 
 /**
  * 服务端驱动

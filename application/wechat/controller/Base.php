@@ -145,4 +145,23 @@ class Base extends Controller
 	{
 		$this->assign('meta_title', $meta_title);
 	}
+
+	/**
+	 * 权限检测
+	 * @param string  $rule    检测的规则
+	 * @param string  $mode    check模式
+	 * @return boolean
+	 */
+	final protected function checkRule($rule, $type = 1, $mode = 'url')
+	{
+		static $Auth = null;
+		if (!$Auth) {
+			$Auth = new \app\common\org\Auth();
+		}
+
+		if (!$Auth->check($rule, session('user_auth.uid'), $type, $mode)) {
+			return false;
+		}
+		return true;
+	}
 }

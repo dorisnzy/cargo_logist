@@ -879,7 +879,7 @@ class Wechat {
 	private function json_encode($array = array()) {
 		$array = str_replace("\\/", "/", json_encode($array));
 		
-		return $array;
+		// return $array;
 
 		$search = '#\\\u([0-9a-f]+)#ie';
 		if (strpos(strtoupper(PHP_OS), 'WIN') === false) {
@@ -888,7 +888,7 @@ class Wechat {
 			$replace = "iconv('UCS-2', 'UTF-8', pack('H4', '\\1'))";//WINDOWS
 		}
 
-		// return preg_replace($search, $replace, $array);
+		return preg_replace($search, $replace, $array);
 	}
 
 	/**
