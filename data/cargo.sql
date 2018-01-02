@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-01-02 01:24:04
+Date: 2018-01-02 18:17:17
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -39,8 +39,8 @@ CREATE TABLE `ca_address_map` (
 -- ----------------------------
 DROP TABLE IF EXISTS `ca_attachment`;
 CREATE TABLE `ca_attachment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '附件id',
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `attachment_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '附件id',
+  `owner` int(11) NOT NULL DEFAULT '0' COMMENT '文件拥有者',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件名称',
   `savename` varchar(255) NOT NULL DEFAULT '' COMMENT '保存文件名',
   `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件路径',
@@ -55,30 +55,42 @@ CREATE TABLE `ca_attachment` (
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态',
   `location` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件存储位置',
   `ip` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件上传IP',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`attachment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_attachment
 -- ----------------------------
+INSERT INTO `ca_attachment` VALUES ('11', '0', 'bdb015e28497da3776400fd60ea689d0.jpg', 'bdb015e28497da3776400fd60ea689d0.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\bdb015e28497da3776400fd60ea689d0.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1514883784', '1514883784', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('12', '0', '9776cb5291fd4134e014b82891484ba1.jpg', '9776cb5291fd4134e014b82891484ba1.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\9776cb5291fd4134e014b82891484ba1.jpg', 'jpg', 'image/jpeg', '', '91497', 'ed22ffbbd89aeeb56d8c07454a4e89b8', '289954567fc3d2ecd0166629a4bd46c7963f6ced', '', '1514883787', '1514883787', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('13', '0', '9cc898564137ae39ae7c1a77fd9ae61c.jpg', '9cc898564137ae39ae7c1a77fd9ae61c.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\9cc898564137ae39ae7c1a77fd9ae61c.jpg', 'jpg', 'image/jpeg', '', '30901', '563476e23e8a0a5ca886e92264d1e6a8', '7eeb9a0b45ecb0c5877d006fcab8062999f1834b', '', '1514883927', '1514883927', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('14', '0', '20c01d7928d3a110ad0884d3723194d6.jpg', '20c01d7928d3a110ad0884d3723194d6.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\20c01d7928d3a110ad0884d3723194d6.jpg', 'jpg', 'image/jpeg', '', '30901', '563476e23e8a0a5ca886e92264d1e6a8', '7eeb9a0b45ecb0c5877d006fcab8062999f1834b', '', '1514884011', '1514884011', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('15', '0', 'f15f9e120cea49fe497e773e4fec7da1.jpg', 'f15f9e120cea49fe497e773e4fec7da1.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\f15f9e120cea49fe497e773e4fec7da1.jpg', 'jpg', 'image/jpeg', '', '30901', '563476e23e8a0a5ca886e92264d1e6a8', '7eeb9a0b45ecb0c5877d006fcab8062999f1834b', '', '1514884726', '1514884726', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('16', '0', 'a4fabcfca587cdf4408faabccd056207.jpg', 'a4fabcfca587cdf4408faabccd056207.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\a4fabcfca587cdf4408faabccd056207.jpg', 'jpg', 'image/jpeg', '', '30901', '563476e23e8a0a5ca886e92264d1e6a8', '7eeb9a0b45ecb0c5877d006fcab8062999f1834b', '', '1514884892', '1514884892', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('17', '0', 'af566a47a7935e800ea647d084bd3500.jpg', 'af566a47a7935e800ea647d084bd3500.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\af566a47a7935e800ea647d084bd3500.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1514884893', '1514884893', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('18', '0', '91f1cd947a3fd1add0cc9d2b5084c1d9.jpg', '91f1cd947a3fd1add0cc9d2b5084c1d9.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\91f1cd947a3fd1add0cc9d2b5084c1d9.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1514885840', '1514885840', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('19', '0', 'b9580327d95400f93916dad4876a774a.jpg', 'b9580327d95400f93916dad4876a774a.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\b9580327d95400f93916dad4876a774a.jpg', 'jpg', 'image/jpeg', '', '91497', 'ed22ffbbd89aeeb56d8c07454a4e89b8', '289954567fc3d2ecd0166629a4bd46c7963f6ced', '', '1514885916', '1514885916', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
 
 -- ----------------------------
 -- Table structure for ca_attachment_user
 -- ----------------------------
 DROP TABLE IF EXISTS `ca_attachment_user`;
 CREATE TABLE `ca_attachment_user` (
-  `attachment_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增长ID',
+  `attachment_id` int(11) NOT NULL COMMENT '自增长ID',
   `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
   `scene_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '附件使用场景类型（1用户头像，2取货者验货上传的图片，3司机送货成功验货上传的图片）',
-  PRIMARY KEY (`attachment_id`)
+  `extra` varchar(255) NOT NULL DEFAULT '' COMMENT '额外场景值',
+  UNIQUE KEY `user_attachment` (`attachment_id`,`uid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='附件_用户关联表';
 
 -- ----------------------------
 -- Records of ca_attachment_user
 -- ----------------------------
+INSERT INTO `ca_attachment_user` VALUES ('18', '1', '2', '1');
+INSERT INTO `ca_attachment_user` VALUES ('19', '1', '2', '1');
 
 -- ----------------------------
 -- Table structure for ca_auth_group
@@ -273,6 +285,7 @@ CREATE TABLE `ca_order` (
   `order_status` int(11) NOT NULL DEFAULT '0' COMMENT '订单状态 0 发布成功平台收到待分配取货者 20待取货者确认  40-取货确认  60 - 已到达   80-已取货  100 发布司机送货单 120 完成回到平台所在，取货整体完成',
   `order_product` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '产品名称 - 有可能用到',
   `order_product_price` varchar(10) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '产品价格 - 有可能用到',
+  `pay_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否代收货款（0：不是，1：是）',
   `site_sn` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
   `take_uid` int(11) NOT NULL DEFAULT '0' COMMENT '取货人uid',
   `take_time` int(11) NOT NULL DEFAULT '0' COMMENT '取货时间',
@@ -289,7 +302,7 @@ CREATE TABLE `ca_order` (
 -- ----------------------------
 -- Records of ca_order
 -- ----------------------------
-INSERT INTO `ca_order` VALUES ('1', '1', '2', '0', '30', 'adf，', '60', '', '', '', '1', '0', '0', 'a ', 'nog', '', '北京市北京市房山区九渡大街15号翠竹桥苑内房山十渡风景名胜区-关圣阁', '', '');
+INSERT INTO `ca_order` VALUES ('1', '1', '2', '0', '30', 'adf，', '80', '', '', '1', '', '1', '0', '0', '', 'nog', '', '云南省昆明市盘龙区沣源路昆明市北部汽车客运站', '', '');
 
 -- ----------------------------
 -- Table structure for ca_order_log
@@ -303,7 +316,7 @@ CREATE TABLE `ca_order_log` (
   `log_time` int(11) NOT NULL DEFAULT '0' COMMENT '时间',
   `log_msg` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '日志备注，专门针对这个环节的备注',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，状态变化日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，状态变化日志表';
 
 -- ----------------------------
 -- Records of ca_order_log
@@ -312,6 +325,7 @@ INSERT INTO `ca_order_log` VALUES ('1', '1', '0', '1', '1514821289', '发布成�
 INSERT INTO `ca_order_log` VALUES ('2', '1', '20', '1', '1514821289', '已指派取货人');
 INSERT INTO `ca_order_log` VALUES ('3', '1', '40', '1', '1514821289', '已经指派取货人');
 INSERT INTO `ca_order_log` VALUES ('5', '1', '60', '1', '1514824399', '取货人已到达取货地点');
+INSERT INTO `ca_order_log` VALUES ('10', '1', '80', '1', '1514887299', '取货成功');
 
 -- ----------------------------
 -- Table structure for ca_pay
@@ -491,7 +505,7 @@ CREATE TABLE `ca_user` (
 -- ----------------------------
 -- Records of ca_user
 -- ----------------------------
-INSERT INTO `ca_user` VALUES ('1', '创始人', 'admin', 'admin', '创始人', 'dorisnzy', '0', '', '', '', '', '0', '', '', '', '', 'cf57eb8a739adbcae3a7669e4a41ad5a', 'UFTGw', '', '1514795224', '127.0.0.1', '34', '1', '0', '1514795224', '18388069008', '915599781@qq.com');
+INSERT INTO `ca_user` VALUES ('1', '创始人', 'admin', 'admin', '创始人', 'dorisnzy', '0', '', '', '', '', '0', '', '', '', '', 'cf57eb8a739adbcae3a7669e4a41ad5a', 'UFTGw', '', '1514856416', '127.0.0.1', '36', '1', '0', '1514856416', '18388069008', '915599781@qq.com');
 INSERT INTO `ca_user` VALUES ('2', '', 'nongzhengyi', '', '农正忆', 'dorislsy', '1', '', '', '', '', '0', '', '', '', '', 'c60782f20eef3d9abd3fd8493b26ab6d', 'BROFzf', '127.0.0.1', '1514708513', '127.0.0.1', '7', '1', '1514566861', '1514708513', '18388092222', '915599781@qq.at');
 
 -- ----------------------------
