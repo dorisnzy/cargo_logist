@@ -27,16 +27,14 @@ class Attachment extends Base
 
 	/**
 	 * 多图片上传
-	 * @param   integer $uid  用户ID
 	 */
 	public function uploadAll(){
-	    $files = request()->file('image');
+	    $files = request()->file('file');
 	    foreach($files as $file){
 	        $validate = [
-	        	'size'=>15678,
 	        	'ext'=>'jpg,png',
 	        ];
-	        $info = $file->validate($validate)->move($file_dir);
+	        $info = $file->validate($validate)->move($this->file_dir);
 	        if($info){
 	            // 成功上传后 获取上传信息
 	            return $this->saveAttachment($info);
@@ -51,17 +49,20 @@ class Attachment extends Base
 	/**
 	 * 单个图片上传
 	 */
-	public function uploadOne($uid = 0)
+	public function uploadOne()
 	{	
-		$file = request()->file('image');
+		$file = request()->file('file');
 		
         $validate = [
-        	'size'=>15678,
         	'ext'=>'jpg,png,'
         ];
-        $info = $file->validate($validate)->move($file_dir);
+        $info = $file->validate($validate)->move($this->file_dir);
         if($info){
-            return $this->saveAttachment($info, 1, $uid);
+            $attachment_id = $this->saveAttachment($info);
+            if (!$attachment_id) {
+            	return false;
+            }
+            return $attachment_id;
         }else{
             // 上传失败获取错误信息
             $this->setError($file->getError());
@@ -82,28 +83,28 @@ class Attachment extends Base
 		// 接收数据
 		$data['name']        = $info->getFilename(); //获取文件名
 		$data['path']        = $info->getPath(); //不带文件名的文件路径
-		$data['url']         = $data['path'] = str_replace("\\", '/', substr($info->getPathname(), 1)); //全路径
+		$data['url']         = str_replace(ROOT_PATH . 'public', '', $info->getPathname()); //全路径
 		$data['ext']         = $info->getExtension(); //文件扩展名
 		$data['md5']         = $info->md5();
 		$data['sha1']        = $info->sha1();
 		$data['savename']    = $info->getBasename(); //获取无路径的basename
-		$data['create_time'] = time() //创建时间
-        $data['update_time'] = time() //更新时间
+		$data['create_time'] = time(); //创建时间
+        $data['update_time'] = time(); //更新时间
         $data['size']        = $info->getSize(); //文件大小，单位字节
         $data['owner']       = $info->getOwner(); //文件拥有者
-        $data['location']    = ROOT_PATH; // 附件存储位置
+        $data['location']    = ROOT_PATH . 'public'; // 附件存储位置
         $data['ip']		 	 = request()->ip(); // 附件上传IP
-        $data['mime']        = $ifno->getMime(); // 文件mime类型
+        $data['mime']        = $info->getMime(); // 文件mime类型
         $data['sort']        = 100;
 
-		$res = $this->data($data)->save();
+		$res = db('attachment')->insertGetId($data);
 
 		if (!$res) {
 			$this->setError('上传失败');
 			return false;
 		}
 
-		return true;
+		return $res;
 	}
 
 	/**
@@ -125,9 +126,38 @@ class Attachment extends Base
 
 		$res = db('attachment_user')->insert($user_attach_data);
 		if (!$res) {
-			$this->setError('保存附件挂链表失败');
+			$this->setError('保存附件失败');
 			return false;
 		}
+	}
+
+	/**
+	 * 获取附件地址
+	 *
+	 * @param  integer $uid           用户ID
+	 * @param  integer $attachment_id 附件ID
+	 * @param  integer $scene_type    场景值
+	 * @param  string $extra         场景扩展字段
+	 *
+	 * @return  array              附件信息
+	 */
+	public function getUrls($uid = 0, $scene_type = 0, $extra = '')
+	{
+		$map = [];
+		if ($uid) {
+			$map['uid'] 		= $uid;
+		}
+		if ($scene_type) {
+			$map['scene_type'] 	= $scene_type;
+		}
+		if ($extra) {
+			$map['extra'] 		= $extra;
+		}
+		$attachment_id = db('attachment_user')->where($map)->column('attachment_id');
+		$attachment_id = array_filter($attachment_id);
+		$attachment_id = array_unique($attachment_id);
+
+		return $this->where(['attachment_id' => ['in', $attachment_id]])->column('url');
 	}
 }
 

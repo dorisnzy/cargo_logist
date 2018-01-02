@@ -89,26 +89,72 @@ var webupload = function(){
 	// 基础配置
 	var uploader = WebUploader.create({
 
+	    // 选完文件后，是否自动上传。
+    	auto: true,
+
 	    // swf文件路径
-	    swf: base_url + '/js/Uploader.swf',
+	    swf: base_url + '/static/webuploder/Uploader.swf',
 
 	    // 文件接收服务端。
 	    server: service,
 
 	    // 选择文件的按钮。可选。
-	    pick: '#picker',
+	    pick: '#filePicker',
 
-	    // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
-	    resize: false
+	     // 只允许选择图片文件。
+	    accept: {
+	        title: 'Images',
+	        extensions: 'jpg,jpeg,png',
+	        mimeTypes: 'image/jpg,image/jpeg,image/png'
+	    }
 	});
 
-	// 显示用户选择
+	// 当有文件添加进来的时候
 	uploader.on( 'fileQueued', function( file ) {
-	    $list.append( '<div id="' + file.id + '" class="item">' +
-	        '<h4 class="info">' + file.name + '</h4>' +
-	        '<p class="state">等待上传...</p>' +
-	    '</div>' );
+	    var $li = $(
+	            '<li class="weui-uploader__file" id=' + file.id +  '>' +
+	            	'<img>' +
+	            '</li>'
+
+	            ),
+	        $img = $li.find('img');
+
+	    // $list为容器jQuery实例
+	    $('#uploaderFiles').append( $li );
+
+	    // 创建缩略图
+	    thumbnailWidth = '79';
+	    thumbnailHeight = '79';
+	    uploader.makeThumb( file, function( error, src ) {
+	        if ( error ) {
+	            $img.replaceWith('<span>不能预览</span>');
+	            return;
+	        }
+
+	        $img.attr( 'src', src );
+	    }, thumbnailWidth, thumbnailHeight );
 	});
+
+	// 文件上传过程中创建进度条实时显示。
+	uploader.on( 'uploadProgress', function( file, percentage ) {
+	    $('#'+file.id).addClass('weui-uploader__file_status');
+	    $('#'+file.id).append('<div class="weui-uploader__file-content">' + percentage * 100 + '%</div>');
+
+	});
+
+	// 文件上传成功，给item添加成功class, 用样式标记上传成功。
+	uploader.on( 'uploadSuccess', function( file, response ) {
+	    $( '#'+file.id ).find('.weui-uploader__file-content').html('<i class="weui-icon-success"></i>');
+	    console.log(response);
+	    $('form').append('<input type="hidden" name="attachment_id[]" value="' + response.data.attachment_id + '">');
+	});
+
+	// 文件上传失败，显示上传出错。
+	uploader.on( 'uploadError', function( file, response ) {
+	   $( '#'+file.id ).find('.weui-uploader__file-content').html('<i class="weui-icon-warn"></i>');
+	   $.toptip(response.msg, 'error');
+	});
+
 }
 
 // --------------------------- 更高级封装 --------------------------------------
@@ -120,5 +166,8 @@ $(
 
 		// 返回上一页
 		$('#back-btn').on('click', function(){ 	history.go(-1)});
+
+		// 文件上传
+		webupload();
 	}
 );

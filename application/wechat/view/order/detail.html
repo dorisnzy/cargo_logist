@@ -118,15 +118,54 @@
   	  </case>
   	  <case value="80">
   	  	<!-- 已取货 -->
-
+		<div class="status-list-item">
+	  	  	<div class="weui-flex">
+			  <div class="left-item">
+			  	<div class="top-time">{$item.log_time|date="m-d",###}</div>
+			  	<div class="top-time">{$item.log_time|date="H:i",###}</div>
+			  </div>
+			  <div class="weui-flex__item rigth-item">
+			  	<div>{$item.log_msg}</div>
+			  	<div class="take-info">取货人：{$info.take.wxname}</div>
+			  	<div class="take-info">联系方式：{$info.take.mobile|default=""}</div>
+			  	
+			  </div>
+		    </div>
+	    </div>
   	  </case>
   	  <case value="100">
   	  	<!-- 发布司机送货 -->
-
+		<div class="status-list-item">
+	  	  	<div class="weui-flex">
+			  <div class="left-item">
+			  	<div class="top-time">{$item.log_time|date="m-d",###}</div>
+			  	<div class="top-time">{$item.log_time|date="H:i",###}</div>
+			  </div>
+			  <div class="weui-flex__item rigth-item">
+			  	<div>{$item.log_msg}</div>
+			  	<div class="take-info">取货人：{$info.take.wxname}</div>
+			  	<div class="take-info">联系方式：{$info.take.mobile|default=""}</div>
+			  	
+			  </div>
+		    </div>
+	    </div>
   	  </case>
   	  <case value="120">
   	  	<!-- 取货完成 -->
-
+		<div class="status-list-item">
+	  	  	<div class="weui-flex">
+			  <div class="left-item">
+			  	<div class="top-time">{$item.log_time|date="m-d",###}</div>
+			  	<div class="top-time">{$item.log_time|date="H:i",###}</div>
+			  </div>
+			  <div class="weui-flex__item rigth-item">
+			  	<div>{$item.log_msg}</div>
+			  	<div class="take-info">取货人：{$info.take.wxname}</div>
+			  	<div class="take-info">联系方式：{$info.take.mobile|default=""}</div>
+			  	
+			  </div>
+		    </div>
+	    </div>
   	  </case>
 	</switch>
   </volist>

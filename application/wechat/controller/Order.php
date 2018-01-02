@@ -13,6 +13,7 @@ namespace app\wechat\controller;
 
 use app\wechat\controller\Base;
 use app\common\logic\Attachment;
+use app\common\logic\Order as LogicOrder;
 
 /**
  * 供应商发布需求，第一环节
@@ -28,6 +29,7 @@ class Order extends Base
 	{
 		$this->modelOder = model('Order');
 		$this->modelOrderLog = model('OrderLog');
+		$this->logicOrder = new LogicOrder;
 	}
 
 	/**
@@ -83,7 +85,7 @@ class Order extends Base
 
 		// 获取订单状态日志
 		$info['log'] = db('order_log')->where($map)->order('log_id asc')->select();
-
+		
 		$this->setMeta('订单详情');
 		return $this->fetch();
 	}
@@ -121,7 +123,9 @@ class Order extends Base
 			$log_data['op_uid']  = $this->userInfo['uid'];
 			$log_data['log_time'] = time();
 			$log_data['log_msg'] = '已经指派取货人';
-			$res = $this->modelOrderLog->save($log_data);
+
+			$res = $this->logicOrder->setConfig($log_data)->addOrderLog();
+
 			if ($res === false) {
 				$data['order_status'] = $info['order_status'];
 				$this->modelOder->where($map)->update($data);
@@ -175,7 +179,9 @@ class Order extends Base
 			$log_data['op_uid']  = $this->userInfo['uid'];
 			$log_data['log_time'] = time();
 			$log_data['log_msg'] = '取货人已到达取货地点';
-			$res = $this->modelOrderLog->save($log_data);
+
+			$res = $this->logicOrder->setConfig($log_data)->addOrderLog();
+
 			if ($res === false) {
 				$data['order_status'] = $info['order_status'];
 				$this->modelOder->where($map)->update($data);
@@ -209,6 +215,48 @@ class Order extends Base
 		$map = ['order_id' => $order_id];
 		$info = $this->modelOder->where($map)->find();
 
+		if (!$info) {
+			return $this->error('信息不存在');
+		}
+
+		$attachment = new Attachment;
+
+		if ($this->request->isPost()) {
+			$data = input('post.');
+			$data['order_status'] = 80;
+
+			if ($info['take_uid'] != $this->userInfo['uid']) {
+				return $this->error('您不是取货人，不能确认');
+			}
+
+			// 新增图片
+			if (!empty($data['attachment_id'])) {
+				foreach ($data['attachment_id'] as $attachment_id) {
+					$attachment->saveUserAttachment($info['take_uid'], $attachment_id, 2, $order_id);
+				}
+				unset($data['attachment_id']);
+			}
+
+			// 编辑订单信息
+			$res = $this->modelOder->where($map)->update($data);
+			if ($res === false) {
+				return $this->error('信息补充失败');
+			}
+
+			// 添加订单日志-----取货人确认成功
+			$log_data['order_id'] = $order_id;
+			$log_data['order_status'] = 80;
+			$log_data['op_uid']  = $this->userInfo['uid'];
+			$log_data['log_time'] = time();
+			$log_data['log_msg'] = '取货成功';
+
+			$this->logicOrder->setConfig($log_data)->addOrderLog();
+
+			return $this->success('信息补充成功');
+		}
+
+		// 获取订单图片信息
+		$this->assign('images', $attachment->getUrls($info['take_uid'], 2, $order_id));
 		$this->assign('action', $this->request->action());
 		$this->assign('info', $info);
 		
@@ -222,10 +270,19 @@ class Order extends Base
 	public function takeUpload()
 	{
 		$attachment = new Attachment;
-		$res = $this->uploadAll();
+		$res = $attachment->uploadOne();
 		if (!$res) {
-			return $this->error($attachment->getError());
+			$data = [
+				'msg'  => $attachment->getError(),
+				'code' => 0,
+			];
+			return json($data, $code = 500);
 		}
-		return $this->success();
+		$data = [
+			'msg'  => '上传成功',
+			'code' => 1,
+			'data' => ['attachment_id' => $res],
+		];
+		return json($data, $code = 200);
 	}
 }

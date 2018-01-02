@@ -1,5 +1,12 @@
 <extend name="public/base">
 
+<block name="css">
+	<link rel="stylesheet" href="__STATIC__/webuploader/webuploader.css">
+<style type="text/css">
+	.weui-uploader__file{background-color: #f2f2f2;}
+</style>
+</block>
+
 <block name="body">
 <form action="" method="post">
 	<div class="weui-cells__title">供货信息</div>
@@ -97,34 +104,25 @@
 	  <div class="weui-cell">
 	    <div class="weui-cell__hd"><label for="" class="weui-label">是否代收货款</label></div>
 	    <div class="weui-cell__bd">
-	      <input type="radio" name="pay_type">是
-	      <input type="radio" name="pay_type">否
+	      <input type="radio" name="pay_type" value="0" <eq name="info.pay_type" value="0">checked</eq>>否
+	      <input type="radio" name="pay_type" value="1" <eq name="info.pay_type" value="1">checked</eq>>是
 	    </div>
 	  </div>
-
+		<!-- 上传图片 -->
 	  <div class="weui-cell">
 	    <div class="weui-cell__bd">
 	      <div class="weui-uploader" id="webuploder" data-url="{:url('takeUpload')}" base-url="">
 	        <div class="weui-uploader__hd">
-	          <p class="weui-uploader__title">上传照片</p>
-	          <div class="weui-uploader__info">0/0</div>
+	          <p class="weui-uploader__title">上传验货图片</p>
 	        </div>
 	        <div class="weui-uploader__bd">
 	          <ul class="weui-uploader__files" id="uploaderFiles">
-	            <li class="weui-uploader__file" style="background-color: #f2f2f2;"></li>
-	            <li class="weui-uploader__file" style="background-color: #f2f2f2;"></li>
-	            <li class="weui-uploader__file" style="background-color: #f2f2f2;"></li>
-	            <li class="weui-uploader__file weui-uploader__file_status" style="background-color: #f2f2f2;">
-	              <div class="weui-uploader__file-content">
-	                <i class="weui-icon-warn"></i>
-	              </div>
-	            </li>
-	            <li class="weui-uploader__file weui-uploader__file_status" style="background-color: #f2f2f2;">
-	              <div class="weui-uploader__file-content">50%</div>
-	            </li>
+	          	<volist name="images" id="image">
+	            	<li class="weui-uploader__file" ><img src="{$image}" width="79" height="79"></li>
+	          	</volist>
 	          </ul>
 	          <div class="weui-uploader__input-box">
-	            <input id="uploaderInput" class="weui-uploader__input" id="picker" type="file" accept="image/*" multiple="">
+	          	<div id="filePicker">选择图片</div>
 	          </div>
 	        </div>
 	      </div>
@@ -154,11 +152,11 @@
 
 </block>
 <block name="script">
-
+	<script src="__STATIC__/webuploader/webuploader.min.js"></script>
 	<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.3&key=7c45b141523c00c13256887f315ce7ec&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>
 	<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
 	<script type="text/javascript">
-	 var map = new AMap.Map("container", {
+	var map = new AMap.Map("container", {
         resizeEnable: true,
     });
 
@@ -200,6 +198,6 @@
    		$('input[name="target_address"]').val(real_adress);
    }
     	
-</script>
+    </script>
 
 </block>
