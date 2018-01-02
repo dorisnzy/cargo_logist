@@ -12,6 +12,7 @@
 namespace app\wechat\controller;
 
 use app\wechat\controller\Base;
+use app\common\logic\Attachment;
 
 /**
  * 供应商发布需求，第一环节
@@ -213,5 +214,18 @@ class Order extends Base
 		
 		$this->setMeta('填写取货信息');
 		return $this->fetch();
+	}
+
+	/**
+	 * 取货人上传图片
+	 */
+	public function takeUpload()
+	{
+		$attachment = new Attachment;
+		$res = $this->uploadAll();
+		if (!$res) {
+			return $this->error($attachment->getError());
+		}
+		return $this->success();
 	}
 }

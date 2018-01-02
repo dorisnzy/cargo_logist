@@ -83,6 +83,34 @@ var subForm = function(box_form, node, btn_info, element) {
 	});
 }
 
+var webupload = function(){
+	var base_url = $('#webuploder').attr('base-url');
+	var service  = $('#webuploder').attr('data-url');
+	// 基础配置
+	var uploader = WebUploader.create({
+
+	    // swf文件路径
+	    swf: base_url + '/js/Uploader.swf',
+
+	    // 文件接收服务端。
+	    server: service,
+
+	    // 选择文件的按钮。可选。
+	    pick: '#picker',
+
+	    // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+	    resize: false
+	});
+
+	// 显示用户选择
+	uploader.on( 'fileQueued', function( file ) {
+	    $list.append( '<div id="' + file.id + '" class="item">' +
+	        '<h4 class="info">' + file.name + '</h4>' +
+	        '<p class="state">等待上传...</p>' +
+	    '</div>' );
+	});
+}
+
 // --------------------------- 更高级封装 --------------------------------------
 $(
 	function(){

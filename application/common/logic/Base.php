@@ -11,16 +11,28 @@
 
 namespace app\common\logic;
 
-use app\common\logic\Base;
+use think\Model;
 
 /**
- * 用户服务逻辑层
+ * 逻辑服务层基础类
  */
-class User extends Base
+class Base extends Model
 {
-	// 会员模型
-	protected function $userModel;
-	// 管理员模型
-	protected function $adminModel;
+	protected $errmsg;
+
+	/**
+	 * 获取错误信息
+	 */
+	public function getError(){
+		return $this->errmsg;
+	}
+
+	/**
+	 * 设置错误信息
+	 */
+	protected function setError($errmsg)
+	{
+		$this->errmsg = $errmsg;
+	}
 }
 

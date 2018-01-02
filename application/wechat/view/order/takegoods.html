@@ -104,10 +104,10 @@
 
 	  <div class="weui-cell">
 	    <div class="weui-cell__bd">
-	      <div class="weui-uploader">
+	      <div class="weui-uploader" id="webuploder" data-url="{:url('takeUpload')}" base-url="">
 	        <div class="weui-uploader__hd">
 	          <p class="weui-uploader__title">上传照片</p>
-	          <div class="weui-uploader__info">0/2</div>
+	          <div class="weui-uploader__info">0/0</div>
 	        </div>
 	        <div class="weui-uploader__bd">
 	          <ul class="weui-uploader__files" id="uploaderFiles">
@@ -124,7 +124,7 @@
 	            </li>
 	          </ul>
 	          <div class="weui-uploader__input-box">
-	            <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple="">
+	            <input id="uploaderInput" class="weui-uploader__input" id="picker" type="file" accept="image/*" multiple="">
 	          </div>
 	        </div>
 	      </div>
