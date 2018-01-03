@@ -130,9 +130,7 @@ EOF;
      * 点击菜单事件发布需求
      */
     public function clickMenuSendOrder()
-    {
-        throw new Exception("Error Processing Request", 1);
-        
+    {   
         $data = <<<EOF
 <xml>
 <ToUserName>asdf</ToUserName>

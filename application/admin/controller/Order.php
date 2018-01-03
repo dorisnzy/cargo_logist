@@ -104,7 +104,7 @@ class Order extends Base
 			$log_data['order_status'] = 20;
 			$log_data['op_uid']  = $this->userInfo['uid'];
 			$log_data['log_time'] = time();
-			$log_data['log_msg'] = '发布成功，平台收到待分配取货者';
+			$log_data['log_msg'] = get_order_status(20);
 
 			$res = $this->logicOrder->setConfig($log_data)->addOrderLog();
 
@@ -115,7 +115,7 @@ class Order extends Base
 			}
 
 			// 修改取货者工作状态
-			// model('UserTake')->where(['uid' => $data['take_uid']])->update(['work_status' => 1]);
+			model('UserTake')->where(['uid' => $data['take_uid']])->update(['work_status' => 1]);
 
 			// 发送微信消息
 			$supplier_openid = db('user')->where(['uid' => $info['supplier_uid']])->value('openid');
