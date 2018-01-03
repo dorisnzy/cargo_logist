@@ -129,6 +129,7 @@ class Attachment extends Base
 			$this->setError('保存附件失败');
 			return false;
 		}
+		return true;
 	}
 
 	/**

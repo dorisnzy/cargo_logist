@@ -30,7 +30,7 @@ class Subscribe extends RequestBase {
             $this->response();
         } else { // 普通关注
             $this->register(); 
-            // $this->response();
+            $this->response();
         }
     }
 
@@ -108,6 +108,7 @@ class Subscribe extends RequestBase {
             $attachment = new Attachment;
             $uid = db('user')->where(['openid' => $data['openid']])->value('uid');
             $res = $attachment->wxUploadHeadImg($wx_info['headimgurl'], $wx_info['openid'], $uid);
+            $this->wechat->response((string) $res);
             if (!$res) {
                 throw new \Exception($attachment->getError());
             }
