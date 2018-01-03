@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-01-03 01:20:56
+Date: 2018-01-04 01:02:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -51,7 +51,7 @@ CREATE TABLE `ca_attachment` (
   `size` int(11) NOT NULL DEFAULT '0' COMMENT '附件大小',
   `md5` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件MD5',
   `sha1` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '文件sha1编码',
-  `remark` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '附件备注',
+  `remark` varchar(0) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件备注',
   `create_time` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
@@ -59,7 +59,7 @@ CREATE TABLE `ca_attachment` (
   `location` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件存储位置',
   `ip` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件上传IP',
   PRIMARY KEY (`attachment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_attachment
@@ -73,6 +73,20 @@ INSERT INTO `ca_attachment` VALUES ('16', '0', 'a4fabcfca587cdf4408faabccd056207
 INSERT INTO `ca_attachment` VALUES ('17', '0', 'af566a47a7935e800ea647d084bd3500.jpg', 'af566a47a7935e800ea647d084bd3500.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\af566a47a7935e800ea647d084bd3500.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1514884893', '1514884893', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
 INSERT INTO `ca_attachment` VALUES ('18', '0', '91f1cd947a3fd1add0cc9d2b5084c1d9.jpg', '91f1cd947a3fd1add0cc9d2b5084c1d9.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\91f1cd947a3fd1add0cc9d2b5084c1d9.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1514885840', '1514885840', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
 INSERT INTO `ca_attachment` VALUES ('19', '0', 'b9580327d95400f93916dad4876a774a.jpg', 'b9580327d95400f93916dad4876a774a.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180102', '\\uploads\\20180102\\b9580327d95400f93916dad4876a774a.jpg', 'jpg', 'image/jpeg', '', '91497', 'ed22ffbbd89aeeb56d8c07454a4e89b8', '289954567fc3d2ecd0166629a4bd46c7963f6ced', '', '1514885916', '1514885916', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('20', '0', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc', '.', '\\uploads\\headimg\\ogZD6wpXliPpZnsy86Yw0FP_RrBc', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc', '', '', '0', 'dbdba086e558d43d6ad4e3e9e99e3afc', '911182f3afa5dc895bc0831b605ab832f228dc06', '', '1514949291', '1514949291', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\headimg', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('21', '0', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', '.', '\\uploads\\headimg\\ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'jpg', '', '', '0', 'dbdba086e558d43d6ad4e3e9e99e3afc', '911182f3afa5dc895bc0831b605ab832f228dc06', '', '1514949389', '1514949389', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\headimg', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('22', '0', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\headimg', '\\uploads\\headimg\\ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'jpg', '', '', '0', 'dbdba086e558d43d6ad4e3e9e99e3afc', '911182f3afa5dc895bc0831b605ab832f228dc06', '', '1514949767', '1514949767', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\headimg', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('23', '8001', 'd0d600e20f5a5cddcdc2a3b4b73a0761.jpg', 'd0d600e20f5a5cddcdc2a3b4b73a0761.jpg', '/var/www/cargo_logist/public/uploads/20180103', '/uploads/20180103/d0d600e20f5a5cddcdc2a3b4b73a0761.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1514951374', '1514951374', '100', '1', '/var/www/cargo_logist/public', '112.115.19.2');
+INSERT INTO `ca_attachment` VALUES ('24', '8001', 'cd0998c9cdbedd720d5feb94bc5aca0b.jpg', 'cd0998c9cdbedd720d5feb94bc5aca0b.jpg', '/var/www/cargo_logist/public/uploads/20180103', '/uploads/20180103/cd0998c9cdbedd720d5feb94bc5aca0b.jpg', 'jpg', 'image/jpeg', '', '91497', 'ed22ffbbd89aeeb56d8c07454a4e89b8', '289954567fc3d2ecd0166629a4bd46c7963f6ced', '', '1514951387', '1514951387', '100', '1', '/var/www/cargo_logist/public', '112.115.19.2');
+INSERT INTO `ca_attachment` VALUES ('25', '8001', '32b7d745c7bcdf0d89264e0db7cd38cf.jpg', '32b7d745c7bcdf0d89264e0db7cd38cf.jpg', '/var/www/cargo_logist/public/uploads/20180103', '/uploads/20180103/32b7d745c7bcdf0d89264e0db7cd38cf.jpg', 'jpg', 'image/jpeg', '', '30901', '563476e23e8a0a5ca886e92264d1e6a8', '7eeb9a0b45ecb0c5877d006fcab8062999f1834b', '', '1514951405', '1514951405', '100', '1', '/var/www/cargo_logist/public', '112.115.19.2');
+INSERT INTO `ca_attachment` VALUES ('26', '0', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', '/var/www/cargo_logist/public/uploads/headimg', '/uploads/headimg/ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'jpg', '', '', '0', 'dbdba086e558d43d6ad4e3e9e99e3afc', '911182f3afa5dc895bc0831b605ab832f228dc06', '', '1514952840', '1514952840', '100', '1', '/var/www/cargo_logist/public/uploads/headimg', '140.207.54.75');
+INSERT INTO `ca_attachment` VALUES ('27', '0', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', '/var/www/cargo_logist/public/uploads/headimg', '/uploads/headimg/ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'jpg', '', '', '0', 'dbdba086e558d43d6ad4e3e9e99e3afc', '911182f3afa5dc895bc0831b605ab832f228dc06', '', '1514952952', '1514952952', '100', '1', '/var/www/cargo_logist/public/uploads/headimg', '140.207.54.75');
+INSERT INTO `ca_attachment` VALUES ('28', '0', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', '/var/www/cargo_logist/public/uploads/headimg', '/uploads/headimg/ogZD6wpXliPpZnsy86Yw0FP_RrBc.jpg', 'jpg', '', '', '0', 'dbdba086e558d43d6ad4e3e9e99e3afc', '911182f3afa5dc895bc0831b605ab832f228dc06', '', '1514955526', '1514955526', '100', '1', '/var/www/cargo_logist/public/uploads/headimg', '140.207.54.76');
+INSERT INTO `ca_attachment` VALUES ('29', '8001', 'b4486d2c6cb3c6f4af1ed46a36836737.jpg', 'b4486d2c6cb3c6f4af1ed46a36836737.jpg', '/var/www/cargo_logist/public/uploads/20180103', '/uploads/20180103/b4486d2c6cb3c6f4af1ed46a36836737.jpg', 'jpg', 'image/jpeg', '', '30901', '563476e23e8a0a5ca886e92264d1e6a8', '7eeb9a0b45ecb0c5877d006fcab8062999f1834b', '', '1514967678', '1514967678', '100', '1', '/var/www/cargo_logist/public', '112.115.19.2');
+INSERT INTO `ca_attachment` VALUES ('30', '0', 'ogZD6wqHv7OUcqZGzIdu55U6bZ8g.jpg', 'ogZD6wqHv7OUcqZGzIdu55U6bZ8g.jpg', '/var/www/cargo_logist/public/uploads/headimg', '/uploads/headimg/ogZD6wqHv7OUcqZGzIdu55U6bZ8g.jpg', 'jpg', '', '', '0', 'd6023f5fc3a9d3155b42ea08d61fd33c', '0432548fe44ea06496bd7e54e163f8a74ca29cdc', '', '1514971629', '1514971629', '100', '1', '/var/www/cargo_logist/public/uploads/headimg', '140.207.54.75');
+INSERT INTO `ca_attachment` VALUES ('31', '0', 'ogZD6wpX-pZA9Eyh-AsXRMrGonm4.jpg', 'ogZD6wpX-pZA9Eyh-AsXRMrGonm4.jpg', '/var/www/cargo_logist/public/uploads/headimg', '/uploads/headimg/ogZD6wpX-pZA9Eyh-AsXRMrGonm4.jpg', 'jpg', '', '', '0', '43c275cb0b43925bff5c643ff139c2a7', 'c63ec1f15c9209dcb7b7bd48e9b194c9e8987a3b', '', '1514971651', '1514971651', '100', '1', '/var/www/cargo_logist/public/uploads/headimg', '140.207.54.80');
+INSERT INTO `ca_attachment` VALUES ('32', '0', 'ogZD6wtO8l_vjlUBU60EmUXsGwSs.jpg', 'ogZD6wtO8l_vjlUBU60EmUXsGwSs.jpg', '/var/www/cargo_logist/public/uploads/headimg', '/uploads/headimg/ogZD6wtO8l_vjlUBU60EmUXsGwSs.jpg', 'jpg', '', '', '0', '01463267bd75a951d26be302e8c085d2', '336ca7d68a9b05813342d66aac722e0de10f54aa', '', '1514971678', '1514971678', '100', '1', '/var/www/cargo_logist/public/uploads/headimg', '140.207.54.75');
+INSERT INTO `ca_attachment` VALUES ('33', '8001', 'db0aa657b9729ef2a59ada350371f1d6.jpg', 'db0aa657b9729ef2a59ada350371f1d6.jpg', '/var/www/cargo_logist/public/uploads/20180103', '/uploads/20180103/db0aa657b9729ef2a59ada350371f1d6.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1514972833', '1514972833', '100', '1', '/var/www/cargo_logist/public', '112.115.19.2');
 
 -- ----------------------------
 -- Table structure for ca_attachment_user
@@ -91,6 +105,17 @@ CREATE TABLE `ca_attachment_user` (
 -- ----------------------------
 INSERT INTO `ca_attachment_user` VALUES ('18', '1', '2', '1');
 INSERT INTO `ca_attachment_user` VALUES ('19', '1', '2', '1');
+INSERT INTO `ca_attachment_user` VALUES ('20', '6', '1', '');
+INSERT INTO `ca_attachment_user` VALUES ('21', '7', '1', '');
+INSERT INTO `ca_attachment_user` VALUES ('22', '10', '1', '');
+INSERT INTO `ca_attachment_user` VALUES ('24', '1', '2', '1');
+INSERT INTO `ca_attachment_user` VALUES ('25', '1', '2', '1');
+INSERT INTO `ca_attachment_user` VALUES ('26', '18', '1', '');
+INSERT INTO `ca_attachment_user` VALUES ('27', '19', '1', '');
+INSERT INTO `ca_attachment_user` VALUES ('28', '20', '1', '');
+INSERT INTO `ca_attachment_user` VALUES ('30', '21', '1', '');
+INSERT INTO `ca_attachment_user` VALUES ('31', '22', '1', '');
+INSERT INTO `ca_attachment_user` VALUES ('32', '23', '1', '');
 
 -- ----------------------------
 -- Table structure for ca_auth_group
@@ -101,17 +126,18 @@ CREATE TABLE `ca_auth_group` (
   `title` char(100) NOT NULL DEFAULT '' COMMENT '用户组中文名称',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态：1-正常，0-禁用',
   `rules` varchar(255) NOT NULL DEFAULT '' COMMENT '用户组拥有的规则id,多个规则","隔开',
+  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '用户类型标识符与user表中的type字段对应（例如：1：后台管理员、2供应商用户，3取货者，4司机，5目的地商家用户）',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_auth_group
 -- ----------------------------
-INSERT INTO `ca_auth_group` VALUES ('1', '创始人组', '1', '1,2,3,4,5,6,7,8,9,10,11,12');
-INSERT INTO `ca_auth_group` VALUES ('3', '供货商', '1', '');
-INSERT INTO `ca_auth_group` VALUES ('4', '调度者', '1', '');
-INSERT INTO `ca_auth_group` VALUES ('5', '取货员', '1', '');
-INSERT INTO `ca_auth_group` VALUES ('6', '司机', '1', '');
+INSERT INTO `ca_auth_group` VALUES ('1', '后台管理员', '1', '1,2,3,4,5,6,7,8,9,10,11,12,14', '1');
+INSERT INTO `ca_auth_group` VALUES ('3', '供货商用户', '1', '', '2');
+INSERT INTO `ca_auth_group` VALUES ('4', '取货者', '1', '', '3');
+INSERT INTO `ca_auth_group` VALUES ('5', '司机', '1', '', '4');
+INSERT INTO `ca_auth_group` VALUES ('6', '目的地商家用户', '1', '', '5');
 
 -- ----------------------------
 -- Table structure for ca_auth_group_access
@@ -129,14 +155,10 @@ CREATE TABLE `ca_auth_group_access` (
 -- Records of ca_auth_group_access
 -- ----------------------------
 INSERT INTO `ca_auth_group_access` VALUES ('1', '1');
-INSERT INTO `ca_auth_group_access` VALUES ('2', '1');
-INSERT INTO `ca_auth_group_access` VALUES ('8', '3');
-INSERT INTO `ca_auth_group_access` VALUES ('8', '4');
-INSERT INTO `ca_auth_group_access` VALUES ('13', '1');
-INSERT INTO `ca_auth_group_access` VALUES ('14', '1');
-INSERT INTO `ca_auth_group_access` VALUES ('15', '1');
-INSERT INTO `ca_auth_group_access` VALUES ('16', '1');
-INSERT INTO `ca_auth_group_access` VALUES ('17', '1');
+INSERT INTO `ca_auth_group_access` VALUES ('2', '4');
+INSERT INTO `ca_auth_group_access` VALUES ('21', '3');
+INSERT INTO `ca_auth_group_access` VALUES ('22', '3');
+INSERT INTO `ca_auth_group_access` VALUES ('23', '3');
 
 -- ----------------------------
 -- Table structure for ca_auth_rule
@@ -152,7 +174,7 @@ CREATE TABLE `ca_auth_rule` (
   `condition` char(100) NOT NULL DEFAULT '' COMMENT '规则表达式，为空表示存在就验证，不为空表示按照条件验证',
   `module` varchar(50) NOT NULL DEFAULT '' COMMENT '所属模块',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_auth_rule
@@ -177,6 +199,10 @@ INSERT INTO `ca_auth_rule` VALUES ('17', 'admin/rule/index', '权限列表', '1'
 INSERT INTO `ca_auth_rule` VALUES ('18', 'admin/rule/add', '新增权限', '1', '1', '权限管理', '', 'admin');
 INSERT INTO `ca_auth_rule` VALUES ('19', 'admin/rule/edit', '编辑权限', '1', '1', '权限管理', '', 'admin');
 INSERT INTO `ca_auth_rule` VALUES ('20', 'admin/rule/delete', '删除权限', '1', '1', '权限管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('21', 'admin/order/index', '供应商发布需求列表', '1', '1', '供应商发布订单管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('22', 'admin/order/designatetake', '指派取货人取货', '1', '1', '供应商发布订单管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('23', 'admin/order/index', '供应商', '2', '1', '顶级菜单', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('24', 'admin/merchant/index', '商家列表', '1', '1', '商家管理', '', 'admin');
 
 -- ----------------------------
 -- Table structure for ca_config
@@ -219,17 +245,20 @@ CREATE TABLE `ca_menu` (
   `sort` tinyint(4) NOT NULL DEFAULT '0' COMMENT '权重',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态 0-禁用 1-启用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 -- ----------------------------
 -- Records of ca_menu
 -- ----------------------------
-INSERT INTO `ca_menu` VALUES ('1', '系统', 'admin/user/index', 'admin', '系统管理', '1', null, '0', '100', '1');
+INSERT INTO `ca_menu` VALUES ('1', '系统', 'admin/user/index', 'admin', '其它', '1', null, '0', '100', '1');
 INSERT INTO `ca_menu` VALUES ('2', '会员', 'admin/user/index', 'admin', '系统管理', '2', null, '1', '100', '1');
 INSERT INTO `ca_menu` VALUES ('3', '角色', 'admin/group/index', 'admin', '系统管理', '2', null, '1', '100', '1');
 INSERT INTO `ca_menu` VALUES ('4', '菜单', 'admin/menu/index', 'admin', '系统管理', '2', null, '1', '100', '1');
 INSERT INTO `ca_menu` VALUES ('6', '权限', 'admin/rule/index', 'admin', '系统管理', '2', null, '1', '100', '1');
 INSERT INTO `ca_menu` VALUES ('7', '首页', 'admin/index/index', 'admin', '其它', '1', null, '0', '1', '1');
+INSERT INTO `ca_menu` VALUES ('8', '商家', 'admin/order/index', 'admin', '其他', '1', null, '0', '100', '1');
+INSERT INTO `ca_menu` VALUES ('9', '指派取货', 'admin/order/index', 'admin', '货物管理', '2', null, '8', '100', '1');
+INSERT INTO `ca_menu` VALUES ('11', '商家列表', 'admin/merchant/index', 'admin', '商家管理', '2', null, '8', '100', '1');
 
 -- ----------------------------
 -- Table structure for ca_merchant
@@ -247,12 +276,15 @@ CREATE TABLE `ca_merchant` (
   `latitude` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置纬度',
   `precision` varchar(50) NOT NULL DEFAULT '' COMMENT '地理位置精度',
   PRIMARY KEY (`merchant_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商家表，包括供应商和收货商';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='商家表，包括供应商和收货商';
 
 -- ----------------------------
 -- Records of ca_merchant
 -- ----------------------------
-INSERT INTO `ca_merchant` VALUES ('1', '昆明信息港', '1', '云南省', '昆明市', '五华区', '高新区西城时代', '', '', '');
+INSERT INTO `ca_merchant` VALUES ('1', '昆明信息港1', '1', '云南省', '昆明市', '五华区', '高新区西城时代', '', '', '');
+INSERT INTO `ca_merchant` VALUES ('2', '圈圈物流', '1', '云南省', '昆明市', '五华区', '高德大厦', '', '', '');
+INSERT INTO `ca_merchant` VALUES ('4', '小马超市', '2', '云南省', '昆明市', '五华区', '西城时代', '', '', '');
+INSERT INTO `ca_merchant` VALUES ('5', '扛把子川菜', '2', '云南省', '昆明市', '五华区', '西城时代', '', '', '');
 
 -- ----------------------------
 -- Table structure for ca_notice
@@ -297,43 +329,14 @@ CREATE TABLE `ca_order` (
   `target_lng` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '目的地商家 经度',
   `target_lat` varchar(255) NOT NULL DEFAULT '' COMMENT '目的地商家 维度',
   PRIMARY KEY (`order_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，补充完善信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，补充完善信息表';
 
 -- ----------------------------
 -- Records of ca_order
 -- ----------------------------
-INSERT INTO `ca_order` VALUES ('1', '1', '2', '0', '30', 'adf，', '80', '', '', '1', '', '1', '0', '0', '', 'nog', '', '云南省昆明市盘龙区沣源路昆明市北部汽车客运站', '', '');
-INSERT INTO `ca_order` VALUES ('3', '1', '2', '1514903650', '1514905450', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('4', '1', '2', '1514907702', '1514909502', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('5', '1', '2', '1514907776', '1514909576', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('6', '1', '2', '1514908003', '1514909803', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('7', '1', '2', '1514908011', '1514909811', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('8', '1', '2', '1514908067', '1514909867', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('9', '1', '2', '1514908128', '1514909928', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('10', '1', '2', '1514908160', '1514909960', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('11', '1', '2', '1514908227', '1514910027', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('12', '1', '2', '1514908234', '1514910034', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('13', '1', '2', '1514908325', '1514910125', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('14', '1', '2', '1514908336', '1514910136', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('15', '1', '2', '1514908354', '1514910154', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('16', '1', '2', '1514908747', '1514910547', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('17', '1', '2', '1514908792', '1514910592', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('18', '1', '2', '1514908838', '1514910638', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('19', '1', '2', '1514908850', '1514910650', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('20', '1', '2', '1514908893', '1514910693', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('21', '1', '2', '1514908917', '1514910717', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('22', '1', '2', '1514908942', '1514910742', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('23', '1', '2', '1514908964', '1514910764', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('24', '1', '2', '1514909009', '1514910809', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('25', '1', '2', '1514909078', '1514910878', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('26', '1', '2', '1514912843', '1514914643', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('27', '1', '2', '1514912900', '1514914700', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('28', '1', '2', '1514912912', '1514914712', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('29', '1', '2', '1514913085', '1514914885', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('30', '1', '2', '1514913134', '1514914934', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('31', '1', '2', '1514913135', '1514914935', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('32', '1', '2', '1514913394', '1514915194', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
-INSERT INTO `ca_order` VALUES ('33', '1', '2', '1514913449', '1514915249', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
+INSERT INTO `ca_order` VALUES ('1', '1', '2', '1514971214', '1514973014', '', '60', '', '', '0', '', '2', '1514971268', '0', '', '', '0', '', '', '');
+INSERT INTO `ca_order` VALUES ('2', '1', '2', '1514972004', '1514973804', '', '0', '', '', '0', '', '0', '0', '0', '', '', '0', '', '', '');
+INSERT INTO `ca_order` VALUES ('3', '1', '2', '1514972523', '1514974323', '', '0', '', '', '0', '', '0', '0', '0', '啊', '', '0', '', '', '');
 
 -- ----------------------------
 -- Table structure for ca_order_log
@@ -347,47 +350,17 @@ CREATE TABLE `ca_order_log` (
   `log_time` int(11) NOT NULL DEFAULT '0' COMMENT '时间',
   `log_msg` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '日志备注，专门针对这个环节的备注',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，状态变化日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='供应商发布需求，状态变化日志表';
 
 -- ----------------------------
 -- Records of ca_order_log
 -- ----------------------------
-INSERT INTO `ca_order_log` VALUES ('1', '1', '0', '1', '1514821289', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('2', '1', '20', '1', '1514821289', '已指派取货人');
-INSERT INTO `ca_order_log` VALUES ('3', '1', '40', '1', '1514821289', '已经指派取货人');
-INSERT INTO `ca_order_log` VALUES ('5', '1', '60', '1', '1514824399', '取货人已到达取货地点');
-INSERT INTO `ca_order_log` VALUES ('10', '1', '80', '1', '1514887299', '取货成功');
-INSERT INTO `ca_order_log` VALUES ('11', '3', '0', '2', '1514903650', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('12', '4', '0', '2', '1514907702', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('13', '5', '0', '2', '1514907776', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('14', '6', '0', '2', '1514908003', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('15', '7', '0', '2', '1514908012', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('16', '8', '0', '2', '1514908067', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('17', '9', '0', '2', '1514908128', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('18', '10', '0', '2', '1514908160', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('19', '11', '0', '2', '1514908227', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('20', '12', '0', '2', '1514908234', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('21', '13', '0', '2', '1514908325', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('22', '14', '0', '2', '1514908336', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('23', '15', '0', '2', '1514908354', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('24', '16', '0', '2', '1514908747', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('25', '17', '0', '2', '1514908792', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('26', '18', '0', '2', '1514908838', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('27', '19', '0', '2', '1514908850', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('28', '20', '0', '2', '1514908893', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('29', '21', '0', '2', '1514908917', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('30', '22', '0', '2', '1514908942', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('31', '23', '0', '2', '1514908965', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('32', '24', '0', '2', '1514909009', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('33', '25', '0', '2', '1514909078', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('34', '26', '0', '2', '1514912843', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('35', '27', '0', '2', '1514912900', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('36', '28', '0', '2', '1514912912', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('37', '29', '0', '2', '1514913086', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('38', '30', '0', '2', '1514913134', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('39', '31', '0', '2', '1514913136', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('40', '32', '0', '2', '1514913394', '发布成功,平台收到待分配取货者');
-INSERT INTO `ca_order_log` VALUES ('41', '33', '0', '2', '1514913449', '发布成功,平台收到待分配取货者');
+INSERT INTO `ca_order_log` VALUES ('1', '1', '0', '2', '1514971214', '发布成功,平台收到待分配取货者');
+INSERT INTO `ca_order_log` VALUES ('2', '1', '20', '1', '1514971268', '平台已指派，待取货者确认');
+INSERT INTO `ca_order_log` VALUES ('3', '1', '40', '2', '1514971276', '取货者已经确认，正赶往取货点地');
+INSERT INTO `ca_order_log` VALUES ('4', '1', '60', '2', '1514971297', '取货者已到达取货地');
+INSERT INTO `ca_order_log` VALUES ('5', '2', '0', '2', '1514972004', '发布成功,平台收到待分配取货者');
+INSERT INTO `ca_order_log` VALUES ('6', '3', '0', '2', '1514972523', '发布成功,平台收到待分配取货者');
 
 -- ----------------------------
 -- Table structure for ca_pay
@@ -538,7 +511,7 @@ CREATE TABLE `ca_user` (
   `username` varchar(50) NOT NULL DEFAULT '' COMMENT '用户名前后端登录唯一标识（系统内部动态生成）',
   `openid` varchar(100) NOT NULL DEFAULT '' COMMENT '用户的标识，对当前公众号唯一',
   `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '前台显示的昵称',
-  `wxname` varchar(100) NOT NULL COMMENT '微信用户的昵称',
+  `wxname` varchar(100) NOT NULL DEFAULT '' COMMENT '微信用户的昵称',
   `sex` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户的性别，值为1时是男性，值为2时是女性，值为0时是未知',
   `city` varchar(100) NOT NULL DEFAULT '' COMMENT '用户所在城市',
   `country` varchar(100) NOT NULL DEFAULT '' COMMENT '用户所在国家',
@@ -562,13 +535,16 @@ CREATE TABLE `ca_user` (
   `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 -- ----------------------------
 -- Records of ca_user
 -- ----------------------------
-INSERT INTO `ca_user` VALUES ('1', '创始人', 'admin', 'admin', '创始人', 'dorisnzy', '0', '', '', '', '', '0', '', '', '', '', 'cf57eb8a739adbcae3a7669e4a41ad5a', 'UFTGw', '', '1514856416', '127.0.0.1', '36', '1', '0', '1514856416', '18388069008', '915599781@qq.com');
-INSERT INTO `ca_user` VALUES ('2', '', 'nongzhengyi', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc', '农正忆', 'dorislsy', '1', '', '', '', '', '0', '', '', '', '', 'c60782f20eef3d9abd3fd8493b26ab6d', 'BROFzf', '127.0.0.1', '1514708513', '127.0.0.1', '7', '1', '1514566861', '1514708513', '18388092222', '915599781@qq.at');
+INSERT INTO `ca_user` VALUES ('1', '创始人', 'admin', 'admin', '创始人', 'dorisnzy', '0', '', '', '', '', '0', '', '', '', '', 'cf57eb8a739adbcae3a7669e4a41ad5a', 'UFTGw', '', '1514988885', '183.225.23.235', '45', '1', '0', '1514990469', '18388069008', '915599781@qq.com');
+INSERT INTO `ca_user` VALUES ('2', '测试1', '900730439', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc', '', 'Dorisnzy', '2', '昆明', '中国', '云南', 'zh_CN', '1514955507', '', '', '0', '[]', '033b9751a7dd15d3fecf659c676789eb', 'WiXsm', '140.207.54.76', '1514977431', '183.225.23.235', '3', '3', '1514955508', '1514989673', 'admin', '');
+INSERT INTO `ca_user` VALUES ('21', '测试2', '737529021', 'ogZD6wqHv7OUcqZGzIdu55U6bZ8g', '', '二师兄', '1', '昭通', '中国', '云南', 'zh_CN', '1514971611', '', '', '0', '[]', '1007fdea777fd375b0ce8a57a58c6f64', 'atbfR', '140.207.54.75', '0', '', '0', '2', '1514971612', '1514996648', 'admin', '');
+INSERT INTO `ca_user` VALUES ('22', '测试3', '476596208', 'ogZD6wpX-pZA9Eyh-AsXRMrGonm4', '', 'paleior', '1', '昆明', '中国', '云南', 'zh_CN', '1514971631', '', '', '0', '[]', '4519c01deefbf30c50c818f0b2ab8ad2', 'HDOlz', '140.207.54.80', '0', '', '0', '2', '1514971632', '1514990432', 'admin', '');
+INSERT INTO `ca_user` VALUES ('23', '测试4', '807806134', 'ogZD6wtO8l_vjlUBU60EmUXsGwSs', '', '不胖不胖', '1', '昆明', '中国', '云南', 'zh_CN', '1514971659', '', '', '0', '[]', '8d0e9c44b14d59ed45d27960f6a8e9b8', 'jpAMO', '140.207.54.75', '0', '', '0', '2', '1514971659', '1514990422', 'admin', '');
 
 -- ----------------------------
 -- Table structure for ca_user_admin
@@ -580,11 +556,12 @@ CREATE TABLE `ca_user_admin` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态（0待审核、1正常、2锁定、3离职）',
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE COMMENT '会员uid不能重复'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='后台管理员表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='后台管理员表';
 
 -- ----------------------------
 -- Records of ca_user_admin
 -- ----------------------------
+INSERT INTO `ca_user_admin` VALUES ('2', '1', '1');
 
 -- ----------------------------
 -- Table structure for ca_user_driver
@@ -596,7 +573,7 @@ CREATE TABLE `ca_user_driver` (
   `work_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '工作状态（0：休息，1：忙碌，3：停职）',
   PRIMARY KEY (`driver_id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE COMMENT '会员ID唯一'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='司机用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='司机用户表';
 
 -- ----------------------------
 -- Records of ca_user_driver
@@ -612,12 +589,14 @@ CREATE TABLE `ca_user_supplier` (
   `merchant_id` int(11) NOT NULL DEFAULT '0' COMMENT '供应商家ID（注：与商家表ca_merchant关联）',
   PRIMARY KEY (`supplier_id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE COMMENT '会员ID唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='供应商用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='供应商用户表';
 
 -- ----------------------------
 -- Records of ca_user_supplier
 -- ----------------------------
-INSERT INTO `ca_user_supplier` VALUES ('1', '2', '1');
+INSERT INTO `ca_user_supplier` VALUES ('7', '23', '2');
+INSERT INTO `ca_user_supplier` VALUES ('8', '22', '0');
+INSERT INTO `ca_user_supplier` VALUES ('10', '21', '2');
 
 -- ----------------------------
 -- Table structure for ca_user_take
@@ -629,11 +608,12 @@ CREATE TABLE `ca_user_take` (
   `work_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '工作状态（0：休息，1：忙碌，3：停职）',
   PRIMARY KEY (`take_id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='取货者表';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='取货者表';
 
 -- ----------------------------
 -- Records of ca_user_take
 -- ----------------------------
+INSERT INTO `ca_user_take` VALUES ('13', '2', '0');
 
 -- ----------------------------
 -- Table structure for ca_user_target
@@ -645,7 +625,7 @@ CREATE TABLE `ca_user_target` (
   `merchant_id` int(11) NOT NULL DEFAULT '0' COMMENT '目的地商家ID（注：与商家表ca_merchant关联）',
   PRIMARY KEY (`target_id`),
   UNIQUE KEY `uid` (`uid`) USING BTREE COMMENT '会员唯一'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='目的地商家用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='目的地商家用户表';
 
 -- ----------------------------
 -- Records of ca_user_target
