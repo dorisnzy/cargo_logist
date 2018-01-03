@@ -204,7 +204,7 @@ class Merchant extends Base
 			->where(['merchant_id' => $info['merchant_id']])
 			->column('uid')
 		;
-		// halt(implode(',', $my_uid));
+
 		$this->assign('my_uid', implode(',', $my_uid));
 		$this->assign('list', $list);
 		$this->setMeta('选择用户');
