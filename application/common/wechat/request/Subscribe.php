@@ -107,7 +107,10 @@ class Subscribe extends RequestBase {
         if (isset($wx_info['headimgurl'])) {
             $attachment = new Attachment;
             $uid = db('user')->where(['openid' => $data['openid']])->value('uid');
-            $attachment->wxUploadHeadImg($wx_info['headimgurl'], $wx_info['openid'], $uid);
+            $res = $attachment->wxUploadHeadImg($wx_info['headimgurl'], $wx_info['openid'], $uid);
+            if (!$res) {
+                throw new \Exception($attachment->getError());
+            }
         }
 
         if (!$result) {
