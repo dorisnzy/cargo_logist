@@ -179,13 +179,13 @@ class Attachment extends Base
 		$result = file_get_contents($url);
 		if (!$result) {
 			$this->setError('获取用户头像失败');
-			return true;
+			return false;
 		}
 
 		$res = file_put_contents($file_path, $result);
 		if (!$res) {
 			$this->setError('保存用户头像失败');
-			return true;
+			return false;
 		}
 
 
