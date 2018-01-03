@@ -183,7 +183,7 @@ class Attachment extends Base
 		}
 
 		$res = file_put_contents($file_path, $result);
-		if (!$result) {
+		if (!$res) {
 			$this->setError('保存用户头像失败');
 			return true;
 		}
