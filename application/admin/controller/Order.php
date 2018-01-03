@@ -115,7 +115,7 @@ class Order extends Base
 			}
 
 			// 修改取货者工作状态
-			model('UserTake')->where(['uid' => $data['take_uid']])->update(['work_status' => 1]);
+			// model('UserTake')->where(['uid' => $data['take_uid']])->update(['work_status' => 1]);
 
 			// 发送微信消息
 			$supplier_openid = db('user')->where(['uid' => $info['supplier_uid']])->value('openid');

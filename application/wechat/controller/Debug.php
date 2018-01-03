@@ -131,7 +131,9 @@ EOF;
      */
     public function clickMenuSendOrder()
     {
-    	$data = <<<EOF
+        throw new Exception("Error Processing Request", 1);
+        
+        $data = <<<EOF
 <xml>
 <ToUserName>asdf</ToUserName>
 <FromUserName>ogZD6wpXliPpZnsy86Yw0FP_RrBc</FromUserName>
