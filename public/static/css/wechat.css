@@ -6,7 +6,7 @@ body {
 .wechat-header {
 	height: 2.5rem;
 	line-height: 2.5rem;
-	background-color: #01AAED;
+	background-color: #353535;
 	padding-left: 1rem;
 }
 
@@ -20,8 +20,5 @@ body {
 }
 
 .weui-cells{
-	font-size: 14px;
-}
-.weui-vcode-btn{
 	font-size: 14px;
 }
