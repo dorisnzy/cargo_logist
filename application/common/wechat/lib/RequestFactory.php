@@ -74,7 +74,6 @@ class RequestFactory {
             }
 
             self::$instance[$key] = new $class();
-            throw new \Exception('3');
         }
         return self::$instance[$key];
     }
