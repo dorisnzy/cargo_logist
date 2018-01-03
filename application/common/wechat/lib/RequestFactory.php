@@ -32,7 +32,7 @@ class RequestFactory {
     public static function getInstance($request) {
 
         $request = array_change_key_case($request, CASE_LOWER);
-        
+
         switch ($request['msgtype']){
             // 事件消息
             case 'event' : 
@@ -44,7 +44,7 @@ class RequestFactory {
 
                 $key = $request['msgtype'];
         }
-throw new \Exception('不存在的消息类型');
+
         $key = strtolower($key);
 
         if (!$key) {
@@ -61,6 +61,7 @@ throw new \Exception('不存在的消息类型');
      * @param obj 返回对象实例
      */ 
     private static function getObj($key) {
+        throw new \Exception('1');
         if (empty(self::$instance[$key])) {
 
             self::$request_path;
