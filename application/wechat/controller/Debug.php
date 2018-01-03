@@ -127,9 +127,9 @@ EOF;
     }
 
     /**
-     * 点击菜单事件
+     * 点击菜单事件发布需求
      */
-    public function clickMenu()
+    public function clickMenuSendOrder()
     {
     	$data = <<<EOF
 <xml>
@@ -139,6 +139,24 @@ EOF;
 <MsgType>event</MsgType>
 <Event>click</Event>
 <EventKey>send_order</EventKey>
+</xml>
+EOF;
+        $url = 'http://cargo.at/wechat/wechat_request/index';
+        $this->http($url, $data, 'post');
+    }
+
+    /**
+     * 关注事件
+     */
+    public function wxsubscribe()
+    {
+        $data = <<<EOF
+<xml>
+<ToUserName>asdf</ToUserName>
+<FromUserName>ogZD6wpXliPpZnsy86Yw0FP_RrBc</FromUserName>
+<CreateTime>123456789</CreateTime>
+<MsgType>event</MsgType>
+<Event>subscribe</Event>
 </xml>
 EOF;
         $url = 'http://cargo.at/wechat/wechat_request/index';

@@ -18,18 +18,18 @@ use app\common\logic\Attachment;
  * 接收微信公众号关注事件
  */
 class Subscribe extends RequestBase {
-    use Sign; // 引用签到
 
     /**
      * 接收消息
      */
     public function dispose() {
-        if (preg_match('/^qrscene_/i', $this->content['eventkey'])) { // 扫码关注
+        if (isset($this->content['eventkey']) && preg_match('/^qrscene_/i', $this->content['eventkey'])) { // 扫码关注
             $event_key_arr = explode('_', $this->content['eventkey']);
-            $qrcode = $event_key_arr[1]; 
-            // $this->scanQrcode($qrcode, $this->content['fromusername']);
+            $qrcode = $event_key_arr[1];
+            $this->register(); 
             $this->response();
         } else { // 普通关注
+            $this->register(); 
             $this->response();
         }
     }
@@ -47,7 +47,7 @@ class Subscribe extends RequestBase {
         // 获取微信用户信息
         $wx_info = $this->wechat->user($this->content['fromusername']);
 
-        if (!$wx_info['subscribe']) {
+        if (isset($wx_info['subscribe']) && $wx_info['subscribe'] == 0) {
             throw new \Exception('该用户没有关注公众号');   
         }
 
@@ -79,12 +79,6 @@ class Subscribe extends RequestBase {
             $data['language']       = $wx_info['language'];
         }
 
-        // 处理用户头像
-        if (isset($wx_info['headimgurl'])) {
-            // $data['headimgurl']     = $wx_info['headimgurl'];
-            // TODO::
-        }
-
         if (isset($wx_info['subscribe_time'])) {
             $data['subscribe_time'] = $wx_info['subscribe_time'];
         }
@@ -105,7 +99,17 @@ class Subscribe extends RequestBase {
             $data['unionid']         = $wx_info['unionid'];
         }
 
+        $data['password'] = $data['nickname'];
+
         $result = model('User')->register($data, false);
+
+        // 处理用户头像
+        if (isset($wx_info['headimgurl'])) {
+            $attachment = new Attachment;
+            $uid = db('user')->where(['openid' => $data['openid']])->value('uid');
+            $attachment->wxUploadHeadImg($wx_info['headimgurl'], $wx_info['openid'], $uid);
+        }
+
         if (!$result) {
             throw new \Exception('注册失败，请您重新关注');
         }

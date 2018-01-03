@@ -159,5 +159,57 @@ class Attachment extends Base
 
 		return $this->where(['attachment_id' => ['in', $attachment_id]])->column('url');
 	}
+
+	/**
+	 * 微信用户上传用户头像
+	 *
+	 * @param  string $url [头像地址]
+	 * @param  string $openid [微信用户openid]
+	 *
+	 * @return boolean 	成功-true,失败-false
+	 */
+	public function wxUploadHeadImg($url = '', $openid = '', $uid = '')
+	{
+		$user_dir = $this->file_dir . DS .'headimg';
+		$file_path = $user_dir . DS . $openid . '.jpg';
+		$result = file_get_contents($url);
+		if (!$result) {
+			$this->setError('获取用户头像失败');
+			return true;
+		}
+
+		$res = file_put_contents($file_path, $result);
+		if (!$result) {
+			$this->setError('保存用户头像失败');
+			return true;
+		}
+
+
+		// 上传附件
+		$data['name']        = basename($file_path); //获取文件名
+		$data['path']        = dirname($file_path); //不带文件名的文件路径
+		$data['url']         = str_replace(ROOT_PATH . 'public', '', $file_path);//全路径
+
+		$file_arr = explode('.', basename($file_path));
+		$data['ext']         = $file_arr[count($file_arr) - 1]; //文件扩展名
+
+		$data['md5']         = md5($result);
+		$data['sha1']        = sha1($result);
+		$data['savename']    = basename($file_path); //获取无路径的basename
+		$data['create_time'] = time(); //创建时间
+        $data['update_time'] = time(); //更新时间
+        $data['location']    = $user_dir; // 附件存储位置
+        $data['ip']		 	 = request()->ip(); // 附件上传IP
+        $data['sort']        = 100;
+
+        $attachment_id = db('attachment')->insertGetId($data);
+
+		if (!$res) {
+			$this->setError('上传失败');
+			return false;
+		}
+
+		return $this->saveUserAttachment($uid, $attachment_id, 1);
+	}
 }
 
