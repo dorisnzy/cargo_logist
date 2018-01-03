@@ -187,11 +187,6 @@ class Base extends Controller
 
     	// 给当前左侧子菜单激活属性
         $sub_row[$sub_pid]['class'] = 'layui-this';
-    	// 给当前左侧菜单组激活属性
-    	$menus['_child'][$sub_row[$sub_pid]['group']]['class'] = 'layui-nav-itemed';
-    	if (!empty($menus['main'][$sub_row[$sub_pid]['pid']])) {
-    		$menus['main'][$sub_row[$sub_pid]['pid']]['class'] = 'layui-this';
-    	}
 
         // 给主菜单激活属性
         foreach ($sub_row as $key => $item) {
@@ -205,6 +200,11 @@ class Base extends Controller
 
         	$menus['_child'][$item['group']]['item'][$key] = $item;
         }
+    	// 给当前左侧菜单组激活属性
+    	$menus['_child'][$sub_row[$sub_pid]['group']]['class'] = 'layui-nav-itemed';
+    	if (!empty($menus['main'][$sub_row[$sub_pid]['pid']])) {
+    		$menus['main'][$sub_row[$sub_pid]['pid']]['class'] = 'layui-this';
+    	}
 
         return $menus;
 	}
