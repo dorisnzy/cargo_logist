@@ -241,10 +241,10 @@ function get_order_status($order_status = 0)
 			$status_title = '平台已指派，待取货者确认';	
 			break;
 		case 40 :
-			$status_title = '取货确认';	
+			$status_title = '取货者已经确认，正赶往取货点地';	
 			break;
 		case 60 :
-			$status_title = '已到达';	
+			$status_title = '取货者已到达取货地';	
 			break;
 		case 80 :
 			$status_title = '已取货';	

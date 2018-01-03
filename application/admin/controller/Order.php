@@ -119,12 +119,12 @@ class Order extends Base
 
 			// 发送微信消息
 			$supplier_openid = db('user')->where(['uid' => $info['supplier_uid']])->value('openid');
-			$target_openid   = db('user')->where(['uid' => $data['take_uid']])->value('openid');
+			$take_openid   = db('user')->where(['uid' => $data['take_uid']])->value('openid');
 			$message = new \app\common\logic\WechatMessage;
 			$msg_data = [
 				'order_id' 			=> $order_id,
 				'supplier_openid' 	=> $supplier_openid,
-				'target_openid' 	=> $target_openid,
+				'take_openid' 	=> $take_openid,
 			];
 			$message->setConfig($msg_data)->designateOrder();
 

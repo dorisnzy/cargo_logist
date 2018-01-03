@@ -122,7 +122,7 @@ class Order extends Base
 			$log_data['order_status'] = 40;
 			$log_data['op_uid']  = $this->userInfo['uid'];
 			$log_data['log_time'] = time();
-			$log_data['log_msg'] = '已经指派取货人';
+			$log_data['log_msg'] = get_order_status(40);
 
 			$res = $this->logicOrder->setConfig($log_data)->addOrderLog();
 
@@ -131,6 +131,17 @@ class Order extends Base
 				$this->modelOder->where($map)->update($data);
 				return $this->error('确认有误');
 			}
+
+			// 发送微信消息
+			$supplier_openid = db('user')->where(['uid' => $info['supplier_uid']])->value('openid');
+			$take_openid   = db('user')->where(['uid' => $info['take_uid']])->value('openid');
+			$message = new \app\common\logic\WechatMessage;
+			$msg_data = [
+				'order_id' 			=> $order_id,
+				'supplier_openid' 	=> $supplier_openid,
+				'take_openid' 	=> $take_openid,
+			];
+			$message->setConfig($msg_data)->comfirmSucc();
 
 			return $this->success('确认成功');
 		}
@@ -178,7 +189,7 @@ class Order extends Base
 			$log_data['order_status'] = 60;
 			$log_data['op_uid']  = $this->userInfo['uid'];
 			$log_data['log_time'] = time();
-			$log_data['log_msg'] = '取货人已到达取货地点';
+			$log_data['log_msg'] = get_order_status(60);
 
 			$res = $this->logicOrder->setConfig($log_data)->addOrderLog();
 
@@ -187,6 +198,17 @@ class Order extends Base
 				$this->modelOder->where($map)->update($data);
 				return $this->error('确认有误');
 			}
+
+			// 发送微信消息
+			$supplier_openid = db('user')->where(['uid' => $info['supplier_uid']])->value('openid');
+			$take_openid   = db('user')->where(['uid' => $info['take_uid']])->value('openid');
+			$message = new \app\common\logic\WechatMessage;
+			$msg_data = [
+				'order_id' 			=> $order_id,
+				'supplier_openid' 	=> $supplier_openid,
+				'take_openid' 	=> $take_openid,
+			];
+			$message->setConfig($msg_data)->comfirmByTargetSucc();
 
 			return $this->success('确认成功');
 		}

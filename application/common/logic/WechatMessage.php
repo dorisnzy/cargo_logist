@@ -22,14 +22,15 @@ class WechatMessage extends Base
 	protected $wechat;
 	// 供应商收到的消息模板
 	protected $supplierSendMsg       = '您的需求发布成功，等待分配取货人，请保持电话畅通';
-	protected $supplierDesignateSucc = '已为您指派取货人，取货人正在路上，请保持电话畅通';
+    protected $supplierDesignateSucc = '已为您指派取货人，请保持电话畅通';
+	protected $supplierComfirmSucc   = '取货者已经确认，正赶往取货点地，请保持电话畅通';
 	protected $supplierDestination   = '取货人已到达取货地点，快去交货吧';
 	protected $supplierTakeSucc      = '已取货，等待分配司机送货';
 
 	// 取货人收到的消息模板
 	protected $takeNew 				 = '您有新的取货订单';
 	protected $takeComfirm 			 = '订单已经确认快去取货吧';
-	protected $takeTarget 		     = '已到达取货地点';
+	protected $takeTarget 		     = '已到达取货地点，请联系供应商取货';
 	protected $takeDesignate 		 = '货物已经接收，快安排司机送货吧';
 
 	// 初始化
@@ -49,12 +50,32 @@ class WechatMessage extends Base
     public function designateOrder()
     {
         // 发送消息给取货人
-        $this->takeNew($this->config['target_openid'], $this->config['order_id']);
+        $this->takeNew($this->config['take_openid'], $this->config['order_id']);
         // 发送消息给供应商
         $this->supplierDesignateSucc($this->config['supplier_openid'], $this->config['order_id']);
     }
 
+    /**
+     * 取货者已经确认成功
+     */
+    public function comfirmSucc()
+    {
+        // 发送消息给取货人
+        $this->takeComfirm($this->config['take_openid'], $this->config['order_id']);
+        // 发送消息给供应商
+        $this->supplierComfirmSucc($this->config['supplier_openid'], $this->config['order_id']);
+    }
 
+    /**
+     * 取货者已经到达取货目的地
+     */
+    public function comfirmByTargetSucc()
+    {
+        // 发送消息给取货人
+        $this->takeTarget($this->config['take_openid'], $this->config['order_id']);
+        // 发送消息给供应商
+        $this->supplierDestination($this->config['supplier_openid'], $this->config['order_id']);
+    }
 
 
 // ---------------------------------- 供应商 ------------------------------------
@@ -87,8 +108,33 @@ class WechatMessage extends Base
         return $this->sendMsg($openid, $url, $this->supplierDesignateSucc);
     }
 
+    /**
+     * 取货者已经确认，发送消息给供应商
+     *
+     * @param  [type] $openid 微信open
+     * @param  [type] $order_id 发布需求订单ID
+     *
+     * @return boolean        成功-true，失败-false
+     */
+    public function supplierComfirmSucc($openid, $order_id)
+    {
+        $url = url('wechat/order/detail', ['order_id' => $order_id]);
+        return $this->sendMsg($openid, $url, $this->supplierComfirmSucc);
+    }
 
-
+    /**
+     * 取货者已到达取货目的地
+     *
+     * @param  [type] $openid 微信open
+     * @param  [type] $order_id 发布需求订单ID
+     *
+     * @return boolean        成功-true，失败-false
+     */
+    public function supplierDestination($openid, $order_id)
+    {
+        $url = url('wechat/order/detail', ['order_id' => $order_id]);
+        return $this->sendMsg($openid, $url, $this->supplierDestination);
+    }
 
 // ------------------------------ 取货人 -----------------------------------------
 
@@ -104,6 +150,31 @@ class WechatMessage extends Base
     {
         $url = url('wechat/order/accessOrder', ['order_id' => $order_id]);
         return $this->sendMsg($openid, $url, $this->takeNew);
+    }
+
+    /**
+     * 取货者已经确认，发送消息给取货者
+     *
+     * @param  [type] $openid 微信open
+     * @param  [type] $order_id 发布需求订单ID
+     *
+     * @return boolean        成功-true，失败-false
+     */
+    public function takeComfirm($openid, $order_id)
+    {
+        $url = url('wechat/order/reachTarget', ['order_id' => $order_id]);
+        return $this->sendMsg($openid, $url, $this->takeComfirm);
+    }
+
+    /**
+     * 已经到达取货目的地，发送消息给取货者
+     *
+     * @return [type] [description]
+     */
+    public function takeTarget($openid, $order_id)
+    {
+        $url = url('wechat/order/takeGoods', ['order_id' => $order_id]);
+        return $this->sendMsg($openid, $url, $this->takeTarget);
     }
 
 	/**
