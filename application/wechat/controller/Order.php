@@ -147,7 +147,7 @@ class Order extends Base
 	}
 
 	/**
-	 * 司机确认到达取货点
+	 * 取货人确认到达取货点
 	 */
 	public function reachTarget($order_id = 0)
 	{
