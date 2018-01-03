@@ -172,6 +172,9 @@ class Attachment extends Base
 	public function wxUploadHeadImg($url = '', $openid = '', $uid = '')
 	{
 		$user_dir = $this->file_dir . DS .'headimg';
+		if (!is_dir($user_dir)) {
+			mkdir($user_dir);
+		}
 		$file_path = $user_dir . DS . $openid . '.jpg';
 		$result = file_get_contents($url);
 		if (!$result) {

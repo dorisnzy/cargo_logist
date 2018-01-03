@@ -102,16 +102,12 @@ class Subscribe extends RequestBase {
         $data['password'] = $data['wxname'];
 
         $result = model('User')->register($data, false);
-        $this->wechat->response($wx_info['headimgurl']);
+
         // 处理用户头像
         if (isset($wx_info['headimgurl'])) {
             $attachment = new Attachment;
             $uid = db('user')->where(['openid' => $data['openid']])->value('uid');
             $res = $attachment->wxUploadHeadImg($wx_info['headimgurl'], $wx_info['openid'], $uid);
-            $this->wechat->response((string) $res);
-            if (!$res) {
-                throw new \Exception($attachment->getError());
-            }
         }
 
         if (!$result) {
