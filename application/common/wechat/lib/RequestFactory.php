@@ -61,7 +61,6 @@ class RequestFactory {
      * @param obj 返回对象实例
      */ 
     private static function getObj($key) {
-        throw new \Exception('1');
         if (empty(self::$instance[$key])) {
 
             self::$request_path;
@@ -73,6 +72,7 @@ class RequestFactory {
 
                 throw new \Exception($key.'类不存在');
             }
+            throw new \Exception('2');
 
             self::$instance[$key] = new $class();
         }
