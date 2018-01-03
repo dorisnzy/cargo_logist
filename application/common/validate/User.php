@@ -19,10 +19,9 @@ use think\Validate;
 class User extends Validate
 {
 	protected $rule = array(
-		'username'   => 'require|unique:user|/^[a-zA-Z]\w{0,39}$/',
+		'username'   => 'require|unique:user',
 		'email'      => 'require|unique:user|email',
 		'mobile'     => 'unique:user',
-		'weixin'     => 'unique:user',
 		'password'   => 'require',
 		'repassword' => 'confirm:password',
 	);
@@ -36,8 +35,8 @@ class User extends Validate
 		'repassword.require'    => '确认密码和密码必须一致',
 	);
 	protected $scene = array(
-		'add'     => 'email,mobile,username,weixin',
-		'edit'     => 'email,mobile,username,weixin',
+		'add'     => 'username',
+		'edit'     => 'username',
 		'password' => 'password,repassword',
 	);
 }

@@ -174,26 +174,17 @@ class User extends Model
         	$username = $this->order('uid desc')->column('username');
         	$data['username'] = rand_string(9, 1);
         }
-		// halt($data);
-        if($data){       
-            $group_ids = isset($data['group_id']) ? $data['group_id'] : [];
-            unset($data['group_id']);
 
+        if($data){
             $result = $this->data($data,true)->isUpdate(false)->validate(true)->save();
     		if ($result) {
     		    $data['uid'] = $this->data['uid'];
-
-    		    // 新增用户-角色关联信息
-    		    if ($group_ids) {
-					model('AuthGroupAccess')->addLink($data['uid'], $group_ids);
-					unset($data['group_id']);
-    		    }
 
     			if ($isautologin) {
     				$this->autoLogin($this->data);
     			}
 
-    			return $result;
+    			return $this->data['uid'];
     		}else{
     			if (!$this->getError()) {
     				$this->error = "注册失败！";
@@ -213,7 +204,7 @@ class User extends Model
 	 *
 	 * @return mixed                 修改结果集
 	 */
-	public function editUser($data, $is_change_pwd = false, $is_change_group = true)
+	public function editUser($data, $is_change_pwd = false)
 	{
 		if (!empty($data['uid'])) {
 			// 修改密码
@@ -224,13 +215,6 @@ class User extends Model
 				$data['salt'] = rand_string(5);
 				$data['password'] = $this->encrptyPwd($data['password'], $data['salt']);
 			}
-
-			// 重置角色
-			if ($is_change_group) {
-				$group_ids = isset($data['group_id']) ? $data['group_id'] : [];
-				model('AuthGroupAccess')->addLink($data['uid'], $group_ids);
-			}
-			unset($data['group_id']);
 
 			$result = $this->data($data,true)->isUpdate(true)->validate('User.edit')->save();
 

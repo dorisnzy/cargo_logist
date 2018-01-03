@@ -13,6 +13,7 @@ namespace app\admin\controller;
 
 use app\admin\controller\Base;
 use app\common\model\User as UserModel;
+use app\common\logic\User as UserLogic;
 
 /**
  * 会员控制器
@@ -30,6 +31,7 @@ class User extends Base
 	protected function _init()
 	{
 		$this->modelUser = model('User');
+		$this->logicUser = new UserLogic;
 
 		// 用户组操作
 		$action_arr = ['add', 'edit'];
@@ -109,9 +111,16 @@ class User extends Base
 				return $this->error($vali_res);
 			}
 
-			$res = $this->modelUser->register($data, false);
-			if (!$res) {
+			$uid = $this->modelUser->register($data, false);
+			if (!$uid) {
 				return $this->error('新增失败');
+			}
+
+			// 添加各类型的用户
+			if (!empty($data['type'])) {
+				$type_data['uid']  = $uid;
+				$type_data['type'] = $data['type'];
+				$this->logicUser->setConfig($type_data)->addTypeUser();
 			}
 
 			return $this->success('新增成功', 'index');
@@ -144,6 +153,13 @@ class User extends Base
 
 			if (!$res) {
 				return $this->error('编辑失败');
+			}
+
+			// 添加各类型的用户
+			if (!empty($data['type']) && $info['type'] != $data['type']) {
+				$type_data['uid']  = $uid;
+				$type_data['type'] = $data['type'];
+				$this->logicUser->setConfig($type_data)->addTypeUser();
 			}
 
 			return $this->success('编辑成功','index');
