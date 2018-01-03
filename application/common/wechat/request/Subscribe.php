@@ -56,7 +56,7 @@ class Subscribe extends RequestBase {
         }
 
         if (isset($wx_info['nickname'])) {
-            $data['nickname']       = $wx_info['nickname'];
+            $data['wxname']       = $wx_info['nickname'];
         }
 
         if (isset($wx_info['sex'])) {
