@@ -46,6 +46,11 @@ layui.use(module, function(){
                 });
             }
 
+            // 弹窗获取页面
+            $('.open-html').bind('click', function(){
+                get_open_html(this);
+            });
+
             layui.use('laypage', function(){
                 var laypage  = layui.laypage;
                 laypage.render({
@@ -153,11 +158,10 @@ layui.use(module, function(){
     }
 
     // 弹窗获取html
-    var get_open_html = function(element){
-        var element    = element || '.open-html';
-        var open_url   = $(element).attr('data-url');
-        var box_width  = $(element).attr('box-width') || '500px';
-        var box_height = $(element).attr('box-height') || '300px';
+    var get_open_html = function(me){
+        var open_url   = $(me).attr('data-url');
+        var box_width  = $(me).attr('box-width') || '500px';
+        var box_height = $(me).attr('box-height') || '300px';
         if (!open_url) {
             return false;
         }
@@ -209,7 +213,7 @@ layui.use(module, function(){
 
         // 弹窗获取页面
         $('.open-html').on('click', function(){
-            get_open_html();
+            get_open_html(this);
         });
     }
     

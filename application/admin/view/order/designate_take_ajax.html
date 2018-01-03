@@ -1,0 +1,19 @@
+<form class="layui-form" action="{:url('designateTake', ['order_id' => $info['order_id']])}">
+	<div class="layui-row" style="padding-left: 2rem;">
+		<volist name="list" id="item">
+			<div class="layui-col-xs3 layui-col-sm3 layui-col-md3" style="padding-top: 0.5rem;">
+		       	<input type="radio" name="take_uid" value="{$item.uid}" title="{$item.user.wxname}" lay-skin="primary" <in name="item.uid" value="$info['take_uid']">checked</in>>
+		    </div>
+		</volist>
+		<input type="hidden" name="order_id" value="{$info['order_id']}">
+	</div>
+	<div style="padding-top: 3rem; text-align: center;">
+		<button class="layui-btn" lay-submit lay-filter="submitForm">提交</button>
+	</div>
+	<script>  
+    layui.use('form', function () {  
+        var form = layui.form;  
+        form.render();
+    });  
+</script>  
+</form>
