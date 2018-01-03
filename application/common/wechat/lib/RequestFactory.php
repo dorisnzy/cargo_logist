@@ -72,9 +72,9 @@ class RequestFactory {
 
                 throw new \Exception($key.'类不存在');
             }
-            throw new \Exception('2');
 
             self::$instance[$key] = new $class();
+            throw new \Exception('3');
         }
         return self::$instance[$key];
     }
