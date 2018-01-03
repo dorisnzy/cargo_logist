@@ -99,7 +99,7 @@ class Subscribe extends RequestBase {
             $data['unionid']         = $wx_info['unionid'];
         }
 
-        $data['password'] = $data['nickname'];
+        $data['password'] = $data['wxname'];
 
         $result = model('User')->register($data, false);
 
