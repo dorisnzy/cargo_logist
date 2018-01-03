@@ -30,7 +30,7 @@ class Subscribe extends RequestBase {
             $this->response();
         } else { // 普通关注
             $this->register(); 
-            $this->response();
+            // $this->response();
         }
     }
 
@@ -48,7 +48,7 @@ class Subscribe extends RequestBase {
         $wx_info = $this->wechat->user($this->content['fromusername']);
 
         if (isset($wx_info['subscribe']) && $wx_info['subscribe'] == 0) {
-            throw new \Exception('该用户没有关注公众号');   
+            throw new \Exception('该用户没有关注公众号');  
         }
 
         if (isset($wx_info['openid'])) {
