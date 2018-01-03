@@ -39,10 +39,28 @@ class WechatMessage extends Base
 		$this->wechat->getToken();
 	}
 
+
+
+// ---------------------------  具体步骤发送消息集合 ----------------------------
+
+    /**
+     * 指派订单成功
+     */
+    public function designateOrder()
+    {
+        // 发送消息给取货人
+        $this->takeNew($this->config['target_openid'], $this->config['order_id']);
+        // 发送消息给供应商
+        $this->supplierDesignateSucc($this->config['supplier_openid'], $this->config['order_id']);
+    }
+
+
+
+
+// ---------------------------------- 供应商 ------------------------------------
+
 	/**
 	 * 需求发布成功，发送消息给供应商
-	 *
-	 * @author dorisnzy <dorisnzy@163.com>
 	 *
 	 * @param  [type] $openid 微信open
 	 * @param  [type] $order_id 发布需求订单ID
@@ -54,6 +72,39 @@ class WechatMessage extends Base
 		$url = url('wechat/order/supplieredit', ['order_id' => $order_id]);
 		return $this->sendMsg($openid, $url, $this->supplierSendMsg);
 	}
+
+    /**
+     * 取货人指派成功，发送消息给供应商
+     *
+     * @param  [type] $openid 微信open
+     * @param  [type] $order_id 发布需求订单ID
+     *
+     * @return boolean        成功-true，失败-false
+     */
+    public function supplierDesignateSucc($openid, $order_id)
+    {
+        $url = url('wechat/order/detail', ['order_id' => $order_id]);
+        return $this->sendMsg($openid, $url, $this->supplierDesignateSucc);
+    }
+
+
+
+
+// ------------------------------ 取货人 -----------------------------------------
+
+    /**
+     * 发布消息给取货者-有新的订单
+     *
+     * @param  [type] $openid 微信open
+     * @param  [type] $order_id 发布需求订单ID
+     *
+     * @return boolean        成功-true，失败-false
+     */
+    public function takeNew($openid, $order_id)
+    {
+        $url = url('wechat/order/accessOrder', ['order_id' => $order_id]);
+        return $this->sendMsg($openid, $url, $this->takeNew);
+    }
 
 	/**
      * 发送模版消息

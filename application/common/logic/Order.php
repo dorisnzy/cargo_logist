@@ -18,9 +18,6 @@ use app\common\logic\Base;
  */
 class Order extends Base
 {	
-	// 基础配置
-	protected $config;
-
 	// 供应商信息
 	protected $supplier;
 
@@ -32,28 +29,6 @@ class Order extends Base
 
 	// 目标目的地商家用户信息
 	protected $targetUser;
-	
-	/**
-	 * 设置配置
-	 *
-	 * @param [type] $config [配置信息]
-	 */
-	public function setConfig($config)
-	{
-		$this->config = $config;
-		return $this;
-	}
-
-	/**
-	 * 获取配置信息
-	 */
-	public function getConfig($key)
-	{
-		if (!empty($this->config[$key])) {
-			return $this->config[$key];
-		}
-		return false;
-	}
 
 	/**
 	 * 新增订单日志

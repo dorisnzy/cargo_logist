@@ -117,6 +117,17 @@ class Order extends Base
 			// 修改取货者工作状态
 			model('UserTake')->where(['uid' => $data['take_uid']])->update(['work_status' => 1]);
 
+			// 发送微信消息
+			$supplier_openid = db('user')->where(['uid' => $info['supplier_uid']])->value('openid');
+			$target_openid   = db('user')->where(['uid' => $data['take_uid']])->value('openid');
+			$message = new \app\common\logic\WechatMessage;
+			$msg_data = [
+				'order_id' 			=> $order_id,
+				'supplier_openid' 	=> $supplier_openid,
+				'target_openid' 	=> $target_openid,
+			];
+			$message->setConfig($msg_data)->designateOrder();
+
 			return $this->success('指派成功');
 		}
 

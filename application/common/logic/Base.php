@@ -19,6 +19,8 @@ use think\Model;
 class Base extends Model
 {
 	protected $errmsg;
+	// 基础配置
+	protected $config;
 
 	/**
 	 * 获取错误信息
@@ -42,6 +44,28 @@ class Base extends Model
 	protected function setError($errmsg)
 	{
 		$this->errmsg = $errmsg;
+	}
+
+	/**
+	 * 设置配置
+	 *
+	 * @param [type] $config [配置信息]
+	 */
+	public function setConfig($config)
+	{
+		$this->config = $config;
+		return $this;
+	}
+
+	/**
+	 * 获取配置信息
+	 */
+	public function getConfig($key)
+	{
+		if (!empty($this->config[$key])) {
+			return $this->config[$key];
+		}
+		return false;
 	}
 }
 
