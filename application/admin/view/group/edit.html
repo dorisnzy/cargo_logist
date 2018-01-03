@@ -9,6 +9,18 @@
       <input type="text" name="title" required  lay-verify="required" placeholder="请输入角色标题" autocomplete="off" class="layui-input" value="{$info['title']|default=''}">
     </div>
   </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">用户类型</label>
+    <div class="layui-input-block">
+      <select name="type" lay-verify="required">
+        <option value="1" <notempty name="info"><eq name="info.type" value="1">selected</eq></notempty>>后台管理员</option>
+        <option value="2" <notempty name="info"><eq name="info.type" value="2">selected</eq></notempty>>供应商用户</option>
+        <option value="3" <notempty name="info"><eq name="info.type" value="3">selected</eq></notempty>>取货者</option>
+        <option value="4" <notempty name="info"><eq name="info.type" value="4">selected</eq></notempty>>司机</option>
+        <option value="5" <notempty name="info"><eq name="info.type" value="5">selected</eq></notempty>>目的地商家用户</option>
+      </select>
+    </div>
+  </div>
 
   <div class="layui-form-item">
     <label class="layui-form-label">状态</label>
