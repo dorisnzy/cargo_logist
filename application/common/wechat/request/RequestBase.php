@@ -30,6 +30,7 @@ abstract class RequestBase {
     public function __construct() {
         $this->wechat = WechatFactory::getInstance();
         $this->wechat->getToken();
+        $this->wechat->response(json_encode($user_info));
         $this->content = $this->wechat->request();
 
         // 根据微信公众号获取用户ID
