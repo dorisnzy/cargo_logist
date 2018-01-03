@@ -238,7 +238,7 @@ function get_order_status($order_status = 0)
 			$status_title = '发布成功，平台收到待分配取货者';
 			break;
 		case 20 :
-			$status_title = '待取货者确认';	
+			$status_title = '平台已指派，待取货者确认';	
 			break;
 		case 40 :
 			$status_title = '取货确认';	
