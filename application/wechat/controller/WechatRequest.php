@@ -29,7 +29,7 @@ class WechatRequest extends Controller
 	 */
 	protected function _initialize()
 	{
-		$this->wechat = WechatFactory::getInstance();
+        $this->wechat = WechatFactory::getInstance();
 	}
 
 	/**
