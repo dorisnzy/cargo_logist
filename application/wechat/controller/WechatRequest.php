@@ -38,6 +38,7 @@ class WechatRequest extends Controller
     public function index() {
         $valid = $this->wechat->valid();
         $content = $this->wechat->request();
+        $this->wechat->response('sdfsd');
         try {
             $obj = RequestFactory::getInstance($content);
             $obj->dispose();
