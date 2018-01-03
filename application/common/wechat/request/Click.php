@@ -29,6 +29,13 @@ class Click extends RequestBase {
 	{
 		$this->logicOrder = new Order;
 		$this->wechatMsg  = new WechatMessage;
+
+        $user_info = model('User')->getUserInfoByOpenid($this->content['fromusername']);
+        if (!$user_info) {
+            throw new \Exception('用户信息不存在');
+        }
+
+        $this->userInfo = $user_info;
 	}
 
     /**

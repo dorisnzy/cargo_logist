@@ -169,6 +169,11 @@ class User extends Model
             $data['salt'] = rand_string(6);
 		}
         $data['password'] = $this->encrptyPwd($data['password'], $data['salt']);
+        // 用户名不存在，系统内部自动生成
+        if (empty($data['username'])) {
+        	$username = $this->order('uid desc')->column('username');
+        	$data['username'] = rand_string(9, 1);
+        }
 		// halt($data);
         if($data){       
             $group_ids = isset($data['group_id']) ? $data['group_id'] : [];
@@ -179,8 +184,10 @@ class User extends Model
     		    $data['uid'] = $this->data['uid'];
 
     		    // 新增用户-角色关联信息
-				model('AuthGroupAccess')->addLink($data['uid'], $group_ids);
-				unset($data['group_id']);
+    		    if ($group_ids) {
+					model('AuthGroupAccess')->addLink($data['uid'], $group_ids);
+					unset($data['group_id']);
+    		    }
 
     			if ($isautologin) {
     				$this->autoLogin($this->data);
@@ -248,5 +255,23 @@ class User extends Model
 	{
 		$base_info = session('user_auth');
 		return $this->where('uid', $base_info['uid'])->find();
+	}
+
+	/**
+	 * 根据openid获取用户信息
+	 *
+	 * @return array 用户基本信息
+	 */
+	public function getUserInfoByOpenid($openid = '')
+	{
+		$map['openid'] = $openid;
+        $user_info = model('User')->where($map)->find();
+
+        if (!$user_info) {
+        	$this->error = '用户已经存在';
+            return false;
+        }
+
+        return $user_info;
 	}
 }

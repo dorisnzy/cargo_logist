@@ -29,21 +29,13 @@ abstract class RequestBase {
      */
     public function __construct() {
         $this->wechat = WechatFactory::getInstance();
+        $this->wechat->getToken();
         $this->content = $this->wechat->request();
 
         // 根据微信公众号获取用户ID
         if (empty($this->content['fromusername'])) {
             throw new \Exception('参数错误');  
         }
-
-        $map['openid'] = $this->content['fromusername'];
-        $user_info = model('User')->where($map)->find();
-
-        if (!$user_info) {
-            throw new \Exception('用户信息不存在');
-        }
-
-        $this->userInfo = $user_info;
 
         $this->init();
     }
