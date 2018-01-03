@@ -18,3 +18,7 @@ body {
 .wechat-contain {
 	padding: 0 0.2rem;
 }
+
+.weui-cells{
+	font-size: 14px;
+}
