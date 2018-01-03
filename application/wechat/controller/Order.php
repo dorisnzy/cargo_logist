@@ -270,9 +270,20 @@ class Order extends Base
 			$log_data['order_status'] = 80;
 			$log_data['op_uid']  = $this->userInfo['uid'];
 			$log_data['log_time'] = time();
-			$log_data['log_msg'] = '取货成功';
+			$log_data['log_msg'] = get_order_status(80);
 
 			$this->logicOrder->setConfig($log_data)->addOrderLog();
+
+			// 发送微信消息
+			$supplier_openid = db('user')->where(['uid' => $info['supplier_uid']])->value('openid');
+			$take_openid   = db('user')->where(['uid' => $info['take_uid']])->value('openid');
+			$message = new \app\common\logic\WechatMessage;
+			$msg_data = [
+				'order_id' 			=> $order_id,
+				'supplier_openid' 	=> $supplier_openid,
+				'take_openid' 	=> $take_openid,
+			];
+			$message->setConfig($msg_data)->tekeSucc();
 
 			return $this->success('信息补充成功');
 		}

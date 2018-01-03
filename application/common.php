@@ -247,10 +247,10 @@ function get_order_status($order_status = 0)
 			$status_title = '取货者已到达取货地';	
 			break;
 		case 80 :
-			$status_title = '已取货';	
+			$status_title = '已取货，待分配司机送货';	
 			break;
 		case 100 :
-			$status_title = '发布司机送货单';	
+			$status_title = '已分配司机送货';	
 			break;
 		case 120 :
 			$status_title = '完成回到平台所在，取货整体完成';
