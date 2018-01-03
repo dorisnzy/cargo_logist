@@ -1,0 +1,17 @@
+<extend name="public/base">
+
+<block name="body">
+<form class="layui-form" action="">
+	<div class="layui-row" style="padding-left: 2rem;">
+		<input type="hidden" name="flag" value="1">
+		<volist name="list" id="item">
+			<div class="layui-col-xs1 layui-col-sm2 layui-col-md2" style="padding-top: 0.5rem;">
+		       	<input type="checkbox" name="uid[]" value="{$item.uid}" title="{$item.realname}" lay-skin="primary" <in name="item.uid" value="$my_uid">checked</in> >
+		    </div>
+		</volist>
+	</div>
+	<div style="padding-top: 3rem; text-align: center;">
+		<button class="layui-btn" lay-submit lay-filter="submitForm">提交</button>
+	</div>
+</form>
+</block>

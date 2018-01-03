@@ -1,0 +1,36 @@
+<extend name="public/base">
+
+<block name="body">
+<form class="layui-form layui-form-pane keyword"> 
+  <div class="layui-form-item"> 
+    <div class="layui-inline"> 
+      <label class="layui-form-label">商家名称</label> 
+      <div class="layui-input-inline"> 
+        <input type="text" name="name" autocomplete="off" class="layui-input" placeholder="请输入标题" > 
+      </div> 
+    </div> 
+    <div class="layui-inline"> 
+      <type type="button" class="layui-btn" id="keyword">查询</button>
+    </div>
+  </div> 
+</form>
+<div class="layui-tab layui-tab-card">
+  <ul class="layui-tab-title">
+    <a href="{:url('', ['type' => 1])}"><li <if condition="$type eq 1">class="layui-this"</if> >供应商</li></a>
+    <a href="{:url('', ['type' => 2])}"><li <if condition="$type eq 2">class="layui-this"</if> >目的地商家</li></a>
+  </ul>
+  <div class="layui-tab-content" >
+    <div class="layui-tab-item layui-show" style="padding-bottom: 3rem;">
+		<div class="layui-btn-group">
+		  <a class="layui-btn" href="{:url('add', ['type' => $type])}">
+		    <i class="layui-icon">&#xe654;</i>新增
+		  </a>
+		</div> 
+		<table class="layui-table" data-url="{:url('', ['type' => $type])}">
+		</table>
+		<div id="page" style="text-align: center;"></div>
+    </div>
+  </div>
+</div>
+</form>
+</block>

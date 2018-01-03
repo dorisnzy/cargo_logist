@@ -1,0 +1,48 @@
+<extend name="public/base">
+
+<block name="body">
+<form class="layui-form" action="">
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">名称</label>
+    <div class="layui-input-block">
+      <input type="text" name="name" required  lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input" value="{$info['name']|default=''}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">所在省份</label>
+    <div class="layui-input-block">
+      <input type="text" name="province" required  lay-verify="required" placeholder="请输入所在省份" autocomplete="off" class="layui-input" value="{$info['province']|default=''}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">所在城市</label>
+    <div class="layui-input-block">
+      <input type="text" name="city" required  lay-verify="required" placeholder="请输入所在城市" autocomplete="off" class="layui-input" value="{$info['city']|default=''}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">所在县区</label>
+    <div class="layui-input-block">
+      <input type="text" name="county" required  lay-verify="required" placeholder="请输入所在县区" autocomplete="off" class="layui-input" value="{$info['county']|default=''}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">详细地址</label>
+    <div class="layui-input-block">
+      <input type="text" name="supplier_address" required  lay-verify="required" placeholder="请输入详细地址" autocomplete="off" class="layui-input" value="{$info['supplier_address']|default=''}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="submitForm">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+</block>

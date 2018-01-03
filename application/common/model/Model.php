@@ -36,7 +36,7 @@ class Model extends \think\Model
      */
     protected function loadPage()
     {
-        $page = Config::get('page');
+        $page = Config::get('app.page');
         $rows = Request::instance()->param('limit', 0, 'intval');
         $this->pageLimit = $rows ? : $page['list_rows'];
         $this->pageNow = Request::instance()->param('page', 1, 'intval');

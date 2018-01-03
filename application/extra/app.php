@@ -15,5 +15,11 @@ return [
 
     // 网站域名
     'system_domain' => 'http://www.wuliu.jlhou.cn',
+
+    // 系统后台分页
+    'page' => [
+        'type' => 'layui',
+        'list_rows' => 13,
+    ],
 ];
 
