@@ -30,7 +30,7 @@ class Menu extends Drive {
                     'sub_button' => array(
                         0 => array(
                             'type' => 'click',
-                            'name' => '个人中心',
+                            'name' => '下单',
                             'key'  => 'send_order',
                         ),
                     ),
