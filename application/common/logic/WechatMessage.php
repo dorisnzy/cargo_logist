@@ -77,6 +77,17 @@ class WechatMessage extends Base
         $this->supplierDestination($this->config['supplier_openid'], $this->config['order_id']);
     }
 
+    /**
+     * 取货者取货成功
+     */
+    public function tekeSucc()
+    {
+         // 发送消息给取货人
+        $this->takeDesignate($this->config['take_openid'], $this->config['order_id']);
+        // 发送消息给供应商
+        $this->supplierTakeSucc($this->config['supplier_openid'], $this->config['order_id']);
+    }
+
 
 // ---------------------------------- 供应商 ------------------------------------
 
@@ -123,7 +134,7 @@ class WechatMessage extends Base
     }
 
     /**
-     * 取货者已到达取货目的地
+     * 取货者已到达取货目的地,发送消息给供应商
      *
      * @param  [type] $openid 微信open
      * @param  [type] $order_id 发布需求订单ID
@@ -134,6 +145,20 @@ class WechatMessage extends Base
     {
         $url = url('wechat/order/detail', ['order_id' => $order_id]);
         return $this->sendMsg($openid, $url, $this->supplierDestination);
+    }
+
+    /**
+     * 取货者已经取货，发送消息给供应商
+     * 
+     * @param  [type] $openid 微信open
+     * @param  [type] $order_id 发布需求订单ID
+     *
+     * @return boolean        成功-true，失败-false
+     */
+    public function supplierTakeSucc($openid, $order_id)
+    {
+        $url = url('wechat/order/detail', ['order_id' => $order_id]);
+        return $this->sendMsg($openid, $url, $this->supplierTakeSucc);
     }
 
 // ------------------------------ 取货人 -----------------------------------------
@@ -175,6 +200,20 @@ class WechatMessage extends Base
     {
         $url = url('wechat/order/takeGoods', ['order_id' => $order_id]);
         return $this->sendMsg($openid, $url, $this->takeTarget);
+    }
+
+    /**
+     * 取货者已经取货，发送消息给取货者
+     * 
+     * @param  [type] $openid 微信open
+     * @param  [type] $order_id 发布需求订单ID
+     *
+     * @return boolean        成功-true，失败-false
+     */
+    public function takeDesignate($openid, $order_id)
+    {
+        $url = url('wechat/send/driverlist', ['order_id' => $order_id]);
+        return $this->sendMsg($openid, $url, $this->takeDesignate);
     }
 
 	/**
