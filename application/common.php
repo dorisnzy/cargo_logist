@@ -223,3 +223,40 @@ function check_rule($url){
 
 	return true;
 }
+
+/**
+ * 获取订单状态中文标识
+ *
+ * @param  integer $order_status 订单状态值
+ *
+ * @return string                状态中文标识
+ */	
+function get_order_status($order_status = 0)
+{
+	switch ($order_status) {
+		case 0 :
+			$status_title = '发布成功，平台收到待分配取货者';
+			break;
+		case 20 :
+			$status_title = '待取货者确认';	
+			break;
+		case 40 :
+			$status_title = '取货确认';	
+			break;
+		case 60 :
+			$status_title = '已到达';	
+			break;
+		case 80 :
+			$status_title = '已取货';	
+			break;
+		case 100 :
+			$status_title = '发布司机送货单';	
+			break;
+		case 120 :
+			$status_title = '完成回到平台所在，取货整体完成';
+			break;
+		default :
+			$status_title = '未知';
+	}
+	return $status_title;
+}

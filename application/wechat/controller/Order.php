@@ -194,7 +194,7 @@ class Order extends Base
 		$this->assign('info', $info);
 
 		// 获取订单状态日志
-		$info['log'] = db('order_log')->where($map)->order('log_id asc')->select();
+		$info['log'] = db('order_log')->where($map)->order('order_status asc')->select();
 
 		$this->assign('action', $this->request->action());
 		
