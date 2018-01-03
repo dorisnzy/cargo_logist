@@ -31,7 +31,7 @@ class Click extends RequestBase {
 		$this->wechatMsg  = new WechatMessage;
 
         $user_info = model('User')->getUserInfoByOpenid($this->content['fromusername']);
-        $this->wechat->response(json_encode($user_info));
+        
         if (!$user_info) {
             throw new \Exception('用户信息不存在');
         }
