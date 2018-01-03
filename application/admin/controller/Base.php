@@ -52,15 +52,16 @@ class Base extends Controller
 			$this->redirect('admin/user/login');
 		}
 
+        // 是否是超级管理员
+		defined('IS_ROOT') or define('IS_ROOT', is_administrator());
+
 		//不是后台管理员禁止登陆后台
-        if($this->userInfo['type'] != 1 && !in_array($this->currentUrl, $this->noaccessUrlArr)){
+        if(!IS_ROOT && $this->userInfo['type'] != 1 && !in_array($this->currentUrl, $this->noaccessUrlArr)){
         	model('User')->logout();
             $this->error('您不是管理员，非法访问','admin/index/login');
         }
 
 
-        // 是否是超级管理员
-		defined('IS_ROOT') or define('IS_ROOT', is_administrator());
 
 		if (!in_array($this->currentUrl, $this->noaccessUrlArr)) {            
             // 检测系统权限
