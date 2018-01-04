@@ -59,7 +59,7 @@
 	  <div class="weui-cell">
 	    <div class="weui-cell__hd"><label for="" class="weui-label">联系电话</label></div>
 	    <div class="weui-cell__bd">
-	      <input class="weui-input"  placeholder="请输入联系电话" name="target_tel" value="{$info.target_tel|default=''}">
+	      <input type="number" class="weui-input"  placeholder="请输入联系电话" name="target_tel" value="<notempty name='info.target_tel'>{$info.target_tel}</notempty>">
 	    </div>
 	  </div>
 
@@ -98,6 +98,13 @@
 	    <div class="weui-cell__hd"><label for="" class="weui-label">货物名称</label></div>
 	    <div class="weui-cell__bd">
 	      <input class="weui-input"  placeholder="请输入货物名称" name="order_product" value="{$info.order_product|default=''}">
+	    </div>
+	  </div>
+
+	  <div class="weui-cell">
+	    <div class="weui-cell__hd"><label for="" class="weui-label">线下货单号</label></div>
+	    <div class="weui-cell__bd">
+	      <input class="weui-input"  placeholder="请输入线下货单号" name="site_sn" value="{$info.site_sn|default=''}">
 	    </div>
 	  </div>
 
@@ -150,7 +157,6 @@
 
 </block>
 <block name="script">
-	<script src="__STATIC__/webuploader/webuploader.min.js"></script>
 	<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.3&key=7c45b141523c00c13256887f315ce7ec&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>
 	<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
 	<script type="text/javascript">

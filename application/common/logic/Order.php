@@ -35,9 +35,9 @@ class Order extends Base
 	 */
 	public function addOrderLog()
 	{
-		$data['order_id'] = $this->config['order_id'];
-		$data['order_status'] = $this->config['order_status'];
-		$data['op_uid'] = $this->config['op_uid'];
+		$data['order_id'] 		= $this->config['order_id'];
+		$data['order_status'] 	= $this->config['order_status'];
+		$data['op_uid'] 		= $this->config['op_uid'];
 
 		$info = db('order_log')->where($data)->find();
 		if ($info) {
@@ -94,7 +94,7 @@ class Order extends Base
 		$this->config['order_id']     = $order_id;
 		$this->config['order_status'] = 0;
 		$this->config['op_uid']       = $this->config['uid'];
-		$this->config['log_msg']      = '发布成功,平台收到待分配取货者';
+		$this->config['log_msg']      = get_order_status(0);
 		$this->addOrderLog();
 
 		return $order_id;

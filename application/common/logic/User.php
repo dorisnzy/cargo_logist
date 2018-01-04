@@ -175,5 +175,25 @@ class User extends Base
 
 		return $info;
 	}
+
+	/**
+	 * 获取在休息状态的司机列表（包含头像）
+	 */
+	public function getDriverList()
+	{
+		$list = $this->modelObj['driver']
+			->where('work_status', 0)
+			->select()
+		;
+
+		// 获取头像
+		$attachment = new \app\common\logic\Attachment;
+		foreach ($list as $key => $item) {
+			$headimg = $attachment->getUrls($item->uid, 1);
+			$list[$key]['headimg'] = !empty($headimg[0]) ? $headimg[0] : '';
+		}
+
+		return $list;
+	}
 }
 

@@ -39,11 +39,18 @@ class Take extends Base
         $map = [];
         // 关键词搜索
         if ($this->request->param('keyword')) {
-            $map['u.nickname|u.username|u.email|u.mobile|u.realname'] = ['like', '%'. $this->request->param('keyword') . '%'];
+            $map['u.nickname|u.username|u.email|u.mobile|u.realname'] = [
+                'like', 
+                '%'. $this->request->param('keyword') . '%'
+            ];
         }
 
         if ($this->request->isAjax()) {
-            $count = $this->modelTake->alias('t')->where($map)->join('__USER__ u', 'u.uid=t.uid')->count();
+            $count = $this->modelTake
+                ->alias('t')
+                ->where($map)->join('__USER__ u', 'u.uid=t.uid')
+                ->count()
+            ;
 
             $list  = $this->modelTake
                 ->alias('t')

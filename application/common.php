@@ -268,8 +268,31 @@ function get_send_status($send_status = 0)
 {
 	switch ($send_status) {
 		case 0 :
-			$send_title = '发布送货订单';
+			$send_title = '发布成功，平台收到待分配送货者司机';
 			break;
+		case 20 :
+			$send_title = '已经分配司机取货，待司机确认';
+			break;
+		case 40 :
+			$send_title = '送货司机已经确认';
+			break;
+		case 60 :
+			$send_title = '司机已到达取货点';
+			break;
+		case 80 :
+			$send_title = '司机已取货';
+			break;
+		case 100 :
+			$send_title = '司机已送达目的地';
+			break;
+		case 120 :
+			$send_title = '目的地商家确认收货';
+			break;
+		case 140 :
+			$send_title = '司机完成送货已回到平台所在，送货整体完成';
+			break;
+		default :
+			$send_title = '未知';
 	}
 
 	return $send_title;

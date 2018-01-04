@@ -1,25 +1,12 @@
 /**
- * 弹框提示
- * @param string msg 提示信息
- * @param integer timer 弹框关闭时间
- * @param boolen status 状态显示 [true-成功提示，false-失败提示]
- * @author doris <dorisnzy@163.com>
+ * ---------------------------------------------
+ * layui后台数据处理
+ * ---------------------------------------------
+ * Author  dorisnzy@163.com
+ * ---------------------------------------------
+ * Date 2017-12-20
+ * ---------------------------------------------
  */
-var showInfo = function(msg, status, timer) {
-	timer = timer ? timer : 2;
-
-	var error_bg   = 'border:none; background-color:#FF4351; color:#fff;background-color: rgba(255,67,81,.7);';
-	var success_bg = 'border:none; background-color:#5eb95e; color:#fff;background-color: rgba(94,185,94,.7);';
-	var style = status ? success_bg : error_bg;
-
-	var config = {
-		content : msg,
-		time : timer,
-		style : style,
-		skin: 'msg',
-	};
-	layer.open(config);
-}
 
 
 /**
@@ -157,6 +144,65 @@ var webupload = function(){
 
 }
 
+// 获取列表信息
+var get_list = function(element, where){
+	var element 	= element ? element : $('.data-list');
+	var body 		= $(element.attr('target-body'));
+    var server_url 	= element.attr('data-url');
+    var current 	= element.attr('data-page');
+        current 	= current ? current : 1;
+
+    if (!server_url) return false;
+
+    var o  = {};
+    o.page = current;
+    o      = $.extend(o, where);
+
+    $.get(server_url, o, function(result){
+    	if (current == 1) {
+    		if (!result.code) {
+	    		body.html('<div style="font-size: 14px; color: #c2c2c2;text-align: center;padding: 2rem;">暂无数据</div>');
+	    		return false;
+	    	}
+    		body.html(result.data.list);
+    	} else {
+	    	if (!result.code) {
+	    		body.append('<div style="font-size: 14px; color: #c2c2c2;text-align: center;padding: 2rem;">暂无数据</div>');
+	    		return false;
+	    	}
+	    	body.append(result.data.list);
+    	}
+    });
+}
+
+// 关键词搜索列表
+var keyword_search = function(me){
+	var keyword = $(me).val();
+	get_list('', {keyword:keyword});
+}
+
+// 滚动加载
+var loader_list = function(element){
+	var loading = false;  //状态标记
+	$(element).infinite().on("infinite", function() {
+	  	if(loading) return;
+	  	loading = true;
+	    get_list();
+	    loading = false;
+	    $(element).destroyInfinite()
+	});
+}
+
+// 上拉刷新信息
+var pull_to_refresh = function(element){
+	var element = element || '.data-list';
+	// 初始化下拉刷新
+	$(element).pullToRefresh(function () {
+		get_list();
+		$(element).pullToRefreshDone();
+	});
+}
+
 // --------------------------- 更高级封装 --------------------------------------
 $(
 	function(){
@@ -169,5 +215,17 @@ $(
 
 		// 文件上传
 		webupload();
+
+		// 下拉刷新列表
+		pull_to_refresh('.data-list');
+
+		// 滚动加载
+		loader_list('.data-list');
+
+		// 获取列表信息
+		get_list();
+
+		// 关键词搜索
+		$('input[type="search"]').bind('blur',function(){keyword_search(this)});
 	}
 );
