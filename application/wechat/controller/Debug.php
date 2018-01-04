@@ -38,7 +38,7 @@ class Debug extends Controller
 	public function index()
 	{
 		// 线下调试用
-        $user = model('User')->where(array('username'=>'admin'))->find();
+        $user = model('User')->where(array('username'=>'900730439'))->find();
         $this->autologin($user['openid']);
 	}
 
