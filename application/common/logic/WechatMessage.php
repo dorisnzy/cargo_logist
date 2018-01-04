@@ -216,6 +216,9 @@ class WechatMessage extends Base
         return $this->sendMsg($openid, $url, $this->takeDesignate);
     }
 
+
+// ------------------------------ 基础模版 -----------------------------------------
+
 	/**
      * 发送模版消息
      * @param   interger    $openid      用户openid

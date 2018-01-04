@@ -1,0 +1,23 @@
+<form class="layui-form" action="{:url('updateWorkStatus', ['uid' => $uid])}">
+  <div class="layui-row" style="padding-left: 4.5rem;">
+        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3" style="padding-top: 0.5rem;">
+            <input type="radio" name="work_status" value="0" title="休息" lay-skin="primary" <eq name="info.work_status" value="0">checked</eq>>
+        </div>
+        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3" style="padding-top: 0.5rem;">
+            <input type="radio" name="work_status" value="1" title="忙碌" lay-skin="primary" <eq name="info.work_status" value="1">checked</eq>>
+        </div>
+        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3" style="padding-top: 0.5rem;">
+            <input type="radio" name="work_status" value="3" title="停职" lay-skin="primary" <eq name="info.work_status" value="3">checked</eq>>
+        </div>
+    <input type="hidden" name="uid" value="{$info['uid']}">
+  </div>
+  <div style="padding-top: 1rem; text-align: center;">
+    <button class="layui-btn" lay-submit lay-filter="submitForm">提交工作状态</button>
+  </div>
+  <script>  
+    layui.use('form', function () {  
+        var form = layui.form;  
+        form.render();
+    });  
+</script>  
+</form>

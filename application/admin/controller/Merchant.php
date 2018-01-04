@@ -14,7 +14,7 @@ namespace app\admin\controller;
 use app\admin\controller\Base;
 
 /**
- * 会员控制器
+ * 商家控制器
  */
 class Merchant extends Base
 {
@@ -31,8 +31,8 @@ class Merchant extends Base
 		$this->modelMerchant = model('Merchant');
 	}
 
-		/**
-	 * 用户列表
+	/**
+	 * 列表信息
 	 */
 	public function index($type = 1)
 	{
