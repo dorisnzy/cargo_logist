@@ -253,10 +253,24 @@ function get_order_status($order_status = 0)
 			$status_title = '已分配司机送货';	
 			break;
 		case 120 :
-			$status_title = '完成回到平台所在，取货整体完成';
+			$status_title = '完成回到平台所在，取货完成';
 			break;
 		default :
 			$status_title = '未知';
 	}
 	return $status_title;
+}
+
+/**
+ * 获取司机送货订单中文标识
+ */
+function get_send_status($send_status = 0)
+{
+	switch ($send_status) {
+		case 0 :
+			$send_title = '发布送货订单';
+			break;
+	}
+
+	return $send_title;
 }

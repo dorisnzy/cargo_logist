@@ -68,6 +68,11 @@ class User extends Base
             $map['mobile'] = ['like', '%'. $this->request->param('mobile') . '%'];
         }
 
+        // 真实姓名
+        if ($this->request->param('realname')) {
+            $map['realname'] = ['like', '%'. $this->request->param('realname') . '%'];
+        }
+
         if ($this->request->isAjax()) {
             $count = $this->modelUser->where($map)->count();
 

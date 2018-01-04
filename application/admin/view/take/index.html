@@ -1,0 +1,28 @@
+<extend name="public/base">
+
+<block name="body">
+<form class="layui-form layui-form-pane keyword"> 
+  <div class="layui-form-item"> 
+
+    <div class="layui-inline"> 
+      <label class="layui-form-label">关键词</label> 
+      <div class="layui-input-inline"> 
+        <input type="text" name="keyword" autocomplete="off" class="layui-input" placeholder="昵称/手机号/邮箱/真实姓名" > 
+      </div> 
+    </div> 
+
+    <div class="layui-inline"> 
+      <type type="button" class="layui-btn" id="keyword">查询</button>
+    </div>
+
+  </div> 
+</form>
+<div class="layui-btn-group">
+  <a class="layui-btn" href="{:url('add')}">
+    <i class="layui-icon">&#xe654;</i>新增
+  </a>
+</div> 
+<table class="layui-table" data-url="{:url('')}">
+</table>
+<div id="page" style="text-align: center;"></div>
+</block>

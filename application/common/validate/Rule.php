@@ -48,6 +48,9 @@ class Rule extends Validate
 	{
 		$map['type'] = $data['group'] == '顶级菜单' ? 2 : 1;
 		$map['name'] = $data['name'];
+		if (!empty($data['id'])) {
+			$map['id'] = ['neq', $data['id']];
+		}
 
 		$id = db('auth_rule')->where($map)->value('id');
 
