@@ -61,7 +61,8 @@ class Click extends RequestBase {
         			throw new \Exception($this->wechatMsg->getError());
         		}
         		// 回复普通消息
-        		$this->wechat->response('');
+                echo '';die;   
+        		// $this->wechat->response('发布成功');
         		break;
         }
     }
