@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-01-04 01:02:12
+Date: 2018-01-04 17:36:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -59,7 +59,7 @@ CREATE TABLE `ca_attachment` (
   `location` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件存储位置',
   `ip` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '附件上传IP',
   PRIMARY KEY (`attachment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_attachment
@@ -87,6 +87,8 @@ INSERT INTO `ca_attachment` VALUES ('30', '0', 'ogZD6wqHv7OUcqZGzIdu55U6bZ8g.jpg
 INSERT INTO `ca_attachment` VALUES ('31', '0', 'ogZD6wpX-pZA9Eyh-AsXRMrGonm4.jpg', 'ogZD6wpX-pZA9Eyh-AsXRMrGonm4.jpg', '/var/www/cargo_logist/public/uploads/headimg', '/uploads/headimg/ogZD6wpX-pZA9Eyh-AsXRMrGonm4.jpg', 'jpg', '', '', '0', '43c275cb0b43925bff5c643ff139c2a7', 'c63ec1f15c9209dcb7b7bd48e9b194c9e8987a3b', '', '1514971651', '1514971651', '100', '1', '/var/www/cargo_logist/public/uploads/headimg', '140.207.54.80');
 INSERT INTO `ca_attachment` VALUES ('32', '0', 'ogZD6wtO8l_vjlUBU60EmUXsGwSs.jpg', 'ogZD6wtO8l_vjlUBU60EmUXsGwSs.jpg', '/var/www/cargo_logist/public/uploads/headimg', '/uploads/headimg/ogZD6wtO8l_vjlUBU60EmUXsGwSs.jpg', 'jpg', '', '', '0', '01463267bd75a951d26be302e8c085d2', '336ca7d68a9b05813342d66aac722e0de10f54aa', '', '1514971678', '1514971678', '100', '1', '/var/www/cargo_logist/public/uploads/headimg', '140.207.54.75');
 INSERT INTO `ca_attachment` VALUES ('33', '8001', 'db0aa657b9729ef2a59ada350371f1d6.jpg', 'db0aa657b9729ef2a59ada350371f1d6.jpg', '/var/www/cargo_logist/public/uploads/20180103', '/uploads/20180103/db0aa657b9729ef2a59ada350371f1d6.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1514972833', '1514972833', '100', '1', '/var/www/cargo_logist/public', '112.115.19.2');
+INSERT INTO `ca_attachment` VALUES ('34', '0', '5baf53416729ad5ab8f5f14a340be7ca.jpg', '5baf53416729ad5ab8f5f14a340be7ca.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180104', '\\uploads\\20180104\\5baf53416729ad5ab8f5f14a340be7ca.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1515053297', '1515053297', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
+INSERT INTO `ca_attachment` VALUES ('35', '0', '3bbd306a7ea3c425a0648a4fb91aabf7.jpg', '3bbd306a7ea3c425a0648a4fb91aabf7.jpg', 'D:\\phphome\\www\\cargo_logist\\public\\uploads\\20180104', '\\uploads\\20180104\\3bbd306a7ea3c425a0648a4fb91aabf7.jpg', 'jpg', 'image/jpeg', '', '92697', '45f714fde25cc58e2f1e647841832d7e', 'c9ebc7ca874479cebaca243f4cb2d708013d4144', '', '1515056921', '1515056921', '100', '1', 'D:\\phphome\\www\\cargo_logist\\public', '127.0.0.1');
 
 -- ----------------------------
 -- Table structure for ca_attachment_user
@@ -174,7 +176,7 @@ CREATE TABLE `ca_auth_rule` (
   `condition` char(100) NOT NULL DEFAULT '' COMMENT '规则表达式，为空表示存在就验证，不为空表示按照条件验证',
   `module` varchar(50) NOT NULL DEFAULT '' COMMENT '所属模块',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ca_auth_rule
@@ -203,6 +205,8 @@ INSERT INTO `ca_auth_rule` VALUES ('21', 'admin/order/index', '供应商发布�
 INSERT INTO `ca_auth_rule` VALUES ('22', 'admin/order/designatetake', '指派取货人取货', '1', '1', '供应商发布订单管理', '', 'admin');
 INSERT INTO `ca_auth_rule` VALUES ('23', 'admin/order/index', '供应商', '2', '1', '顶级菜单', '', 'admin');
 INSERT INTO `ca_auth_rule` VALUES ('24', 'admin/merchant/index', '商家列表', '1', '1', '商家管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('25', 'admin/take/index', '取货员列表信息', '1', '1', '取货员管理', '', 'admin');
+INSERT INTO `ca_auth_rule` VALUES ('26', 'admin/take/updateworkstatus', '修改工作状态', '1', '1', '取货员管理', '', 'admin');
 
 -- ----------------------------
 -- Table structure for ca_config
@@ -245,7 +249,7 @@ CREATE TABLE `ca_menu` (
   `sort` tinyint(4) NOT NULL DEFAULT '0' COMMENT '权重',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态 0-禁用 1-启用',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 -- ----------------------------
 -- Records of ca_menu
@@ -259,6 +263,7 @@ INSERT INTO `ca_menu` VALUES ('7', '首页', 'admin/index/index', 'admin', '其�
 INSERT INTO `ca_menu` VALUES ('8', '商家', 'admin/order/index', 'admin', '其他', '1', null, '0', '100', '1');
 INSERT INTO `ca_menu` VALUES ('9', '指派取货', 'admin/order/index', 'admin', '货物管理', '2', null, '8', '100', '1');
 INSERT INTO `ca_menu` VALUES ('11', '商家列表', 'admin/merchant/index', 'admin', '商家管理', '2', null, '8', '100', '1');
+INSERT INTO `ca_menu` VALUES ('12', '取货员', 'admin/take/index', 'admin', '取货员管理', '2', null, '8', '100', '1');
 
 -- ----------------------------
 -- Table structure for ca_merchant
@@ -463,19 +468,19 @@ CREATE TABLE `ca_pay_wxnotice` (
 -- ----------------------------
 DROP TABLE IF EXISTS `ca_send`;
 CREATE TABLE `ca_send` (
-  `send_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '送货单id',
-  `merchant_id` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '供应商id',
-  `supplier_uid` int(11) DEFAULT NULL COMMENT '供应商用户uid',
-  `order_id` int(11) DEFAULT NULL COMMENT '来源于 供应商发布需求表',
-  `publish_time` int(11) DEFAULT NULL COMMENT '发布时间',
-  `maybe_time` int(11) DEFAULT NULL COMMENT '预计送达时间 （自动在发布时间后加60分钟）',
-  `sand_remark` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '送货订单备注',
-  `send_status` int(11) DEFAULT NULL COMMENT '订单状态 0 发布 20平台收到待分配送货者司机  40-送货者司机确认  60 - 司机已到达   80-司机已取货  100 司机送达目的地 120目的地商家确认收货 140 完成送货回到平台所在，送货整体完成',
-  `pay_status` int(11) DEFAULT NULL COMMENT '支付状态 0 未支付 大于0具体为支付订单号 便于关联查询',
-  `driver_uid` int(11) DEFAULT NULL COMMENT '司机uid',
-  `driver_take_time` int(11) DEFAULT NULL COMMENT '司机取货时间',
-  `driver_over_time` int(11) DEFAULT NULL COMMENT '司机送达货时间',
-  `site_sn` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
+  `send_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '送货单id',
+  `merchant_id` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '供应商id',
+  `supplier_uid` int(11) NOT NULL DEFAULT '0' COMMENT '供应商用户uid',
+  `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '来源于 供应商发布需求表',
+  `publish_time` int(11) NOT NULL DEFAULT '0' COMMENT '发布时间',
+  `maybe_time` int(11) NOT NULL DEFAULT '0' COMMENT '预计送达时间 （自动在发布时间后加60分钟）',
+  `sand_remark` varchar(255) NOT NULL DEFAULT '' COMMENT '送货订单备注',
+  `send_status` int(11) NOT NULL DEFAULT '0' COMMENT '0-发布成功，平台收到待分配送货者司机，20-已经分配司机取货，待司机确认，40-送货者司机确认  60 - 司机已到达取货点   80-司机已取货  100 司机已送达目的地 120目的地商家确认收货 140 完成送货回到平台所在，送货整体完成'',',
+  `pay_status` int(11) NOT NULL DEFAULT '0' COMMENT '支付状态 0 未支付 大于0具体为支付订单号 便于关联查询',
+  `driver_uid` int(11) NOT NULL DEFAULT '0' COMMENT '司机uid',
+  `driver_take_time` int(11) NOT NULL DEFAULT '0' COMMENT '司机取货时间',
+  `driver_over_time` int(11) NOT NULL DEFAULT '0' COMMENT '司机送达货时间',
+  `site_sn` varchar(255) NOT NULL DEFAULT '' COMMENT '记账凭证号，线下有个单子，单子的号码，取货的人填',
   PRIMARY KEY (`send_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='司机送货需求表，补充完善信息表';
 
@@ -540,8 +545,8 @@ CREATE TABLE `ca_user` (
 -- ----------------------------
 -- Records of ca_user
 -- ----------------------------
-INSERT INTO `ca_user` VALUES ('1', '创始人', 'admin', 'admin', '创始人', 'dorisnzy', '0', '', '', '', '', '0', '', '', '', '', 'cf57eb8a739adbcae3a7669e4a41ad5a', 'UFTGw', '', '1514988885', '183.225.23.235', '45', '1', '0', '1514990469', '18388069008', '915599781@qq.com');
-INSERT INTO `ca_user` VALUES ('2', '测试1', '900730439', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc', '', 'Dorisnzy', '2', '昆明', '中国', '云南', 'zh_CN', '1514955507', '', '', '0', '[]', '033b9751a7dd15d3fecf659c676789eb', 'WiXsm', '140.207.54.76', '1514977431', '183.225.23.235', '3', '3', '1514955508', '1514989673', 'admin', '');
+INSERT INTO `ca_user` VALUES ('1', '创始人', 'admin', 'admin', '创始人', 'dorisnzy', '0', '', '', '', '', '0', '', '', '', '', 'cf57eb8a739adbcae3a7669e4a41ad5a', 'UFTGw', '', '1515048363', '127.0.0.1', '46', '1', '0', '1515048363', '18388069008', '915599781@qq.com');
+INSERT INTO `ca_user` VALUES ('2', '测试1', '900730439', 'ogZD6wpXliPpZnsy86Yw0FP_RrBc', '', 'Dorisnzy', '2', '昆明', '中国', '云南', 'zh_CN', '1514955507', '', '', '0', '[]', '033b9751a7dd15d3fecf659c676789eb', 'WiXsm', '140.207.54.76', '1515052733', '127.0.0.1', '4', '3', '1514955508', '1515052733', 'admin', '');
 INSERT INTO `ca_user` VALUES ('21', '测试2', '737529021', 'ogZD6wqHv7OUcqZGzIdu55U6bZ8g', '', '二师兄', '1', '昭通', '中国', '云南', 'zh_CN', '1514971611', '', '', '0', '[]', '1007fdea777fd375b0ce8a57a58c6f64', 'atbfR', '140.207.54.75', '0', '', '0', '2', '1514971612', '1514996648', 'admin', '');
 INSERT INTO `ca_user` VALUES ('22', '测试3', '476596208', 'ogZD6wpX-pZA9Eyh-AsXRMrGonm4', '', 'paleior', '1', '昆明', '中国', '云南', 'zh_CN', '1514971631', '', '', '0', '[]', '4519c01deefbf30c50c818f0b2ab8ad2', 'HDOlz', '140.207.54.80', '0', '', '0', '2', '1514971632', '1514990432', 'admin', '');
 INSERT INTO `ca_user` VALUES ('23', '测试4', '807806134', 'ogZD6wtO8l_vjlUBU60EmUXsGwSs', '', '不胖不胖', '1', '昆明', '中国', '云南', 'zh_CN', '1514971659', '', '', '0', '[]', '8d0e9c44b14d59ed45d27960f6a8e9b8', 'jpAMO', '140.207.54.75', '0', '', '0', '2', '1514971659', '1514990422', 'admin', '');
