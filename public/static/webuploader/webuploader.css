@@ -17,6 +17,8 @@
 	border-radius: 3px;
 	overflow: hidden;
 	font-size: 1px;
+	height: 74px;
+	width: 74px;
 }
 .webuploader-pick-hover {
 	/*background: #00a2d4;*/
