@@ -4,3 +4,4 @@ composer.lock
 runtime/*
 application/database.php
 public/wechat/*
+public/uploads/*
