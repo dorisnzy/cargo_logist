@@ -71,6 +71,9 @@ class WechatFactory {
      * @param string $ticket_file jsapi_ticket文件路径
      */
     private static function initKey($token_file, $ticket_file) {
+        if (!file_exists(dirname($token_file))) {
+            mkdir(dirname($token_file));
+        }
         if(!file_exists($token_file)){
             file_put_contents($token_file, '{"access_token":"","expire_time":0}');
         }

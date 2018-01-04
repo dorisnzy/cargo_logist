@@ -71,6 +71,12 @@ class Order extends Base
 			return false;
 		}
 
+		// 检查是否有供应商商家认领
+		if (!$this->supplierUser['merchant_id']) {
+			$this->setError('您目前没有分配到具体供应商家，请联系管理员');
+			return false;
+		}
+
 		// 处理订单数据
 		$data['merchant_id'] 	= $this->supplierUser['merchant_id'];
 		$data['supplier_uid'] 	= $this->config['uid'];
